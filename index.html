@@ -1,0 +1,1540 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能课堂点名器</title>
+    <!-- 浏览器标签页图标，将 favicon.png 替换为你自己的图标文件 -->
+    <link rel="icon" type="image/png" href="./favicon.png">
+    <style>
+        /* ===================== 全局基础样式 ===================== */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+
+        /* ===================== 班委标签样式功能开始 ===================== */
+        :root {
+            --committee-offset: 4px;
+            --monitor-color: #ff0000;
+            --leader-color: #00bb00;
+            --dark-monitor-color: #ff6666;
+            --dark-leader-color: #66dd66;
+        }
+
+        .class-committee-monitor,
+        .class-committee-leader {
+            text-decoration: none !important;
+        }
+
+        body.show-committee .class-committee-monitor {
+            text-decoration: underline wavy var(--monitor-color) !important;
+            text-underline-offset: var(--committee-offset);
+        }
+        body.show-committee .class-committee-leader {
+            text-decoration: underline wavy var(--leader-color) !important;
+            text-underline-offset: var(--committee-offset);
+        }
+
+        td.highlight:not(.class-committee-monitor):not(.class-committee-leader),
+        td.highlight:not(.class-committee-monitor):not(.class-committee-leader) .name {
+            text-decoration: none !important;
+        }
+
+        body.show-committee td.highlight.class-committee-monitor,
+        body.show-committee td.highlight .name.class-committee-monitor {
+            text-decoration: underline wavy var(--monitor-color) !important;
+            text-underline-offset: var(--committee-offset);
+        }
+        body.show-committee td.highlight.class-committee-leader,
+        body.show-committee td.highlight .name.class-committee-leader {
+            text-decoration: underline wavy var(--leader-color) !important;
+            text-underline-offset: var(--committee-offset);
+        }
+
+        body.dark-mode.show-committee td.highlight.class-committee-monitor,
+        body.dark-mode.show-committee td.highlight .name.class-committee-monitor {
+            text-decoration: underline wavy var(--dark-monitor-color) !important;
+        }
+        body.dark-mode.show-committee td.highlight.class-committee-leader,
+        body.dark-mode.show-committee td.highlight .name.class-committee-leader {
+            text-decoration: underline wavy var(--dark-leader-color) !important;
+        }
+
+        td.grayed .name,
+        td.dimmed .name,
+        td.faded .name,
+        td.grayed,
+        td.dimmed,
+        td.faded {
+            text-decoration: inherit !important;
+        }
+
+        body.dark-mode.show-committee .class-committee-monitor {
+            text-decoration: underline wavy var(--dark-monitor-color) !important;
+        }
+        body.dark-mode.show-committee .class-committee-leader {
+            text-decoration: underline wavy var(--dark-leader-color) !important;
+        }
+        /* ===================== 班委标签样式功能结束 =====================*/
+
+        body { 
+            font-family: 'Microsoft YaHei', 'Heiti SC', sans-serif; 
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); 
+            color: #fff; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            overflow-x: hidden; 
+            position: relative; 
+            transition: all 0.3s ease;
+        }
+
+        /* ===================== 粒子背景样式 ===================== */
+        #particles-js { 
+            position: absolute; 
+            width: 100%; 
+            height: 100%; 
+            top: 0; 
+            left: 0; 
+            z-index: 1; 
+        }
+
+        /* ===================== 核心容器样式 ===================== */
+        .container { 
+            z-index: 2; 
+            width: 100%; 
+            max-width: 1650px;
+            padding: 15px; 
+            text-align: center; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            margin: 10px auto; 
+        }
+
+        /* ===================== 标题样式 ===================== */
+        h1 { 
+            font-size: 2.2em; 
+            margin-bottom: 10px; 
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); 
+            letter-spacing: 2px; 
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2); 
+            padding-bottom: 10px; 
+            width: 100%; 
+            max-width: 800px; 
+            transition: all 0.3s ease;
+        }
+
+        /* ===================== 姓名显示区域样式 ===================== */
+        #name-display { 
+            font-size: 6em; 
+            font-weight: bold; 
+            margin: 10px 0;
+            text-shadow: 0 0 20px #00fffc, 0 0 40px #00fffc; 
+            height: 100px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            overflow: hidden; 
+            position: relative; 
+            min-width: 500px; 
+            padding: 15px; 
+            transition: all 0.3s ease;
+        }
+       
+        #current-name {
+            position: relative;
+            z-index: 3;
+            transition: all 0.3s ease;
+            font-size: 0.95em; 
+            padding-bottom: 2px;
+        }
+
+
+        /* ===================== 姓名典故样式 ===================== */
+        #intro-display {
+            position: fixed;
+            width: 460px;
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.95) 0%, rgba(42, 82, 152, 0.95) 100%);
+            border: 1px solid rgba(0, 255, 252, 0.5);
+            border-radius: 10px;
+            padding: 0 16px;
+            font-size: 15px;
+            font-weight: normal;
+            color: rgba(255,255,255,0.9);
+            text-align: justify;
+            line-height: 1.8;
+            text-shadow: none;
+            max-height: 0;
+            overflow: visible;
+            opacity: 0;
+            pointer-events: none;
+            transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
+            box-sizing: border-box;
+            backdrop-filter: blur(8px);
+            z-index: 10;
+        }
+        #intro-display.visible {
+            max-height: 300px;
+            opacity: 1;
+            padding: 14px 16px 20px;
+            pointer-events: auto;
+            overflow: hidden;
+        }
+        /* 左侧箭头指向名字，垂直居中 */
+        #intro-display.visible::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -10px;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-right: 10px solid rgba(0, 255, 252, 0.5);
+        }
+        #intro-display.visible::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -8px;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 7px solid transparent;
+            border-bottom: 7px solid transparent;
+            border-right: 9px solid rgba(30, 60, 114, 0.95);
+            z-index: 1;
+        }
+        body.dark-mode #intro-display {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.97) 0%, rgba(30, 41, 59, 0.97) 100%);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #e0f2fe;
+        }
+        body.dark-mode #intro-display.visible::after {
+            border-right-color: rgba(56, 189, 248, 0.4);
+        }
+        body.dark-mode #intro-display.visible::before {
+            border-right-color: rgba(15, 23, 42, 0.97);
+        }
+
+        /* ===================== 按钮基础样式 ===================== */
+        .controls { 
+            margin: 20px 0; 
+            display: flex; 
+            gap: 60px; 
+            align-items: center; 
+            justify-content: center; 
+            flex-wrap: wrap; 
+        }
+        
+        button { 
+            background: rgba(255, 255, 255, 0.1); 
+            border: 1px solid #00fffc; 
+            color: #fff; 
+            padding: 12px 20px; 
+            font-size: 1.1em; 
+            border-radius: 25px; 
+            cursor: pointer; 
+            transition: all 0.3s; 
+            outline: none; 
+            min-width: 160px; 
+        }
+        
+        button:hover { 
+            background: rgba(0, 255, 252, 0.2); 
+            transform: translateY(-2px); 
+        }
+        
+        button:active { 
+            transform: translateY(0); 
+        }
+        
+        button:disabled {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(0, 255, 252, 0.2);
+            cursor: not-allowed;
+            transform: none;
+            opacity: 0.7;
+        }
+
+        #start-btn, #manual-btn {
+            padding: 12px 20px;
+            font-size: 1.15em;
+        }
+
+        /* ===================== 右上角设置按钮样式 ===================== */
+        .settings-btn {
+            position: fixed;
+            top: 38px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #00fffc;
+            color: #fff;
+            font-size: 1.4em;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            cursor: pointer;
+            z-index: 999;
+            transition: all 0.3s ease;
+        }
+        
+        .settings-btn:hover {
+            background: rgba(0,255,252,0.2);
+            transform: rotate(60deg);
+        }
+
+        /* ===================== 设置面板样式 ===================== */
+        .settings-panel {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            width: 180px;
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.98) 0%, rgba(42, 82, 152, 0.98) 100%);
+            border: 1px solid rgba(0, 255, 252, 0.6);
+            border-radius: 12px;
+            padding: 16px;
+            z-index: 998;
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .settings-panel.show {
+            display: flex;
+        }
+        
+        .settings-item {
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.05);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1em;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .settings-item:hover {
+            background: rgba(0,255,252,0.15);
+            color: #00fffc;
+        }
+        
+        .arrow-icon {
+            font-size: 0.9em;
+            transition: transform 0.3s ease;
+        }
+        
+        .settings-item.expanded .arrow-icon {
+            transform: rotate(0deg);
+        }
+        
+        .settings-item.collapsed .arrow-icon {
+            transform: rotate(180deg);
+        }
+        
+        .submenu-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding-left: 40px;
+            margin-top: 4px;
+            margin-bottom: 4px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        
+        .submenu-container.show {
+            max-height: 100px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+        }
+        
+        .submenu-item {
+            padding: 8px 10px;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.03);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95em;
+            text-align: left;
+        }
+        
+        .submenu-item:hover {
+            background: rgba(0,255,252,0.15);
+            color: #00fffc;
+        }
+
+        /* 学生视角：整体翻转表格，单元格内文字反向 */
+
+        #teacher-view.student-mode {
+            transition: none;
+            transform: rotate(180deg);
+        }
+        #teacher-view.student-mode td {
+            transition: none;
+            transform: rotate(180deg);
+        }
+/* ===================== 座位表样式 ===================== */
+        .seating-chart { 
+            background: rgba(255, 255, 255, 0.05); 
+            border-radius: 10px; 
+            padding: 20px; 
+            margin-top: 30px; 
+            width: 100%; 
+            max-width: 1600px;
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); 
+            position: relative; 
+            transition: all 0.3s ease;
+        }
+        
+        .chart-header { 
+            font-size: 1.8em; 
+            margin-bottom: 20px; 
+            color: #00fffc; 
+            text-transform: uppercase; 
+            letter-spacing: 3px; 
+        }
+        
+        table { 
+            width: auto; 
+            border-collapse: collapse; 
+            margin: 0 auto; 
+        }
+        
+        td { 
+            border: 1px solid rgba(255,255,255,0.1); 
+            padding: 15px 5px;
+            text-align: center; 
+            font-size: 1.1em;
+            white-space: nowrap;
+            min-width: 90px;
+            background: rgba(255,255,255,0.05); 
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .aisle { 
+            width: 100px; 
+            font-size: 2em; 
+            font-weight: bold; 
+            color: #00fffc; 
+            opacity: 0.8; 
+            cursor: default; 
+        }
+        
+        .stage { 
+            background: #3b82f6; 
+            font-size: 2em; 
+            font-weight: bold; 
+            color: white; 
+            cursor: default; 
+        }
+        
+        .slogan { 
+            margin-top: 20px; 
+            font-size: 1.2em; 
+            color: #ffd700; 
+            font-weight: bold; 
+            letter-spacing: 2px; 
+        }
+
+        td.called {
+            background: rgba(70,70,70,0.4) !important;
+            color: #fff !important;
+        }
+        
+        .hide-record td.called {
+            background: rgba(255,255,255,0.05) !important;
+            color: #fff !important;
+        }
+
+        .seating-chart td.highlight,
+        .seating-chart.hide-record td.highlight {
+            background: #ffeb3b !important;
+            color: #000 !important;
+            font-weight: bold !important;
+            border: 1px solid rgba(231, 16, 16, 0.1) !important;
+            animation: pulse 1s ease-out !important;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        #teacher-view.student-mode td.highlight {
+            animation: pulse-flipped 1s ease-out !important;
+        }
+
+        @keyframes pulse-flipped {
+            0% { transform: rotate(180deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.03); }
+            100% { transform: rotate(180deg) scale(1); }
+        }
+
+        /* ===================== 使用说明弹窗样式 ===================== */
+        .instruction-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 9999;
+            display: none;
+            align-items: center; 
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        
+        .instruction-content {
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.98) 0%, rgba(42, 82, 152, 0.98) 100%);
+            border: 1px solid #00fffc;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 700px;
+            height: 85vh; 
+            max-height: 800px; 
+            color: #fff;
+            line-height: 1.8;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .instruction-header {
+            padding: 18px 30px;
+            border-bottom: 1px solid rgba(0,252,255,0.3);
+        }
+        
+        .instruction-header h2 {
+            color: #00fffc;
+            text-align: center;
+            margin: 0;
+        }
+        
+        .instruction-body {
+            padding: 15px 30px;
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .instruction-body h3 {
+            color: #ffeb3b;
+            margin: 15px 0 10px;
+        }
+        
+        .instruction-body p {
+            margin: 8px 0;
+        }
+        
+        .instruction-footer {
+            padding: 15px 30px;
+            text-align: center;
+            border-top: 1px solid rgba(0,252,255,0.2);
+        }
+        
+        .instruction-footer .close-btn {
+            padding: 8px 24px;
+            background: rgba(0,255,252,0.2);
+            border: 1px solid #00fffc;
+            color: #fff;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .instruction-footer .close-btn:hover {
+            background: rgba(0,255,252,0.4);
+        }
+        
+        .instruction-modal.show {
+            display: flex;
+        }
+
+        /* ===================== 暗黑模式样式 ===================== */
+        body.dark-mode,
+        html.dark-mode-pre body {
+            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+        }
+        
+        body.dark-mode .container {
+            backdrop-filter: blur(8px);
+            background: rgba(15, 23, 42, 0.3);
+            border-radius: 20px;
+            border: 1px solid rgba(56, 189, 248, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        body.dark-mode h1 {
+            text-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
+            letter-spacing: 3px;
+            background: linear-gradient(90deg, #38bdf8, #818cf8, #38bdf8);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradientFlow 3s ease infinite;
+            border-bottom: 2px solid rgba(56, 189, 248, 0.2);
+        }
+        
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        body.dark-mode #name-display {
+            text-shadow: 0 0 25px rgba(56, 189, 248, 0.8), 0 0 50px rgba(56, 189, 248, 0.5);
+            border-radius: 16px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+        
+        body.dark-mode #current-name {
+            background: linear-gradient(90deg, #ffffff, #e0f2fe, #ffffff);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: namePulse 0.8s ease-in-out infinite alternate;
+        }
+        
+        @keyframes namePulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.02); }
+        }
+        
+        body.dark-mode button {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.1) 0%, rgba(30, 64, 175, 0.1) 100%);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #e0f2fe;
+        }
+        
+        body.dark-mode #particles-js {
+            opacity: 0.6;
+        }
+
+        body.dark-mode .settings-btn {
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #e0f2fe;
+        }
+        
+        body.dark-mode .settings-btn:hover {
+            background: rgba(56, 189, 248, 0.2);
+            transform: rotate(60deg);
+        }
+        
+        body.dark-mode .settings-panel {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+        }
+        
+        body.dark-mode .settings-item {
+            background: rgba(56, 189, 248, 0.05);
+            color: #e0f2fe;
+        }
+        
+        body.dark-mode .settings-item:hover {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+        }
+        
+        body.dark-mode .submenu-item {
+            background: rgba(56, 189, 248, 0.03);
+            color: #e0f2fe;
+        }
+        
+        body.dark-mode .submenu-item:hover {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+        }
+
+        body.dark-mode .instruction-modal {
+            background: rgba(0, 0, 0, 0.9);
+        }
+        
+        body.dark-mode .instruction-content {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+        
+        body.dark-mode .instruction-header {
+            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+        }
+        
+        body.dark-mode .instruction-header h2 {
+            color: #38bdf8;
+        }
+        
+        body.dark-mode .instruction-body h3 {
+            color: #fbbf24;
+        }
+        
+        body.dark-mode .instruction-footer {
+            border-top: 1px solid rgba(56, 189, 248, 0.2);
+        }
+        
+        body.dark-mode .instruction-footer .close-btn {
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #e0f2fe;
+        }
+        
+        body.dark-mode .instruction-footer .close-btn:hover {
+            background: rgba(56, 189, 248, 0.3);
+        }
+
+        body.dark-mode td.called {
+            background: rgba(15, 23, 42, 0.6) !important;
+            color: rgba(224, 242, 254, 0.6) !important;
+            border: 1px solid rgba(56, 189, 248, 0.1) !important;
+        }
+        
+        body.dark-mode .hide-record td.called {
+            background: rgba(15, 23, 42, 0.4) !important;
+            color: #e0f2fe !important;
+            border: 1px solid rgba(56, 189, 248, 0.2) !important;
+            opacity: 1 !important;
+            filter: none !important;
+        }
+        
+        body.dark-mode .seating-chart td:not(.called):not(.aisle):not(.stage) {
+            background: rgba(15, 23, 42, 0.4) !important;
+            color: #e0f2fe !important;
+            border: 1px solid rgba(56, 189, 248, 0.2) !important;
+        }
+        
+        body.dark-mode .seating-chart td.highlight,
+        body.dark-mode .seating-chart.hide-record td.highlight {
+            background: #ffeb3b !important;
+            color: #000 !important;
+            font-weight: bold !important;
+            border: 1px solid rgba(255, 215, 0, 0.5) !important;
+            animation: pulse 1s ease-out !important;
+        }
+    </style>
+    <script>
+        // 在页面渲染前立即应用暗黑模式，避免闪烁
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.documentElement.classList.add('dark-mode-pre');
+        }
+    </script>
+</head>
+<body>
+    <!-- 粒子背景容器 -->
+    <div id="particles-js"></div>
+
+    <!-- 右上角设置按钮 -->
+    <div class="settings-btn">⚙️</div>
+    
+    <!-- 设置面板 -->
+    <div class="settings-panel">
+        <div class="settings-item" id="toggle-view">切换座位视角</div>
+        <div class="settings-item" id="toggle-dark-mode">切换暗黑模式</div>
+        <div class="settings-item" id="toggle-class-committee">显示班委标签</div>
+        <div class="settings-item" id="toggle-intro">显示姓名典故</div>
+
+        <div class="settings-item expanded" id="manage-record">
+            管理点名记录
+            <span class="arrow-icon">▼</span>
+        </div>
+        
+        <div class="submenu-container show" id="record-submenu">
+            <div class="submenu-item" id="clear-record">删除记录</div>
+            <div class="submenu-item" id="toggle-record-visibility">隐藏记录</div>
+        </div>
+
+        <div class="settings-item" id="view-instruction">查看使用说明</div>
+    </div>
+
+    <!-- 使用说明弹窗 -->
+    <div class="instruction-modal" id="instructionModal">
+        <div class="instruction-content">
+            <div class="instruction-header">
+                <h2>智能课堂点名器(v1.0) 使用说明</h2>
+            </div>
+            <div class="instruction-body">
+                <h3>一、功能概述</h3>
+                <p>1. 智能随机点名：支持「仅抽未点过」和「抽取所有人」两种模式，满足不同点名场景需求；</p>
+                <p>2. 手动点名交互：双击座位表姓名即可标记/取消点名状态，操作直观便捷；</p>
+                <p>3. 视角自由切换：支持教师视角（默认）与学生视角（座位反向）双向切换，适配不同使用场景；</p>
+                <p>4. 主题个性化：内置深蓝/暗黑两种主题模式，切换状态自动保存至浏览器；</p>
+                <p>5. 班委快速识别：通过彩色波浪下划线区分班委类型，课堂管理更高效；</p>
+                <p>6. 姓名典故展示：点名后可在姓名右侧弹出典故卡片，帮助老师快速了解学员背景；</p>
+                <p>7. 点名记录管理：支持隐藏/显示已点名单、一键清空记录，灵活管控点名状态。</p>
+
+                <h3>二、操作指南</h3>
+                <p>1. 随机点名操作：</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 点击「随机抽未点过」：系统仅从尚未点名的学生中随机抽取，抽取后自动标记为已点名，无重复；</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 点击「随机抽所有人」：从全班学生中随机抽取，已点名学生仍可能被重复选中；</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 触发后姓名区域会自动滚动2秒并停止，对应座位同步高亮提示。</p>
+
+                <p>2. 手动点名操作：双击座位表中任意学生姓名，即可标记为已点名（座位高亮）；已点名状态下再次双击，可取消点名。</p>
+                <p>3. 视角切换：点击页面右上角⚙️设置按钮，选择「切换座位视角」，即可在教师/学生视角间切换。</p>
+                <p>4. 主题切换：点击⚙️设置按钮，选择「切换暗黑模式」或「切换深蓝模式」，完成界面主题切换，设置自动保存。</p>
+
+                <p>5. 班委标识说明：</p>
+                <p>&nbsp;&nbsp;&nbsp;🔴 红色波浪下划线：班长</p>
+                <p>&nbsp;&nbsp;&nbsp;🟢 绿色波浪下划线：组长</p>
+                </ul>
+                <p>6. 姓名典故说明（⚙️设置按钮 → 显示姓名典故）：</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 显示姓名典故：点名后，在姓名右侧弹出该学员的姓名典故卡片；</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 典故卡片将在显示 30 秒后自动消失；</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 隐藏姓名典故：关闭典故卡片显示，点名结果区恢复简洁样式；</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 设置状态自动保存，刷新页面后保持不变。</p>
+                <p>7. 点名记录管理（⚙️设置按钮 → 管理点名记录）：</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 显示记录：已点名学生座位呈灰色显示，清晰区分未点名状态；</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 隐藏记录：已点名学生座位恢复默认样式，不显示点名标记；</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 删除记录：一键清空所有点名记录（操作不可逆，请谨慎执行）。</p>
+
+                <p>8. 数据保存：所有点名记录、主题/视角设置均自动保存在浏览器本地，刷新页面后数据不丢失。</p>
+
+                <h3>三、注意事项</h3>
+                <p>1. 当「随机抽未点过」触发「全部已点完」提示时，系统会自动重置所有点名记录，可重新开始新一轮点名；</p>
+                <p>2. 操作过程中请勿频繁、快速点击按钮，避免程序响应异常；</p>
+                <p>3. 清空点名记录后无法恢复，执行前请确认无需保留现有记录；</p>
+                <p>4. 建议使用Chrome、Edge等现代浏览器访问，以保障所有功能正常运行。</p>
+            </div>
+            <div class="instruction-footer">
+                <button class="close-btn" id="closeInstructionBtn">关闭说明</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主内容容器 -->
+    <div class="container">
+        <h1>智能课堂点名器(v1.0)</h1>
+        
+        <!-- 姓名显示区域 -->
+        <div id="name-display">
+            <div id="current-name">点击开始</div>
+        </div>
+        <div id="intro-display"></div>
+        
+        <!-- 控制按钮区域 -->
+        <div class="controls">
+            <button id="start-btn" title="只抽取未点过的人，不会重复！">随机抽未点过</button>
+            <button id="manual-btn" title="从全班抽取，点过的人可能被重复点！">随机抽所有人</button>
+        </div>
+
+        <!-- 座位表区域 -->
+        <div class="seating-chart">
+           <div class="chart-header">xx学校-xx教室座位表</div>
+            
+            <!-- 教师视角表格（默认显示） -->
+            <table id="teacher-view">
+                <tr>
+                    <td id="学生01">学生01</td>
+                    <td id="学生02">学生02</td>
+                    <td id="学生03">学生03</td>
+                    <td id="学生04">学生04</td>
+                    <td id="学生05" class="class-committee-leader">学生05</td>
+                    <td id="学生06">学生06</td>
+                    <td id="学生07">学生07</td>
+                    <td id="学生08">学生08</td>
+                    <td class="aisle" rowspan="7">过道</td>
+                    <td colspan="4"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td id="学生09">学生09</td>
+                    <td id="学生10" class="class-committee-leader">学生10</td>
+                    <td id="学生11">学生11</td>
+                    <td id="学生12">学生12</td>
+                    <td id="学生13">学生13</td>
+                    <td id="学生14">学生14</td>
+                    <td id="学生15">学生15</td>
+                    <td id="学生16">学生16</td>
+                    <td id="学生17">学生17</td>
+                    <td id="学生18">学生18</td>
+                    <td id="学生19">学生19</td>
+                    <td id="学生20">学生20</td>
+                    <td id="学生21">学生21</td>
+                    <td id="学生22">学生22</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td id="学生23">学生23</td>
+                    <td id="学生24">学生24</td>
+                    <td id="学生25">学生25</td>
+                    <td id="学生26">学生26</td>
+                    <td id="学生27">学生27</td>
+                    <td id="学生28">学生28</td>
+                    <td id="学生29">学生29</td>
+                    <td id="学生30">学生30</td>
+                    <td id="学生31" class="class-committee-monitor">学生31</td>
+                    <td id="学生32" class="class-committee-leader">学生32</td>
+                    <td id="学生33">学生33</td>
+                    <td id="学生34">学生34</td>
+                    <td id="学生35">学生35</td>
+                    <td id="学生36">学生36</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td id="学生37">学生37</td>
+                    <td id="学生38">学生38</td>
+                    <td id="学生39">学生39</td>
+                    <td id="学生40" class="class-committee-leader">学生40</td>
+                    <td id="学生41">学生41</td>
+                    <td id="学生42">学生42</td>
+                    <td id="学生43" class="class-committee-leader">学生43</td>
+                    <td id="学生44">学生44</td>
+                    <td id="学生45">学生45</td>
+                    <td id="学生46">学生46</td>
+                    <td id="学生47" class="class-committee-monitor">学生47</td>
+                    <td id="学生48">学生48</td>
+                    <td id="学生49">学生49</td>
+                    <td id="学生50">学生50</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td id="学生51">学生51</td>
+                    <td id="学生52">学生52</td>
+                    <td id="学生53">学生53</td>
+                    <td id="学生54">学生54</td>
+                    <td id="学生55">学生55</td>
+                    <td></td>
+                    <td id="学生56">学生56</td>
+                    <td id="学生57">学生57</td>
+                    <td id="学生58">学生58</td>
+                    <td id="学生59" class="class-committee-leader">学生59</td>
+                    <td id="学生60">学生60</td>
+                    <td id="学生61">学生61</td>
+                    <td id="学生62">学生62</td>
+                    <td id="学生63">学生63</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td id="学生64">学生64</td>
+                    <td id="学生65">学生65</td>
+                    <td id="学生66">学生66</td>
+                    <td id="学生67">学生67</td>
+                    <td id="学生68" class="class-committee-leader">学生68</td>
+                    <td id="学生69">学生69</td>
+                    <td id="学生70">学生70</td>
+                    <td id="学生71" class="class-committee-leader">学生71</td>
+                    <td id="学生72">学生72</td>
+                    <td id="学生73">学生73</td>
+                    <td id="学生74">学生74</td>
+                    <td id="学生75">学生75</td>
+                    <td id="学生76">学生76</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td id="学生77">学生77</td>
+                    <td id="学生78">学生78</td>
+                    <td id="学生79">学生79</td>
+                    <td id="学生80">学生80</td>
+                    <td id="学生81">学生81</td>
+                    <td id="学生82">学生82</td>
+                    <td id="学生83">学生83</td>
+                    <td class="stage" colspan="2">讲台</td>
+                    <td id="学生84">学生84</td>
+                    <td id="学生85" class="class-committee-leader">学生85</td>
+                    <td id="学生86">学生86</td>
+                    <td id="学生87">学生87</td>
+                    <td id="学生88">学生88</td>
+                    <td></td>
+                </tr>
+            </table>
+            <div class="slogan">请将此处替换为你班级的专属口号！</div>
+        </div>
+    </div>
+
+    <!-- 粒子背景JS -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // ===================== 全局变量 =====================
+         
+         let name_intro =
+            {
+                // 请将 key 替换为你班级学生的真实姓名，value 替换为对应的介绍文字
+                "学生01": "这里填写学生01的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生02": "这里填写学生02的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生03": "这里填写学生03的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生04": "这里填写学生04的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生05": "这里填写学生05的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生06": "这里填写学生06的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生07": "这里填写学生07的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生08": "这里填写学生08的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生09": "这里填写学生09的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生10": "这里填写学生10的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生11": "这里填写学生11的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生12": "这里填写学生12的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生13": "这里填写学生13的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生14": "这里填写学生14的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生15": "这里填写学生15的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生16": "这里填写学生16的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生17": "这里填写学生17的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生18": "这里填写学生18的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生19": "这里填写学生19的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生20": "这里填写学生20的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生21": "这里填写学生21的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生22": "这里填写学生22的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生23": "这里填写学生23的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生24": "这里填写学生24的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生25": "这里填写学生25的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生26": "这里填写学生26的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生27": "这里填写学生27的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生28": "这里填写学生28的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生29": "这里填写学生29的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生30": "这里填写学生30的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生31": "这里填写学生31的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生32": "这里填写学生32的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生33": "这里填写学生33的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生34": "这里填写学生34的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生35": "这里填写学生35的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生36": "这里填写学生36的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生37": "这里填写学生37的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生38": "这里填写学生38的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生39": "这里填写学生39的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生40": "这里填写学生40的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生41": "这里填写学生41的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生42": "这里填写学生42的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生43": "这里填写学生43的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生44": "这里填写学生44的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生45": "这里填写学生45的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生46": "这里填写学生46的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生47": "这里填写学生47的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生48": "这里填写学生48的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生49": "这里填写学生49的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生50": "这里填写学生50的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生51": "这里填写学生51的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生52": "这里填写学生52的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生53": "这里填写学生53的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生54": "这里填写学生54的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生55": "这里填写学生55的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生56": "这里填写学生56的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生57": "这里填写学生57的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生58": "这里填写学生58的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生59": "这里填写学生59的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生60": "这里填写学生60的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生61": "这里填写学生61的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生62": "这里填写学生62的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+                "学生63": "这里填写学生63的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
+           }
+
+        // 本地化存储相关
+
+        let hasBeenCalled = new Set(JSON.parse(localStorage.getItem('calledNames') || '[]'));
+        let isRunning = false;
+        let last = '';
+        let isTeacher = localStorage.getItem('viewMode') === 'student' ? false : true;
+        let isDarkMode = localStorage.getItem('darkMode') === 'true';
+        let isHideRecord = localStorage.getItem('hideRecord') === 'true';
+        let isShowCommittee = localStorage.getItem('showCommittee') === 'true';
+        let isShowIntro = localStorage.getItem('showIntro') === 'true';
+
+        // 缓存所有学生姓名，避免重复查询 DOM
+        const getAllStudentNames = () =>
+            Array.from(document.querySelectorAll('#teacher-view td[id]')).map(td => td.id);
+
+        // DOM元素
+        const startBtn = document.getElementById('start-btn');
+        const manualBtn = document.getElementById('manual-btn');
+        const nameDisplay = document.getElementById('current-name');
+        const teacherView = document.getElementById('teacher-view');
+                const settingsBtn = document.querySelector('.settings-btn');
+        const settingsPanel = document.querySelector('.settings-panel');
+        const toggleViewBtn = document.getElementById('toggle-view');
+        const toggleDarkModeBtn = document.getElementById('toggle-dark-mode');
+        const toggleClassCommitteeBtn = document.getElementById('toggle-class-committee');
+        const manageRecordBtn = document.getElementById('manage-record');
+        const recordSubmenu = document.getElementById('record-submenu');
+        const clearRecordBtn = document.getElementById('clear-record');
+        const toggleRecordVisibilityBtn = document.getElementById('toggle-record-visibility');
+        const viewInstructionBtn = document.getElementById('view-instruction');
+        const instructionModal = document.getElementById('instructionModal');
+        const closeInstructionBtn = document.getElementById('closeInstructionBtn');
+        const seatingChart = document.querySelector('.seating-chart');
+
+        // ===================== 工具方法 =====================
+
+        /**
+         * 保存数据到本地存储
+         */
+        function save() {
+            localStorage.setItem('calledNames', JSON.stringify(Array.from(hasBeenCalled)));
+            localStorage.setItem('viewMode', isTeacher ? 'teacher' : 'student');
+            localStorage.setItem('darkMode', isDarkMode);
+            localStorage.setItem('hideRecord', isHideRecord);
+            localStorage.setItem('showCommittee', isShowCommittee);
+            localStorage.setItem('showIntro', isShowIntro);
+        }
+
+        /**
+         * 刷新UI - 更新已点名样式、记录显示状态、座位提示
+         */
+        function refreshUI() {
+            // 更新已点名样式
+            document.querySelectorAll('td').forEach(td => {
+                const n = td.id;
+                td.classList.toggle('called', hasBeenCalled.has(n));
+            });
+            
+            // 更新记录显示状态
+            updateRecordVisibilityUI();
+
+            // 更新暗黑模式样式
+            updateDarkModeUI();
+            
+            // 更新所有座位的悬浮提示
+            updateAllSeatTooltip();
+        }
+
+        /**
+         * 更新所有座位的悬浮提示
+         */
+        function updateAllSeatTooltip() {
+            document.querySelectorAll('#teacher-view td').forEach(td => {
+                if(td.classList.contains('aisle') || td.classList.contains('stage') || !td.id) return;
+                const name = td.innerText.trim();
+                const realName = td.id;
+                if(hasBeenCalled.has(realName)){
+                    td.title = `鼠标双击 ${name} 可取消本次点名`;
+                } else {
+                    td.title = `鼠标双击 ${name} 可对其手动点名`;
+                }
+            });
+        }
+
+        /**
+         * 更新记录显示状态UI
+         */
+        function updateRecordVisibilityUI() {
+            seatingChart.classList.toggle('hide-record', isHideRecord);
+            toggleRecordVisibilityBtn.innerText = isHideRecord ? '显示记录' : '隐藏记录';
+        }
+
+        /**
+         * 更新暗黑模式UI
+         */
+        function updateDarkModeUI() {
+            document.body.classList.toggle('dark-mode', isDarkMode);
+            document.documentElement.classList.toggle('dark-mode-pre', isDarkMode);
+            toggleDarkModeBtn.innerText = isDarkMode ? '切换深蓝模式' : '切换暗黑模式';
+        }
+
+        /**
+         * 更新班委标签显示UI
+         */
+        function updateClassCommitteeUI() {
+            document.body.classList.toggle('show-committee', isShowCommittee);
+            toggleClassCommitteeBtn.innerText = isShowCommittee ? '隐藏班委标签' : '显示班委标签';
+        }
+
+        // ===================== 核心功能方法 =====================
+        /**
+         * 高亮指定姓名的座位
+         * @param {string} name - 要高亮的姓名
+         */
+        function high(name) {
+            clearHigh(); 
+            last = name;
+            
+            const el = document.getElementById(name);
+            if(el) {
+                el.classList.add('highlight');
+                el.title = `鼠标双击 ${name} 可取消本次点名`;
+            }
+        }
+
+        /**
+         * 清除所有座位高亮
+         */
+        function clearHigh() { 
+            document.querySelectorAll('td.highlight').forEach(x => {
+                x.classList.remove('highlight');
+                const name = x.innerText.trim();
+                x.title = `鼠标双击 ${name} 可对其手动点名`;
+            }); 
+        }
+
+        /**
+         * 随机抽取姓名
+         * @param {boolean} onlyUncalled - 是否只抽取未点名的
+         */
+        function randomName(onlyUncalled = true) {
+            const allNames = getAllStudentNames();
+            const candidates = onlyUncalled ? allNames.filter(name => !hasBeenCalled.has(name)) : allNames;
+            
+            if (candidates.length === 0) {
+                alert('全部已点完！即将重置记录');
+                hasBeenCalled.clear();
+                clearHigh();
+                nameDisplay.innerText = '点击开始';
+                clearIntro();
+                last = '';
+                save();
+                refreshUI();
+                return null;
+            }
+            
+            return candidates[Math.floor(Math.random() * candidates.length)];
+        }
+
+        /**
+         * 开始随机滚动点名
+         * @param {boolean} onlyUncalled - 是否只抽未点过的
+         */
+        function startRoll(onlyUncalled = true) {
+            if (isRunning) return;
+            
+            isRunning = true;
+            startBtn.disabled = true;
+            manualBtn.disabled = true;
+            
+            const allNames = getAllStudentNames();
+            let counter = 0;
+            const maxCounter = 30;
+            const interval = setInterval(() => {
+                const randomIdx = Math.floor(Math.random() * allNames.length);
+                nameDisplay.innerText = allNames[randomIdx];
+                counter++;
+                
+                if (counter >= maxCounter) {
+                    clearInterval(interval);
+                    const selected = randomName(onlyUncalled);
+                    if (selected) {
+                        nameDisplay.innerText = selected;
+                        high(selected);
+                        hasBeenCalled.add(selected);
+                        showIntro(selected);
+                        save();
+                    } else {
+                        nameDisplay.innerText = '点击开始';
+                clearIntro();
+                    }
+                    
+                    isRunning = false;
+                    startBtn.disabled = false;
+                    manualBtn.disabled = false;
+                    refreshUI();
+                }
+            }, 30);
+        }
+
+        /**
+         * 处理座位双击事件 - 手动点名/取消点名
+         * @param {Event} event - 双击事件对象
+         */
+        function handleDoubleClick(event) {
+            event.preventDefault();
+            
+            if(isRunning) return;
+            
+            const td = event.target;
+            if(!td.id || td.classList.contains('aisle') || td.classList.contains('stage')) return;
+            
+            const realName = td.id;
+            const displayName = td.innerText.trim();
+            // 核心修改：判断是否高亮（而非hasBeenCalled）
+            const isHighlighted = td.classList.contains('highlight');
+            
+            // 已高亮 - 取消点名/取消高亮
+            if(isHighlighted){
+                if(confirm(`确定要取消对【${displayName}】的本次点名吗？`)){
+                    hasBeenCalled.delete(realName); 
+                    save(); 
+                    clearHigh(); // 清除高亮
+                    nameDisplay.innerText = '点击开始';
+                clearIntro(); 
+                    last = ''; 
+                    refreshUI();
+                    // 触发mouseenter更新提示（修复this指向问题）
+                    td.dispatchEvent(new MouseEvent('mouseenter'));
+                }
+            }
+            // 未高亮 - 手动点名/设置高亮
+            else{
+                high(realName); // 设置高亮
+                nameDisplay.innerText = realName; 
+                showIntro(realName);
+                hasBeenCalled.add(realName); 
+                save(); 
+                refreshUI();
+                // 触发mouseenter更新提示（修复this指向问题）
+                td.dispatchEvent(new MouseEvent('mouseenter'));
+            }
+        }
+        
+        // 关闭设置面板的通用函数
+        function closeSettingsPanel() {
+            settingsPanel.classList.remove('show');
+        }
+
+        // 点击空白处面板消失
+        document.addEventListener('click', function(e) {
+            if (!settingsPanel.contains(e.target) && !settingsBtn.contains(e.target)) {
+                settingsPanel.classList.remove('show');
+            }
+        });
+
+        /**
+         * 切换座位视角
+         */
+        function toggleView() {
+            isTeacher = !isTeacher;
+            // 切换前禁用所有td的transition，防止翻转动画
+            document.querySelectorAll('#teacher-view td').forEach(td => td.style.transition = 'none');
+            teacherView.style.transition = 'none';
+            teacherView.classList.toggle('student-mode', !isTeacher);
+            // 下一帧恢复transition
+            requestAnimationFrame(() => {
+                teacherView.style.transition = '';
+                document.querySelectorAll('#teacher-view td').forEach(td => td.style.transition = '');
+            });
+
+            clearHigh();
+            if(last) high(last);
+            save();
+            refreshUI();
+            // 新增：关闭设置面板
+            closeSettingsPanel();
+        }
+
+        /**
+         * 切换暗黑模式
+         */
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            updateDarkModeUI();
+            save();
+            refreshUI();
+            // 新增：关闭设置面板
+            closeSettingsPanel();
+        }
+
+        /**
+         * 切换班委标签显示
+         */
+        function toggleClassCommittee() {
+            isShowCommittee = !isShowCommittee;
+            updateClassCommitteeUI();
+            save();
+            // 新增：关闭设置面板
+            closeSettingsPanel();
+        }
+
+        function toggleIntro() {
+            isShowIntro = !isShowIntro;
+            updateIntroUI();
+            save();
+            closeSettingsPanel();
+        }
+
+        function updateIntroUI() {
+            const btn = document.getElementById('toggle-intro');
+            if (btn) btn.innerText = isShowIntro ? '隐藏姓名典故' : '显示姓名典故';
+            const el = document.getElementById('intro-display');
+            if (el) {
+                if (isShowIntro && el.innerText) el.classList.add('visible');
+                else el.classList.remove('visible');
+            }
+        }
+
+        let introTimer = null;
+
+        function showIntro(name) {
+            const el = document.getElementById('intro-display');
+            if (!el) return;
+            el.classList.remove('visible');
+            if (introTimer) { clearTimeout(introTimer); introTimer = null; }
+            const text = name_intro[name];
+            if (text) {
+                el.innerText = text;
+                if (isShowIntro) {
+                    // 计算 name-display 的位置，卡片贴在其右侧垂直居中
+                    const nameBox = document.getElementById('name-display').getBoundingClientRect();
+                    el.style.left = (nameBox.right + 20) + 'px';
+                    el.style.top = (nameBox.top + nameBox.height / 2) + 'px';
+                    el.style.transform = 'translateY(-50%)';
+                    el.classList.add('visible');
+                    introTimer = setTimeout(() => clearIntro(), 30000);
+                }
+            } else {
+                el.innerText = '';
+            }
+        }
+
+        function clearIntro() {
+            const el = document.getElementById('intro-display');
+            if (!el) return;
+            el.innerText = '';
+            el.classList.remove('visible');
+            if (introTimer) { clearTimeout(introTimer); introTimer = null; }
+        }
+
+        /**
+         * 切换记录显示/隐藏
+         */
+        function toggleRecordVisibility() {
+            isHideRecord = !isHideRecord;
+            updateRecordVisibilityUI();
+            save();
+            // 新增：关闭设置面板
+            closeSettingsPanel();
+        }
+
+        /**
+         * 重置点名记录
+         */
+        function resetRecord() {
+            if(confirm('确定要清空所有点名记录吗？此操作不可恢复！')){
+                hasBeenCalled.clear();
+                clearHigh();
+                nameDisplay.innerText = '点击开始';
+                clearIntro();
+                last = '';
+                save();
+                refreshUI();
+            }
+            // 新增：关闭设置面板
+            closeSettingsPanel();
+        }
+
+        /**
+         * 打开使用说明
+         */
+        function openInstruction() {
+            instructionModal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+            // 新增：关闭设置面板
+            closeSettingsPanel();
+        }
+
+        /**
+         * 关闭使用说明
+         */
+        function closeInstruction() {
+            instructionModal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        /**
+         * 切换设置面板子菜单
+         */
+        function toggleSubmenu() {
+            manageRecordBtn.classList.toggle('expanded');
+            manageRecordBtn.classList.toggle('collapsed');
+            recordSubmenu.classList.toggle('show');
+        }
+
+        // ===================== 事件绑定 =====================
+        /**
+         * 初始化座位单元格事件
+         */
+        function initSeatEvents() {
+            document.querySelectorAll('#teacher-view td').forEach(td => {
+                if(td.classList.contains('aisle') || td.classList.contains('stage') || !td.id) return;
+                
+                td.addEventListener('dblclick', handleDoubleClick);
+                td.addEventListener('mousedown', (e) => e.preventDefault());
+                
+                td.addEventListener('mouseenter', () => {
+                    const displayName = td.innerText.trim();
+                    if(td.classList.contains('highlight')){
+                        td.title = `鼠标双击 ${displayName} 可取消本次点名`;
+                    } else {
+                        td.title = `鼠标双击 ${displayName} 可对其手动点名`;
+                    }
+                });
+            });
+        }
+
+        // ===================== 初始化 =====================
+        function init() {
+            // 初始化按钮事件
+            startBtn.addEventListener('click', () => startRoll(true));
+            manualBtn.addEventListener('click', () => startRoll(false));
+            settingsBtn.addEventListener('click', () => settingsPanel.classList.toggle('show'));
+            toggleViewBtn.addEventListener('click', toggleView);
+            toggleDarkModeBtn.addEventListener('click', toggleDarkMode);
+            toggleClassCommitteeBtn.addEventListener('click', toggleClassCommittee);
+            manageRecordBtn.addEventListener('click', toggleSubmenu);
+            document.getElementById('toggle-intro').addEventListener('click', toggleIntro);
+            clearRecordBtn.addEventListener('click', resetRecord);
+            toggleRecordVisibilityBtn.addEventListener('click', toggleRecordVisibility);
+            viewInstructionBtn.addEventListener('click', openInstruction);
+            closeInstructionBtn.addEventListener('click', closeInstruction);
+            
+            // 点击弹窗外层关闭
+            instructionModal.addEventListener('click', (e) => {
+                if (e.target === instructionModal) closeInstruction();
+            });
+
+            // 初始化座位视角
+            if(!isTeacher) teacherView.classList.add('student-mode');
+
+            // 初始化UI状态
+            updateRecordVisibilityUI();
+            updateDarkModeUI();
+            updateClassCommitteeUI();
+            refreshUI();
+            updateIntroUI();
+            
+            // 初始化座位事件
+            initSeatEvents();
+
+            // 初始化粒子背景
+            particlesJS('particles-js', {
+                particles: {
+                    number: { value: 80, density: { enable: true, value_area: 800 } },
+                    color: { value: "#ffffff" },
+                    shape: { type: "circle" },
+                    opacity: { value: 0.5, random: true },
+                    size: { value: 3, random: true },
+                    line_linked: { enable: true, distance: 150, color: "#00fffc", opacity: 0.2, width: 1 },
+                    move: { enable: true, speed: 2, direction: "none", random: true, straight: false }
+                },
+                interactivity: {
+                    events: {
+                        onhover: { enable: true, mode: "grab" },
+                        onclick: { enable: true, mode: "push" }
+                    }
+                }
+            });
+        }
+        
+
+        // 启动初始化
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
