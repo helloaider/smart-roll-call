@@ -6,7 +6,6 @@
 ![预览截图2](./images/preview2.png)
 ![预览截图3](./images/preview3.png)
 ![预览截图4](./images/preview4.png)
-![预览截图5](./images/preview5.png)
 
 ## ✨ 功能特性
 
