@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -878,22 +878,348 @@
         //   'aisle'                       — 过道（整列都是 aisle 时自动合并行）
         //   'stage'                       — 讲台
         const CLASS_CONFIG = {
-            title: 'xx学校-xx教室座位表',
-            slogan: '请将此处替换为你班级的专属口号！',
+            title: "xx学校-xx教室座位表",
+            slogan: "请将此处替换为你班级的专属口号！",
             seats: [
-                [ null, null, null, null, null, null, null, null, 'aisle', 'stage', 'stage', null, null, null, null, null, null ],
-                [ null, {name:'学生01'}, {name:'学生02'}, {name:'学生03'}, {name:'学生04'}, {name:'学生05',role:'leader'}, {name:'学生06'}, {name:'学生07'}, 'aisle', {name:'学生09'}, {name:'学生10',role:'leader'}, {name:'学生11'}, {name:'学生12'}, {name:'学生13'}, {name:'学生14'}, {name:'学生15'}, null ],
-                [ null, {name:'学生16'}, {name:'学生17'}, {name:'学生18'}, {name:'学生19'}, {name:'学生20'}, {name:'学生21'}, {name:'学生22'}, 'aisle',  {name:'学生23'}, {name:'学生24'}, {name:'学生25'}, {name:'学生26'}, {name:'学生27'}, {name:'学生28'}, {name:'学生29'}, null ],
-                [ null, {name:'学生30'}, {name:'学生31',role:'monitor'}, {name:'学生32',role:'leader'}, {name:'学生33'}, {name:'学生34'}, {name:'学生35'}, {name:'学生36'}, 'aisle',{name:'学生37'}, {name:'学生38'}, {name:'学生39'}, {name:'学生40',role:'leader'}, {name:'学生41'}, {name:'学生42'}, {name:'学生43',role:'leader'} , null ],
-                [ null, {name:'学生44'}, {name:'学生45'}, {name:'学生46'}, {name:'学生47',role:'monitor'}, {name:'学生48'}, {name:'学生49'}, {name:'学生50'}, 'aisle', {name:'学生51'}, {name:'学生52'}, {name:'学生53'}, {name:'学生54'}, {name:'学生55'}, null, {name:'学生56'}, null ],
-                [ null, {name:'学生57'}, {name:'学生58'}, {name:'学生59',role:'leader'}, {name:'学生60'}, {name:'学生61'}, {name:'学生62'}, {name:'学生63'}, 'aisle',{name:'学生64'}, {name:'学生65'}, {name:'学生66'}, {name:'学生67'}, {name:'学生68',role:'leader'}, {name:'学生69'}, {name:'学生70'} , null ],
-                [ null, {name:'学生71',role:'leader'}, {name:'学生72'}, {name:'学生73'}, {name:'学生74'}, {name:'学生75'}, {name:'学生76'}, null, 'aisle',{name:'学生77'}, {name:'学生78'}, {name:'学生79'}, {name:'学生80'}, {name:'学生81'}, {name:'学生82'}, {name:'学生83'} , null ],
-                [ null, {name:'学生84'}, {name:'学生85',role:'leader'}, {name:'学生86'}, {name:'学生87'}, {name:'学生88'}, 'aisle', null, null, , null, null, null, null, null, null ],
-            ],
-            intros: {
-                // 姓名典故，key 与 seats 中的 name 完全一致
-                // "张三": "张三的介绍文字...",
-            }
+  [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    "stage",
+    "stage",
+    "stage",
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  [
+    null,
+    {
+      "name": "学生01"
+    },
+    {
+      "name": "学生02"
+    },
+    {
+      "name": "学生03"
+    },
+    {
+      "name": "学生04"
+    },
+    {
+      "name": "学生05",
+      "role": "leader"
+    },
+    {
+      "name": "学生06"
+    },
+    {
+      "name": "学生07"
+    },
+    "aisle",
+    {
+      "name": "学生09"
+    },
+    {
+      "name": "学生10",
+      "role": "leader"
+    },
+    {
+      "name": "学生11"
+    },
+    {
+      "name": "学生12"
+    },
+    {
+      "name": "学生13"
+    },
+    {
+      "name": "学生14"
+    },
+    {
+      "name": "学生15"
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "name": "学生16"
+    },
+    {
+      "name": "学生17"
+    },
+    {
+      "name": "学生18"
+    },
+    {
+      "name": "学生19"
+    },
+    {
+      "name": "学生20"
+    },
+    {
+      "name": "学生21"
+    },
+    {
+      "name": "学生22"
+    },
+    "aisle",
+    {
+      "name": "学生23"
+    },
+    {
+      "name": "学生24"
+    },
+    {
+      "name": "学生25"
+    },
+    {
+      "name": "学生26"
+    },
+    {
+      "name": "学生27"
+    },
+    {
+      "name": "学生28"
+    },
+    {
+      "name": "学生29"
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "name": "学生30"
+    },
+    {
+      "name": "学生31",
+      "role": "monitor"
+    },
+    {
+      "name": "学生32",
+      "role": "leader"
+    },
+    {
+      "name": "学生33"
+    },
+    {
+      "name": "学生34"
+    },
+    {
+      "name": "学生35"
+    },
+    {
+      "name": "学生36"
+    },
+    "aisle",
+    {
+      "name": "学生37"
+    },
+    {
+      "name": "学生38"
+    },
+    {
+      "name": "学生39"
+    },
+    {
+      "name": "学生40",
+      "role": "leader"
+    },
+    {
+      "name": "学生41"
+    },
+    {
+      "name": "学生42"
+    },
+    {
+      "name": "学生43",
+      "role": "leader"
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "name": "学生44"
+    },
+    {
+      "name": "学生45"
+    },
+    {
+      "name": "学生46"
+    },
+    {
+      "name": "学生47",
+      "role": "monitor"
+    },
+    {
+      "name": "学生48"
+    },
+    {
+      "name": "学生49"
+    },
+    {
+      "name": "学生50"
+    },
+    "aisle",
+    {
+      "name": "学生51"
+    },
+    {
+      "name": "学生52"
+    },
+    {
+      "name": "学生53"
+    },
+    {
+      "name": "学生54"
+    },
+    {
+      "name": "学生55"
+    },
+    null,
+    {
+      "name": "学生56"
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "name": "学生57"
+    },
+    {
+      "name": "学生58"
+    },
+    {
+      "name": "学生59",
+      "role": "leader"
+    },
+    {
+      "name": "学生60"
+    },
+    {
+      "name": "学生61"
+    },
+    {
+      "name": "学生62"
+    },
+    {
+      "name": "学生63"
+    },
+    "aisle",
+    {
+      "name": "学生64"
+    },
+    {
+      "name": "学生65"
+    },
+    {
+      "name": "学生66"
+    },
+    {
+      "name": "学生67"
+    },
+    {
+      "name": "学生68",
+      "role": "leader"
+    },
+    {
+      "name": "学生69"
+    },
+    {
+      "name": "学生70"
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "name": "学生71",
+      "role": "leader"
+    },
+    {
+      "name": "学生72"
+    },
+    {
+      "name": "学生73"
+    },
+    {
+      "name": "学生74"
+    },
+    {
+      "name": "学生75"
+    },
+    {
+      "name": "学生76"
+    },
+    null,
+    "aisle",
+    {
+      "name": "学生77"
+    },
+    {
+      "name": "学生78"
+    },
+    {
+      "name": "学生79"
+    },
+    {
+      "name": "学生80"
+    },
+    {
+      "name": "学生81"
+    },
+    {
+      "name": "学生82"
+    },
+    {
+      "name": "学生83"
+    },
+    null
+  ],
+  [
+    null,
+    {
+      "name": "学生84"
+    },
+    {
+      "name": "学生85",
+      "role": "leader"
+    },
+    {
+      "name": "学生86"
+    },
+    {
+      "name": "学生87"
+    },
+    {
+      "name": "学生88"
+    },
+    null,
+    null,
+    "aisle",
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+  ]
+],
+            intros: {}
         };
 
         // ===================== 座位渲染 =====================
@@ -982,6 +1308,9 @@
                 }
                 table.appendChild(tr);
             }
+            // 渲染完成后立即应用视角，避免闪烁
+            if (!isTeacher) table.classList.add('student-mode');
+            else table.classList.remove('student-mode');
         }
 
         // ===================== 全局变量 =====================
@@ -1371,6 +1700,7 @@
          */
         function openBuilder() {
             closeSettingsPanel();
+            if(!confirm('请确认 builder.html 和点名器文件在同一目录下，确认后将打开配置页面。')) return;
             const draft = {
                 title:  CLASS_CONFIG.title,
                 slogan: CLASS_CONFIG.slogan,
@@ -1384,7 +1714,6 @@
                 intros: CLASS_CONFIG.intros || {}
             };
             localStorage.setItem('builder_draft', JSON.stringify(draft));
-            if(!confirm('请确认 builder.html 和点名器文件在同一目录下，确认后将打开配置页面。')) return;
             const win = window.open('./builder.html', '_blank');
             if (!win) {
                 alert('未找到 builder.html，请将 builder.html 文件放到与本文件相同的目录下。');
