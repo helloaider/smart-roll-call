@@ -1,3 +1,10 @@
 .vscode/
 .DS_Store
 Thumbs.db
+
+# 个人数据文件
+*.xlsx
+AI大模型*.html
+index\ -\ *.html
+_*.py
+_*.txt

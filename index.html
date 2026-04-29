@@ -297,7 +297,7 @@
             position: fixed;
             top: 100px;
             right: 20px;
-            width: 180px;
+            width: 200px;
             background: linear-gradient(135deg, rgba(30, 60, 114, 0.98) 0%, rgba(42, 82, 152, 0.98) 100%);
             border: 1px solid rgba(0, 255, 252, 0.6);
             border-radius: 12px;
@@ -381,11 +381,11 @@
 
         /* 学生视角：整体翻转表格，单元格内文字反向 */
 
-        #teacher-view.student-mode {
+        #seat-table.student-mode {
             transition: none;
             transform: rotate(180deg);
         }
-        #teacher-view.student-mode td {
+        #seat-table.student-mode td {
             transition: none;
             transform: rotate(180deg);
         }
@@ -395,12 +395,18 @@
             border-radius: 10px; 
             padding: 20px; 
             margin-top: 30px; 
-            width: 100%; 
+            width: fit-content;
+            min-width: 100%;
             max-width: 1600px;
             border: 1px solid rgba(255, 255, 255, 0.1); 
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); 
             position: relative; 
             transition: all 0.3s ease;
+            overflow-x: auto;
+        }
+        
+        .seating-chart table {
+            min-width: max-content;
         }
         
         .chart-header { 
@@ -484,7 +490,7 @@
             100% { transform: scale(1); }
         }
 
-        #teacher-view.student-mode td.highlight {
+        #seat-table.student-mode td.highlight {
             animation: pulse-flipped 1s ease-out !important;
         }
 
@@ -755,13 +761,13 @@
     
     <!-- 设置面板 -->
     <div class="settings-panel">
-        <div class="settings-item" id="toggle-view">切换座位视角</div>
-        <div class="settings-item" id="toggle-dark-mode">切换暗黑模式</div>
-        <div class="settings-item" id="toggle-class-committee">显示班委标签</div>
-        <div class="settings-item" id="toggle-intro">显示姓名典故</div>
+        <div class="settings-item" id="toggle-view">🔄 切换座位视角</div>
+        <div class="settings-item" id="toggle-dark-mode">🌙 切换暗黑模式</div>
+        <div class="settings-item" id="toggle-class-committee">🎖️ 显示班委标签</div>
+        <div class="settings-item" id="toggle-intro">📖 显示姓名典故</div>
 
         <div class="settings-item expanded" id="manage-record">
-            管理点名记录
+            📋 管理点名记录
             <span class="arrow-icon">▼</span>
         </div>
         
@@ -770,14 +776,15 @@
             <div class="submenu-item" id="toggle-record-visibility">隐藏记录</div>
         </div>
 
-        <div class="settings-item" id="view-instruction">查看使用说明</div>
+        <div class="settings-item" id="edit-config">✏️ 编辑座位信息</div>
+        <div class="settings-item" id="view-instruction">❓ 查看使用说明</div>
     </div>
 
     <!-- 使用说明弹窗 -->
     <div class="instruction-modal" id="instructionModal">
         <div class="instruction-content">
             <div class="instruction-header">
-                <h2>智能课堂点名器(v1.0) 使用说明</h2>
+                <h2>智能课堂点名器(v1.1) 使用说明</h2>
             </div>
             <div class="instruction-body">
                 <h3>一、功能概述</h3>
@@ -787,7 +794,8 @@
                 <p>4. 主题个性化：内置深蓝/暗黑两种主题模式，切换状态自动保存至浏览器；</p>
                 <p>5. 班委快速识别：通过彩色波浪下划线区分班委类型，课堂管理更高效；</p>
                 <p>6. 姓名典故展示：点名后可在姓名右侧弹出典故卡片，帮助老师快速了解学员背景；</p>
-                <p>7. 点名记录管理：支持隐藏/显示已点名单、一键清空记录，灵活管控点名状态。</p>
+                <p>7. 点名记录管理：支持隐藏/显示已点名单、一键清空记录，灵活管控点名状态；</p>
+                <p>8. 编辑座位表：通过设置菜单「✏️ 编辑座位信息」可打开配置生成器，可视化编辑座位布局、学生姓名、班委角色及姓名典故，编辑完成后点击「应用到点名器」即时生效。</p>
 
                 <h3>二、操作指南</h3>
                 <p>1. 随机点名操作：</p>
@@ -814,6 +822,11 @@
                 <p>&nbsp;&nbsp;&nbsp;&nbsp;- 删除记录：一键清空所有点名记录（操作不可逆，请谨慎执行）。</p>
 
                 <p>8. 数据保存：所有点名记录、主题/视角设置均自动保存在浏览器本地，刷新页面后数据不丢失。</p>
+                <p>9. 编辑座位表操作：</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 点击右上角⚙️设置按钮，选择「✏️ 编辑座位信息」；</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 确认 builder.html 与本文件在同一目录后，配置页面将自动打开并载入当前配置；</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 在配置页面修改座位布局、学生姓名、班委角色、姓名典故等信息；</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 编辑完成后点击「↩ 应用到点名器」，切换回本页面即可看到更新效果（无需重新生成文件）。</p>
 
                 <h3>三、注意事项</h3>
                 <p>1. 当「随机抽未点过」触发「全部已点完」提示时，系统会自动重置所有点名记录，可重新开始新一轮点名；</p>
@@ -829,7 +842,7 @@
 
     <!-- 主内容容器 -->
     <div class="container">
-        <h1>智能课堂点名器(v1.0)</h1>
+        <h1>智能课堂点名器(v1.1)</h1>
         
         <!-- 姓名显示区域 -->
         <div id="name-display">
@@ -845,134 +858,10 @@
 
         <!-- 座位表区域 -->
         <div class="seating-chart">
-           <div class="chart-header">xx学校-xx教室座位表</div>
+           <div class="chart-header" id="chart-header-text"></div>
             
-            <!-- 教师视角表格（默认显示） -->
-            <table id="teacher-view">
-                <tr>
-                    <td id="学生01">学生01</td>
-                    <td id="学生02">学生02</td>
-                    <td id="学生03">学生03</td>
-                    <td id="学生04">学生04</td>
-                    <td id="学生05" class="class-committee-leader">学生05</td>
-                    <td id="学生06">学生06</td>
-                    <td id="学生07">学生07</td>
-                    <td id="学生08">学生08</td>
-                    <td class="aisle" rowspan="7">过道</td>
-                    <td colspan="4"></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td id="学生09">学生09</td>
-                    <td id="学生10" class="class-committee-leader">学生10</td>
-                    <td id="学生11">学生11</td>
-                    <td id="学生12">学生12</td>
-                    <td id="学生13">学生13</td>
-                    <td id="学生14">学生14</td>
-                    <td id="学生15">学生15</td>
-                    <td id="学生16">学生16</td>
-                    <td id="学生17">学生17</td>
-                    <td id="学生18">学生18</td>
-                    <td id="学生19">学生19</td>
-                    <td id="学生20">学生20</td>
-                    <td id="学生21">学生21</td>
-                    <td id="学生22">学生22</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td id="学生23">学生23</td>
-                    <td id="学生24">学生24</td>
-                    <td id="学生25">学生25</td>
-                    <td id="学生26">学生26</td>
-                    <td id="学生27">学生27</td>
-                    <td id="学生28">学生28</td>
-                    <td id="学生29">学生29</td>
-                    <td id="学生30">学生30</td>
-                    <td id="学生31" class="class-committee-monitor">学生31</td>
-                    <td id="学生32" class="class-committee-leader">学生32</td>
-                    <td id="学生33">学生33</td>
-                    <td id="学生34">学生34</td>
-                    <td id="学生35">学生35</td>
-                    <td id="学生36">学生36</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td id="学生37">学生37</td>
-                    <td id="学生38">学生38</td>
-                    <td id="学生39">学生39</td>
-                    <td id="学生40" class="class-committee-leader">学生40</td>
-                    <td id="学生41">学生41</td>
-                    <td id="学生42">学生42</td>
-                    <td id="学生43" class="class-committee-leader">学生43</td>
-                    <td id="学生44">学生44</td>
-                    <td id="学生45">学生45</td>
-                    <td id="学生46">学生46</td>
-                    <td id="学生47" class="class-committee-monitor">学生47</td>
-                    <td id="学生48">学生48</td>
-                    <td id="学生49">学生49</td>
-                    <td id="学生50">学生50</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td id="学生51">学生51</td>
-                    <td id="学生52">学生52</td>
-                    <td id="学生53">学生53</td>
-                    <td id="学生54">学生54</td>
-                    <td id="学生55">学生55</td>
-                    <td></td>
-                    <td id="学生56">学生56</td>
-                    <td id="学生57">学生57</td>
-                    <td id="学生58">学生58</td>
-                    <td id="学生59" class="class-committee-leader">学生59</td>
-                    <td id="学生60">学生60</td>
-                    <td id="学生61">学生61</td>
-                    <td id="学生62">学生62</td>
-                    <td id="学生63">学生63</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td id="学生64">学生64</td>
-                    <td id="学生65">学生65</td>
-                    <td id="学生66">学生66</td>
-                    <td id="学生67">学生67</td>
-                    <td id="学生68" class="class-committee-leader">学生68</td>
-                    <td id="学生69">学生69</td>
-                    <td id="学生70">学生70</td>
-                    <td id="学生71" class="class-committee-leader">学生71</td>
-                    <td id="学生72">学生72</td>
-                    <td id="学生73">学生73</td>
-                    <td id="学生74">学生74</td>
-                    <td id="学生75">学生75</td>
-                    <td id="学生76">学生76</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td id="学生77">学生77</td>
-                    <td id="学生78">学生78</td>
-                    <td id="学生79">学生79</td>
-                    <td id="学生80">学生80</td>
-                    <td id="学生81">学生81</td>
-                    <td id="学生82">学生82</td>
-                    <td id="学生83">学生83</td>
-                    <td class="stage" colspan="2">讲台</td>
-                    <td id="学生84">学生84</td>
-                    <td id="学生85" class="class-committee-leader">学生85</td>
-                    <td id="学生86">学生86</td>
-                    <td id="学生87">学生87</td>
-                    <td id="学生88">学生88</td>
-                    <td></td>
-                </tr>
-            </table>
+            <!-- 教师视角表格（由 JS 动态渲染） -->
+            <table id="seat-table"></table>
             <div class="slogan">请将此处替换为你班级的专属口号！</div>
         </div>
     </div>
@@ -980,76 +869,124 @@
     <!-- 粒子背景JS -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        // ===================== 全局变量 =====================
-         
-         let name_intro =
-            {
-                // 请将 key 替换为你班级学生的真实姓名，value 替换为对应的介绍文字
-                "学生01": "这里填写学生01的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生02": "这里填写学生02的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生03": "这里填写学生03的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生04": "这里填写学生04的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生05": "这里填写学生05的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生06": "这里填写学生06的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生07": "这里填写学生07的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生08": "这里填写学生08的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生09": "这里填写学生09的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生10": "这里填写学生10的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生11": "这里填写学生11的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生12": "这里填写学生12的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生13": "这里填写学生13的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生14": "这里填写学生14的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生15": "这里填写学生15的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生16": "这里填写学生16的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生17": "这里填写学生17的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生18": "这里填写学生18的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生19": "这里填写学生19的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生20": "这里填写学生20的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生21": "这里填写学生21的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生22": "这里填写学生22的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生23": "这里填写学生23的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生24": "这里填写学生24的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生25": "这里填写学生25的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生26": "这里填写学生26的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生27": "这里填写学生27的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生28": "这里填写学生28的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生29": "这里填写学生29的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生30": "这里填写学生30的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生31": "这里填写学生31的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生32": "这里填写学生32的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生33": "这里填写学生33的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生34": "这里填写学生34的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生35": "这里填写学生35的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生36": "这里填写学生36的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生37": "这里填写学生37的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生38": "这里填写学生38的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生39": "这里填写学生39的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生40": "这里填写学生40的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生41": "这里填写学生41的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生42": "这里填写学生42的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生43": "这里填写学生43的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生44": "这里填写学生44的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生45": "这里填写学生45的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生46": "这里填写学生46的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生47": "这里填写学生47的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生48": "这里填写学生48的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生49": "这里填写学生49的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生50": "这里填写学生50的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生51": "这里填写学生51的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生52": "这里填写学生52的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生53": "这里填写学生53的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生54": "这里填写学生54的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生55": "这里填写学生55的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生56": "这里填写学生56的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生57": "这里填写学生57的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生58": "这里填写学生58的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生59": "这里填写学生59的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生60": "这里填写学生60的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生61": "这里填写学生61的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生62": "这里填写学生62的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-                "学生63": "这里填写学生63的姓名典故或个人介绍，点名后将在姓名右侧弹出展示。",
-           }
+        // ===================== 班级配置（在这里修改所有内容）=====================
+        // seats 每行是一个数组，每个元素可以是：
+        //   { name: '姓名' }              — 普通学生
+        //   { name: '姓名', role: 'monitor' }  — 班长（红色波浪线）
+        //   { name: '姓名', role: 'leader' }   — 组长（绿色波浪线）
+        //   null                          — 空格
+        //   'aisle'                       — 过道（整列都是 aisle 时自动合并行）
+        //   'stage'                       — 讲台
+        const CLASS_CONFIG = {
+            title: 'xx学校-xx教室座位表',
+            slogan: '请将此处替换为你班级的专属口号！',
+            seats: [
+                [ null, null, null, null, null, null, null, null, 'aisle', 'stage', 'stage', null, null, null, null, null, null ],
+                [ null, {name:'学生01'}, {name:'学生02'}, {name:'学生03'}, {name:'学生04'}, {name:'学生05',role:'leader'}, {name:'学生06'}, {name:'学生07'}, 'aisle', {name:'学生09'}, {name:'学生10',role:'leader'}, {name:'学生11'}, {name:'学生12'}, {name:'学生13'}, {name:'学生14'}, {name:'学生15'}, null ],
+                [ null, {name:'学生16'}, {name:'学生17'}, {name:'学生18'}, {name:'学生19'}, {name:'学生20'}, {name:'学生21'}, {name:'学生22'}, 'aisle',  {name:'学生23'}, {name:'学生24'}, {name:'学生25'}, {name:'学生26'}, {name:'学生27'}, {name:'学生28'}, {name:'学生29'}, null ],
+                [ null, {name:'学生30'}, {name:'学生31',role:'monitor'}, {name:'学生32',role:'leader'}, {name:'学生33'}, {name:'学生34'}, {name:'学生35'}, {name:'学生36'}, 'aisle',{name:'学生37'}, {name:'学生38'}, {name:'学生39'}, {name:'学生40',role:'leader'}, {name:'学生41'}, {name:'学生42'}, {name:'学生43',role:'leader'} , null ],
+                [ null, {name:'学生44'}, {name:'学生45'}, {name:'学生46'}, {name:'学生47',role:'monitor'}, {name:'学生48'}, {name:'学生49'}, {name:'学生50'}, 'aisle', {name:'学生51'}, {name:'学生52'}, {name:'学生53'}, {name:'学生54'}, {name:'学生55'}, null, {name:'学生56'}, null ],
+                [ null, {name:'学生57'}, {name:'学生58'}, {name:'学生59',role:'leader'}, {name:'学生60'}, {name:'学生61'}, {name:'学生62'}, {name:'学生63'}, 'aisle',{name:'学生64'}, {name:'学生65'}, {name:'学生66'}, {name:'学生67'}, {name:'学生68',role:'leader'}, {name:'学生69'}, {name:'学生70'} , null ],
+                [ null, {name:'学生71',role:'leader'}, {name:'学生72'}, {name:'学生73'}, {name:'学生74'}, {name:'学生75'}, {name:'学生76'}, null, 'aisle',{name:'学生77'}, {name:'学生78'}, {name:'学生79'}, {name:'学生80'}, {name:'学生81'}, {name:'学生82'}, {name:'学生83'} , null ],
+                [ null, {name:'学生84'}, {name:'学生85',role:'leader'}, {name:'学生86'}, {name:'学生87'}, {name:'学生88'}, 'aisle', null, null, , null, null, null, null, null, null ],
+            ],
+            intros: {
+                // 姓名典故，key 与 seats 中的 name 完全一致
+                // "张三": "张三的介绍文字...",
+            }
+        };
 
+        // ===================== 座位渲染 =====================
+        function renderSeats() {
+            const table = document.getElementById('seat-table');
+            const headerEl = document.getElementById('chart-header-text');
+            const sloganEl = document.querySelector('.slogan');
+            if (headerEl) headerEl.textContent = CLASS_CONFIG.title;
+            if (sloganEl) sloganEl.textContent = CLASS_CONFIG.slogan;
+
+            // seats 存储的是学生视角，渲染时翻转为教师视角（行序颠倒 + 每行左右颠倒）
+            // 先补齐列数再翻转，确保翻转后各行过道列 index 一致
+            const rawRows = CLASS_CONFIG.seats;
+            const numRows = rawRows.length;
+            const numCols = Math.max(...rawRows.map(r => r.length));
+            // 补齐后翻转
+            const rows = rawRows.slice().reverse().map(r => {
+                const padded = r.slice();
+                while (padded.length < numCols) padded.push(null);
+                return padded.reverse();
+            });
+
+            // 整列都是 'aisle' → rowspan 合并
+            // 忽略 null/stage，只要有 aisle 且无学生格就合并
+            const aisleFullCols = [];
+            for (let c = 0; c < numCols; c++) {
+                let hasAisle = false, allOk = true;
+                for (let r = 0; r < numRows; r++) {
+                    const v = rows[r][c];
+                    if (v === 'aisle') { hasAisle = true; }
+                    else if (v !== null && v !== undefined && v !== 'stage') { allOk = false; break; }
+                }
+                if (hasAisle && allOk) aisleFullCols.push(c);
+            }
+
+            // 每行连续 stage → colspan 合并
+            const stageSkip    = Array.from({length: numRows}, () => new Array(numCols).fill(false));
+            const stageColspan = Array.from({length: numRows}, () => new Array(numCols).fill(1));
+            for (let r = 0; r < numRows; r++) {
+                let c = 0;
+                while (c < numCols) {
+                    if (rows[r][c] === 'stage') {
+                        let span = 1;
+                        while (c + span < numCols && rows[r][c + span] === 'stage') span++;
+                        stageColspan[r][c] = span;
+                        for (let k = 1; k < span; k++) stageSkip[r][c + k] = true;
+                        c += span;
+                    } else { c++; }
+                }
+            }
+
+            table.innerHTML = '';
+            for (let r = 0; r < numRows; r++) {
+                const tr = document.createElement('tr');
+                for (let c = 0; c < numCols; c++) {
+                    if (aisleFullCols.includes(c)) {
+                        if (r === 0) {
+                            const td = document.createElement('td');
+                            td.className = 'aisle';
+                            td.rowSpan = numRows;
+                            td.textContent = '过道';
+                            tr.appendChild(td);
+                        }
+                        continue;
+                    }
+                    if (stageSkip[r][c]) continue;
+
+                    const cell = rows[r][c];
+                    const td = document.createElement('td');
+                    if (cell === null || cell === undefined) {
+                        td.innerHTML = '&nbsp;'; // 撑高度与有名字的格一致
+                    } else if (cell === 'aisle') {
+                        td.className = 'aisle';
+                        td.textContent = '过道';
+                    } else if (cell === 'stage') {
+                        td.className = 'stage';
+                        td.textContent = '讲台';
+                        if (stageColspan[r][c] > 1) td.colSpan = stageColspan[r][c];
+                    } else if (cell && cell.name) {
+                        td.id = cell.name;
+                        td.textContent = cell.name;
+                        if (cell.role === 'monitor') td.className = 'class-committee-monitor';
+                        else if (cell.role === 'leader') td.className = 'class-committee-leader';
+                    }
+                    tr.appendChild(td);
+                }
+                table.appendChild(tr);
+            }
+        }
+
+        // ===================== 全局变量 =====================
+        const name_intro = CLASS_CONFIG.intros;
+        // 兼容旧版：如果有人直接改这里也能用
         // 本地化存储相关
 
         let hasBeenCalled = new Set(JSON.parse(localStorage.getItem('calledNames') || '[]'));
@@ -1063,13 +1000,13 @@
 
         // 缓存所有学生姓名，避免重复查询 DOM
         const getAllStudentNames = () =>
-            Array.from(document.querySelectorAll('#teacher-view td[id]')).map(td => td.id);
+            Array.from(document.querySelectorAll('#seat-table td[id]')).map(td => td.id);
 
         // DOM元素
         const startBtn = document.getElementById('start-btn');
         const manualBtn = document.getElementById('manual-btn');
         const nameDisplay = document.getElementById('current-name');
-        const teacherView = document.getElementById('teacher-view');
+        const teacherView = document.getElementById('seat-table');
                 const settingsBtn = document.querySelector('.settings-btn');
         const settingsPanel = document.querySelector('.settings-panel');
         const toggleViewBtn = document.getElementById('toggle-view');
@@ -1122,7 +1059,7 @@
          * 更新所有座位的悬浮提示
          */
         function updateAllSeatTooltip() {
-            document.querySelectorAll('#teacher-view td').forEach(td => {
+            document.querySelectorAll('#seat-table td').forEach(td => {
                 if(td.classList.contains('aisle') || td.classList.contains('stage') || !td.id) return;
                 const name = td.innerText.trim();
                 const realName = td.id;
@@ -1148,7 +1085,7 @@
         function updateDarkModeUI() {
             document.body.classList.toggle('dark-mode', isDarkMode);
             document.documentElement.classList.toggle('dark-mode-pre', isDarkMode);
-            toggleDarkModeBtn.innerText = isDarkMode ? '切换深蓝模式' : '切换暗黑模式';
+            toggleDarkModeBtn.innerText = isDarkMode ? '🌙 切换深蓝模式' : '🌙 切换暗黑模式';
         }
 
         /**
@@ -1156,7 +1093,7 @@
          */
         function updateClassCommitteeUI() {
             document.body.classList.toggle('show-committee', isShowCommittee);
-            toggleClassCommitteeBtn.innerText = isShowCommittee ? '隐藏班委标签' : '显示班委标签';
+            toggleClassCommitteeBtn.innerText = isShowCommittee ? '🎖️ 隐藏班委标签' : '🎖️ 显示班委标签';
         }
 
         // ===================== 核心功能方法 =====================
@@ -1312,13 +1249,13 @@
         function toggleView() {
             isTeacher = !isTeacher;
             // 切换前禁用所有td的transition，防止翻转动画
-            document.querySelectorAll('#teacher-view td').forEach(td => td.style.transition = 'none');
+            document.querySelectorAll('#seat-table td').forEach(td => td.style.transition = 'none');
             teacherView.style.transition = 'none';
             teacherView.classList.toggle('student-mode', !isTeacher);
             // 下一帧恢复transition
             requestAnimationFrame(() => {
                 teacherView.style.transition = '';
-                document.querySelectorAll('#teacher-view td').forEach(td => td.style.transition = '');
+                document.querySelectorAll('#seat-table td').forEach(td => td.style.transition = '');
             });
 
             clearHigh();
@@ -1361,7 +1298,7 @@
 
         function updateIntroUI() {
             const btn = document.getElementById('toggle-intro');
-            if (btn) btn.innerText = isShowIntro ? '隐藏姓名典故' : '显示姓名典故';
+            if (btn) btn.innerText = isShowIntro ? '📖 隐藏姓名典故' : '📖 显示姓名典故';
             const el = document.getElementById('intro-display');
             if (el) {
                 if (isShowIntro && el.innerText) el.classList.add('visible');
@@ -1430,6 +1367,31 @@
         }
 
         /**
+         * 打开 builder 编辑座位信息
+         */
+        function openBuilder() {
+            closeSettingsPanel();
+            const draft = {
+                title:  CLASS_CONFIG.title,
+                slogan: CLASS_CONFIG.slogan,
+                cells:  CLASS_CONFIG.seats.map(row => row.map(cell => {
+                    if (cell === null || cell === undefined) return {type:'empty', name:'', role:'normal'};
+                    if (cell === 'aisle') return {type:'aisle', name:'', role:'normal'};
+                    if (cell === 'stage') return {type:'stage', name:'', role:'normal'};
+                    if (cell && cell.name) return {type:'student', name:cell.name, role:cell.role||'normal'};
+                    return {type:'empty', name:'', role:'normal'};
+                })),
+                intros: CLASS_CONFIG.intros || {}
+            };
+            localStorage.setItem('builder_draft', JSON.stringify(draft));
+            if(!confirm('请确认 builder.html 和点名器文件在同一目录下，确认后将打开配置页面。')) return;
+            const win = window.open('./builder.html', '_blank');
+            if (!win) {
+                alert('未找到 builder.html，请将 builder.html 文件放到与本文件相同的目录下。');
+            }
+        }
+
+        /**
          * 打开使用说明
          */
         function openInstruction() {
@@ -1461,7 +1423,7 @@
          * 初始化座位单元格事件
          */
         function initSeatEvents() {
-            document.querySelectorAll('#teacher-view td').forEach(td => {
+            document.querySelectorAll('#seat-table td').forEach(td => {
                 if(td.classList.contains('aisle') || td.classList.contains('stage') || !td.id) return;
                 
                 td.addEventListener('dblclick', handleDoubleClick);
@@ -1480,10 +1442,14 @@
 
         // ===================== 初始化 =====================
         function init() {
+            // 先渲染座位表
+            renderSeats();
+
             // 初始化按钮事件
             startBtn.addEventListener('click', () => startRoll(true));
             manualBtn.addEventListener('click', () => startRoll(false));
             settingsBtn.addEventListener('click', () => settingsPanel.classList.toggle('show'));
+            document.getElementById('edit-config').addEventListener('click', openBuilder);
             toggleViewBtn.addEventListener('click', toggleView);
             toggleDarkModeBtn.addEventListener('click', toggleDarkMode);
             toggleClassCommitteeBtn.addEventListener('click', toggleClassCommittee);
@@ -1532,6 +1498,25 @@
             });
         }
         
+
+        // 轮询检测 builder 写回的配置（file:// 协议下 storage 事件不可靠）
+        setInterval(function() {
+            var raw = localStorage.getItem('builder_apply');
+            if (!raw) return;
+            try {
+                var cfg = JSON.parse(raw);
+                if (cfg && cfg.seats) {
+                    CLASS_CONFIG.title  = cfg.title  || CLASS_CONFIG.title;
+                    CLASS_CONFIG.slogan = cfg.slogan || CLASS_CONFIG.slogan;
+                    CLASS_CONFIG.seats  = cfg.seats;
+                    CLASS_CONFIG.intros = cfg.intros || {};
+                    localStorage.removeItem('builder_apply');
+                    renderSeats();
+                    initSeatEvents();
+                    refreshUI();
+                }
+            } catch(e) {}
+        }, 1000);
 
         // 启动初始化
         window.addEventListener('load', init);
