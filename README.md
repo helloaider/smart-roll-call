@@ -69,3 +69,7 @@ https://helloaider.github.io/smart-roll-call/
 ## 📄 License
 
 [MIT](./LICENSE)
+
+## 📬 联系作者
+
+如有任何使用问题或新需求，欢迎通过邮箱联系作者：20597475@qq.com

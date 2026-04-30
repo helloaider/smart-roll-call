@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,10 +9,10 @@
     <link rel="icon" type="image/png" href="./favicon.png">
     <style>
         /* ===================== 全局基础样式 ===================== */
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         /* ===================== 班委标签样式功能开始 ===================== */
@@ -32,6 +33,7 @@
             text-decoration: underline wavy var(--monitor-color) !important;
             text-underline-offset: var(--committee-offset);
         }
+
         body.show-committee .class-committee-leader {
             text-decoration: underline wavy var(--leader-color) !important;
             text-underline-offset: var(--committee-offset);
@@ -47,6 +49,7 @@
             text-decoration: underline wavy var(--monitor-color) !important;
             text-underline-offset: var(--committee-offset);
         }
+
         body.show-committee td.highlight.class-committee-leader,
         body.show-committee td.highlight .name.class-committee-leader {
             text-decoration: underline wavy var(--leader-color) !important;
@@ -57,6 +60,7 @@
         body.dark-mode.show-committee td.highlight .name.class-committee-monitor {
             text-decoration: underline wavy var(--dark-monitor-color) !important;
         }
+
         body.dark-mode.show-committee td.highlight.class-committee-leader,
         body.dark-mode.show-committee td.highlight .name.class-committee-leader {
             text-decoration: underline wavy var(--dark-leader-color) !important;
@@ -74,82 +78,84 @@
         body.dark-mode.show-committee .class-committee-monitor {
             text-decoration: underline wavy var(--dark-monitor-color) !important;
         }
+
         body.dark-mode.show-committee .class-committee-leader {
             text-decoration: underline wavy var(--dark-leader-color) !important;
         }
+
         /* ===================== 班委标签样式功能结束 =====================*/
 
-        body { 
-            font-family: 'Microsoft YaHei', 'Heiti SC', sans-serif; 
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); 
-            color: #fff; 
-            min-height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            overflow-x: hidden; 
-            position: relative; 
+        body {
+            font-family: 'Microsoft YaHei', 'Heiti SC', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
             transition: all 0.3s ease;
         }
 
         /* ===================== 粒子背景样式 ===================== */
-        #particles-js { 
-            position: absolute; 
-            width: 100%; 
-            height: 100%; 
-            top: 0; 
-            left: 0; 
-            z-index: 1; 
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
         }
 
         /* ===================== 核心容器样式 ===================== */
-        .container { 
-            z-index: 2; 
-            width: 100%; 
+        .container {
+            z-index: 2;
+            width: 100%;
             max-width: 1650px;
-            padding: 15px; 
-            text-align: center; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            margin: 10px auto; 
+            padding: 15px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px auto;
         }
 
         /* ===================== 标题样式 ===================== */
-        h1 { 
-            font-size: 2.2em; 
-            margin-bottom: 10px; 
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); 
-            letter-spacing: 2px; 
-            border-bottom: 2px solid rgba(255, 255, 255, 0.2); 
-            padding-bottom: 10px; 
-            width: 100%; 
-            max-width: 800px; 
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            letter-spacing: 2px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 10px;
+            width: 100%;
+            max-width: 800px;
             transition: all 0.3s ease;
         }
 
         /* ===================== 姓名显示区域样式 ===================== */
-        #name-display { 
-            font-size: 6em; 
-            font-weight: bold; 
+        #name-display {
+            font-size: 6em;
+            font-weight: bold;
             margin: 10px 0;
-            text-shadow: 0 0 20px #00fffc, 0 0 40px #00fffc; 
-            height: 100px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            overflow: hidden; 
-            position: relative; 
-            min-width: 500px; 
-            padding: 15px; 
+            text-shadow: 0 0 20px #00fffc, 0 0 40px #00fffc;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            min-width: 500px;
+            padding: 15px;
             transition: all 0.3s ease;
         }
-       
+
         #current-name {
             position: relative;
             z-index: 3;
             transition: all 0.3s ease;
-            font-size: 0.95em; 
+            font-size: 0.95em;
             padding-bottom: 2px;
         }
 
@@ -164,7 +170,7 @@
             padding: 0 16px;
             font-size: 15px;
             font-weight: normal;
-            color: rgba(255,255,255,0.9);
+            color: rgba(255, 255, 255, 0.9);
             text-align: justify;
             line-height: 1.8;
             text-shadow: none;
@@ -175,8 +181,9 @@
             transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
             box-sizing: border-box;
             backdrop-filter: blur(8px);
-            z-index: 10;
+            z-index: 9000;
         }
+
         #intro-display.visible {
             max-height: 300px;
             opacity: 1;
@@ -184,6 +191,7 @@
             pointer-events: auto;
             overflow: hidden;
         }
+
         /* 左侧箭头指向名字，垂直居中 */
         #intro-display.visible::after {
             content: '';
@@ -197,6 +205,7 @@
             border-bottom: 8px solid transparent;
             border-right: 10px solid rgba(0, 255, 252, 0.5);
         }
+
         #intro-display.visible::before {
             content: '';
             position: absolute;
@@ -210,50 +219,53 @@
             border-right: 9px solid rgba(30, 60, 114, 0.95);
             z-index: 1;
         }
+
         body.dark-mode #intro-display {
             background: linear-gradient(135deg, rgba(15, 23, 42, 0.97) 0%, rgba(30, 41, 59, 0.97) 100%);
             border: 1px solid rgba(56, 189, 248, 0.4);
             color: #e0f2fe;
         }
+
         body.dark-mode #intro-display.visible::after {
             border-right-color: rgba(56, 189, 248, 0.4);
         }
+
         body.dark-mode #intro-display.visible::before {
             border-right-color: rgba(15, 23, 42, 0.97);
         }
 
         /* ===================== 按钮基础样式 ===================== */
-        .controls { 
-            margin: 20px 0; 
-            display: flex; 
-            gap: 60px; 
-            align-items: center; 
-            justify-content: center; 
-            flex-wrap: wrap; 
+        .controls {
+            margin: 20px 0;
+            display: flex;
+            gap: 60px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
         }
-        
-        button { 
-            background: rgba(255, 255, 255, 0.1); 
-            border: 1px solid #00fffc; 
-            color: #fff; 
-            padding: 12px 20px; 
-            font-size: 1.1em; 
-            border-radius: 25px; 
-            cursor: pointer; 
-            transition: all 0.3s; 
-            outline: none; 
-            min-width: 160px; 
+
+        button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #00fffc;
+            color: #fff;
+            padding: 12px 20px;
+            font-size: 1.1em;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            outline: none;
+            min-width: 160px;
         }
-        
-        button:hover { 
-            background: rgba(0, 255, 252, 0.2); 
-            transform: translateY(-2px); 
+
+        button:hover {
+            background: rgba(0, 255, 252, 0.2);
+            transform: translateY(-2px);
         }
-        
-        button:active { 
-            transform: translateY(0); 
+
+        button:active {
+            transform: translateY(0);
         }
-        
+
         button:disabled {
             background: rgba(255, 255, 255, 0.05);
             border-color: rgba(0, 255, 252, 0.2);
@@ -262,7 +274,8 @@
             opacity: 0.7;
         }
 
-        #start-btn, #manual-btn {
+        #start-btn,
+        #manual-btn {
             padding: 12px 20px;
             font-size: 1.15em;
         }
@@ -275,20 +288,20 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             border: 1px solid #00fffc;
             color: #fff;
             font-size: 1.4em;
-            display: flex; 
-            align-items: center; 
+            display: flex;
+            align-items: center;
             justify-content: center;
             cursor: pointer;
             z-index: 999;
             transition: all 0.3s ease;
         }
-        
+
         .settings-btn:hover {
-            background: rgba(0,255,252,0.2);
+            background: rgba(0, 255, 252, 0.2);
             transform: rotate(60deg);
         }
 
@@ -307,18 +320,18 @@
             flex-direction: column;
             gap: 8px;
             backdrop-filter: blur(10px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
             transition: all 0.3s ease;
         }
-        
+
         .settings-panel.show {
             display: flex;
         }
-        
+
         .settings-item {
             padding: 10px 12px;
             border-radius: 8px;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
             cursor: pointer;
             transition: all 0.2s;
             font-size: 1em;
@@ -327,25 +340,25 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .settings-item:hover {
-            background: rgba(0,255,252,0.15);
+            background: rgba(0, 255, 252, 0.15);
             color: #00fffc;
         }
-        
+
         .arrow-icon {
             font-size: 0.9em;
             transition: transform 0.3s ease;
         }
-        
+
         .settings-item.expanded .arrow-icon {
             transform: rotate(0deg);
         }
-        
+
         .settings-item.collapsed .arrow-icon {
             transform: rotate(180deg);
         }
-        
+
         .submenu-container {
             display: flex;
             flex-direction: column;
@@ -357,25 +370,25 @@
             overflow: hidden;
             transition: max-height 0.3s ease, padding 0.3s ease;
         }
-        
+
         .submenu-container.show {
             max-height: 100px;
             padding-top: 4px;
             padding-bottom: 4px;
         }
-        
+
         .submenu-item {
             padding: 8px 10px;
             border-radius: 6px;
-            background: rgba(255,255,255,0.03);
+            background: rgba(255, 255, 255, 0.03);
             cursor: pointer;
             transition: all 0.2s;
             font-size: 0.95em;
             text-align: left;
         }
-        
+
         .submenu-item:hover {
-            background: rgba(0,255,252,0.15);
+            background: rgba(0, 255, 252, 0.15);
             color: #00fffc;
         }
 
@@ -385,52 +398,54 @@
             transition: none;
             transform: rotate(180deg);
         }
+
         #seat-table.student-mode td {
             transition: none;
             transform: rotate(180deg);
         }
-/* ===================== 座位表样式 ===================== */
-        .seating-chart { 
-            background: rgba(255, 255, 255, 0.05); 
-            border-radius: 10px; 
-            padding: 20px; 
-            margin-top: 30px; 
+
+        /* ===================== 座位表样式 ===================== */
+        .seating-chart {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
             width: fit-content;
             min-width: 100%;
             max-width: 1600px;
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); 
-            position: relative; 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
             transition: all 0.3s ease;
             overflow-x: auto;
         }
-        
+
         .seating-chart table {
             min-width: max-content;
         }
-        
-        .chart-header { 
-            font-size: 1.8em; 
-            margin-bottom: 20px; 
-            color: #00fffc; 
-            text-transform: uppercase; 
-            letter-spacing: 3px; 
+
+        .chart-header {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #00fffc;
+            text-transform: uppercase;
+            letter-spacing: 3px;
         }
-        
-        table { 
-            width: auto; 
-            border-collapse: collapse; 
-            margin: 0 auto; 
+
+        table {
+            width: auto;
+            border-collapse: collapse;
+            margin: 0 auto;
         }
-        
-        td { 
-            border: 1px solid rgba(255,255,255,0.1); 
+
+        td {
+            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 15px 5px;
-            text-align: center; 
+            text-align: center;
             font-size: 1.1em;
             white-space: nowrap;
             min-width: 90px;
-            background: rgba(255,255,255,0.05); 
+            background: rgba(255, 255, 255, 0.05);
             user-select: none;
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -439,39 +454,39 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        
-        .aisle { 
-            width: 100px; 
-            font-size: 2em; 
-            font-weight: bold; 
-            color: #00fffc; 
-            opacity: 0.8; 
-            cursor: default; 
+
+        .aisle {
+            width: 100px;
+            font-size: 2em;
+            font-weight: bold;
+            color: #00fffc;
+            opacity: 0.8;
+            cursor: default;
         }
-        
-        .stage { 
-            background: #3b82f6; 
-            font-size: 2em; 
-            font-weight: bold; 
-            color: white; 
-            cursor: default; 
+
+        .stage {
+            background: #3b82f6;
+            font-size: 2em;
+            font-weight: bold;
+            color: white;
+            cursor: default;
         }
-        
-        .slogan { 
-            margin-top: 20px; 
-            font-size: 1.2em; 
-            color: #ffd700; 
-            font-weight: bold; 
-            letter-spacing: 2px; 
+
+        .slogan {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #ffd700;
+            font-weight: bold;
+            letter-spacing: 2px;
         }
 
         td.called {
-            background: rgba(70,70,70,0.4) !important;
+            background: rgba(70, 70, 70, 0.4) !important;
             color: #fff !important;
         }
-        
+
         .hide-record td.called {
-            background: rgba(255,255,255,0.05) !important;
+            background: rgba(255, 255, 255, 0.05) !important;
             color: #fff !important;
         }
 
@@ -483,11 +498,19 @@
             border: 1px solid rgba(231, 16, 16, 0.1) !important;
             animation: pulse 1s ease-out !important;
         }
-        
+
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.03); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.03);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         #seat-table.student-mode td.highlight {
@@ -495,9 +518,17 @@
         }
 
         @keyframes pulse-flipped {
-            0% { transform: rotate(180deg) scale(1); }
-            50% { transform: rotate(180deg) scale(1.03); }
-            100% { transform: rotate(180deg) scale(1); }
+            0% {
+                transform: rotate(180deg) scale(1);
+            }
+
+            50% {
+                transform: rotate(180deg) scale(1.03);
+            }
+
+            100% {
+                transform: rotate(180deg) scale(1);
+            }
         }
 
         /* ===================== 使用说明弹窗样式 ===================== */
@@ -507,76 +538,76 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.8);
             z-index: 9999;
             display: none;
-            align-items: center; 
+            align-items: center;
             justify-content: center;
             backdrop-filter: blur(5px);
             transition: all 0.3s ease;
         }
-        
+
         .instruction-content {
             background: linear-gradient(135deg, rgba(30, 60, 114, 0.98) 0%, rgba(42, 82, 152, 0.98) 100%);
             border: 1px solid #00fffc;
             border-radius: 12px;
             width: 90%;
             max-width: 700px;
-            height: 85vh; 
-            max-height: 800px; 
+            height: 85vh;
+            max-height: 800px;
             color: #fff;
             line-height: 1.8;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
-        
+
         .instruction-header {
             padding: 18px 30px;
-            border-bottom: 1px solid rgba(0,252,255,0.3);
+            border-bottom: 1px solid rgba(0, 252, 255, 0.3);
         }
-        
+
         .instruction-header h2 {
             color: #00fffc;
             text-align: center;
             margin: 0;
         }
-        
+
         .instruction-body {
             padding: 15px 30px;
             flex: 1;
             overflow-y: auto;
         }
-        
+
         .instruction-body h3 {
             color: #ffeb3b;
             margin: 15px 0 10px;
         }
-        
+
         .instruction-body p {
             margin: 8px 0;
         }
-        
+
         .instruction-footer {
             padding: 15px 30px;
             text-align: center;
-            border-top: 1px solid rgba(0,252,255,0.2);
+            border-top: 1px solid rgba(0, 252, 255, 0.2);
         }
-        
+
         .instruction-footer .close-btn {
             padding: 8px 24px;
-            background: rgba(0,255,252,0.2);
+            background: rgba(0, 255, 252, 0.2);
             border: 1px solid #00fffc;
             color: #fff;
             border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s;
         }
-        
+
         .instruction-footer .close-btn:hover {
-            background: rgba(0,255,252,0.4);
+            background: rgba(0, 255, 252, 0.4);
         }
-        
+
         .instruction-modal.show {
             display: flex;
         }
@@ -586,7 +617,7 @@
         html.dark-mode-pre body {
             background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
         }
-        
+
         body.dark-mode .container {
             backdrop-filter: blur(8px);
             background: rgba(15, 23, 42, 0.3);
@@ -594,7 +625,7 @@
             border: 1px solid rgba(56, 189, 248, 0.1);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
-        
+
         body.dark-mode h1 {
             text-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
             letter-spacing: 3px;
@@ -606,20 +637,28 @@
             animation: gradientFlow 3s ease infinite;
             border-bottom: 2px solid rgba(56, 189, 248, 0.2);
         }
-        
+
         @keyframes gradientFlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
-        
+
         body.dark-mode #name-display {
             text-shadow: 0 0 25px rgba(56, 189, 248, 0.8), 0 0 50px rgba(56, 189, 248, 0.5);
             border-radius: 16px;
             background: rgba(15, 23, 42, 0.4);
             border: 1px solid rgba(56, 189, 248, 0.2);
         }
-        
+
         body.dark-mode #current-name {
             background: linear-gradient(90deg, #ffffff, #e0f2fe, #ffffff);
             background-size: 200% 100%;
@@ -628,18 +667,23 @@
             color: transparent;
             animation: namePulse 0.8s ease-in-out infinite alternate;
         }
-        
+
         @keyframes namePulse {
-            from { transform: scale(1); }
-            to { transform: scale(1.02); }
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.02);
+            }
         }
-        
+
         body.dark-mode button {
             background: linear-gradient(135deg, rgba(56, 189, 248, 0.1) 0%, rgba(30, 64, 175, 0.1) 100%);
             border: 1px solid rgba(56, 189, 248, 0.4);
             color: #e0f2fe;
         }
-        
+
         body.dark-mode #particles-js {
             opacity: 0.6;
         }
@@ -649,33 +693,33 @@
             border: 1px solid rgba(56, 189, 248, 0.4);
             color: #e0f2fe;
         }
-        
+
         body.dark-mode .settings-btn:hover {
             background: rgba(56, 189, 248, 0.2);
             transform: rotate(60deg);
         }
-        
+
         body.dark-mode .settings-panel {
             background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
             border: 1px solid rgba(56, 189, 248, 0.3);
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
         }
-        
+
         body.dark-mode .settings-item {
             background: rgba(56, 189, 248, 0.05);
             color: #e0f2fe;
         }
-        
+
         body.dark-mode .settings-item:hover {
             background: rgba(56, 189, 248, 0.15);
             color: #38bdf8;
         }
-        
+
         body.dark-mode .submenu-item {
             background: rgba(56, 189, 248, 0.03);
             color: #e0f2fe;
         }
-        
+
         body.dark-mode .submenu-item:hover {
             background: rgba(56, 189, 248, 0.15);
             color: #38bdf8;
@@ -684,34 +728,34 @@
         body.dark-mode .instruction-modal {
             background: rgba(0, 0, 0, 0.9);
         }
-        
+
         body.dark-mode .instruction-content {
             background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
             border: 1px solid rgba(56, 189, 248, 0.3);
         }
-        
+
         body.dark-mode .instruction-header {
             border-bottom: 1px solid rgba(56, 189, 248, 0.2);
         }
-        
+
         body.dark-mode .instruction-header h2 {
             color: #38bdf8;
         }
-        
+
         body.dark-mode .instruction-body h3 {
             color: #fbbf24;
         }
-        
+
         body.dark-mode .instruction-footer {
             border-top: 1px solid rgba(56, 189, 248, 0.2);
         }
-        
+
         body.dark-mode .instruction-footer .close-btn {
             background: rgba(56, 189, 248, 0.15);
             border: 1px solid rgba(56, 189, 248, 0.4);
             color: #e0f2fe;
         }
-        
+
         body.dark-mode .instruction-footer .close-btn:hover {
             background: rgba(56, 189, 248, 0.3);
         }
@@ -721,7 +765,7 @@
             color: rgba(224, 242, 254, 0.6) !important;
             border: 1px solid rgba(56, 189, 248, 0.1) !important;
         }
-        
+
         body.dark-mode .hide-record td.called {
             background: rgba(15, 23, 42, 0.4) !important;
             color: #e0f2fe !important;
@@ -729,13 +773,13 @@
             opacity: 1 !important;
             filter: none !important;
         }
-        
+
         body.dark-mode .seating-chart td:not(.called):not(.aisle):not(.stage) {
             background: rgba(15, 23, 42, 0.4) !important;
             color: #e0f2fe !important;
             border: 1px solid rgba(56, 189, 248, 0.2) !important;
         }
-        
+
         body.dark-mode .seating-chart td.highlight,
         body.dark-mode .seating-chart.hide-record td.highlight {
             background: #ffeb3b !important;
@@ -752,13 +796,14 @@
         }
     </script>
 </head>
+
 <body>
     <!-- 粒子背景容器 -->
     <div id="particles-js"></div>
 
     <!-- 右上角设置按钮 -->
     <div class="settings-btn">⚙️</div>
-    
+
     <!-- 设置面板 -->
     <div class="settings-panel">
         <div class="settings-item" id="toggle-view">🔄 切换座位视角</div>
@@ -770,7 +815,7 @@
             📋 管理点名记录
             <span class="arrow-icon">▼</span>
         </div>
-        
+
         <div class="submenu-container show" id="record-submenu">
             <div class="submenu-item" id="clear-record">删除记录</div>
             <div class="submenu-item" id="toggle-record-visibility">隐藏记录</div>
@@ -843,13 +888,13 @@
     <!-- 主内容容器 -->
     <div class="container">
         <h1>智能课堂点名器(v1.1)</h1>
-        
+
         <!-- 姓名显示区域 -->
         <div id="name-display">
             <div id="current-name">点击开始</div>
         </div>
         <div id="intro-display"></div>
-        
+
         <!-- 控制按钮区域 -->
         <div class="controls">
             <button id="start-btn" title="只抽取未点过的人，不会重复！">随机抽未点过</button>
@@ -858,8 +903,8 @@
 
         <!-- 座位表区域 -->
         <div class="seating-chart">
-           <div class="chart-header" id="chart-header-text"></div>
-            
+            <div class="chart-header" id="chart-header-text"></div>
+
             <!-- 教师视角表格（由 JS 动态渲染） -->
             <table id="seat-table"></table>
             <div class="slogan">请将此处替换为你班级的专属口号！</div>
@@ -881,345 +926,367 @@
             title: "xx学校-xx教室座位表",
             slogan: "请将此处替换为你班级的专属口号！",
             seats: [
-  [
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    "stage",
-    "stage",
-    "stage",
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null
-  ],
-  [
-    null,
-    {
-      "name": "学生01"
-    },
-    {
-      "name": "学生02"
-    },
-    {
-      "name": "学生03"
-    },
-    {
-      "name": "学生04"
-    },
-    {
-      "name": "学生05",
-      "role": "leader"
-    },
-    {
-      "name": "学生06"
-    },
-    {
-      "name": "学生07"
-    },
-    "aisle",
-    {
-      "name": "学生09"
-    },
-    {
-      "name": "学生10",
-      "role": "leader"
-    },
-    {
-      "name": "学生11"
-    },
-    {
-      "name": "学生12"
-    },
-    {
-      "name": "学生13"
-    },
-    {
-      "name": "学生14"
-    },
-    {
-      "name": "学生15"
-    },
-    null
-  ],
-  [
-    null,
-    {
-      "name": "学生16"
-    },
-    {
-      "name": "学生17"
-    },
-    {
-      "name": "学生18"
-    },
-    {
-      "name": "学生19"
-    },
-    {
-      "name": "学生20"
-    },
-    {
-      "name": "学生21"
-    },
-    {
-      "name": "学生22"
-    },
-    "aisle",
-    {
-      "name": "学生23"
-    },
-    {
-      "name": "学生24"
-    },
-    {
-      "name": "学生25"
-    },
-    {
-      "name": "学生26"
-    },
-    {
-      "name": "学生27"
-    },
-    {
-      "name": "学生28"
-    },
-    {
-      "name": "学生29"
-    },
-    null
-  ],
-  [
-    null,
-    {
-      "name": "学生30"
-    },
-    {
-      "name": "学生31",
-      "role": "monitor"
-    },
-    {
-      "name": "学生32",
-      "role": "leader"
-    },
-    {
-      "name": "学生33"
-    },
-    {
-      "name": "学生34"
-    },
-    {
-      "name": "学生35"
-    },
-    {
-      "name": "学生36"
-    },
-    "aisle",
-    {
-      "name": "学生37"
-    },
-    {
-      "name": "学生38"
-    },
-    {
-      "name": "学生39"
-    },
-    {
-      "name": "学生40",
-      "role": "leader"
-    },
-    {
-      "name": "学生41"
-    },
-    {
-      "name": "学生42"
-    },
-    {
-      "name": "学生43",
-      "role": "leader"
-    },
-    null
-  ],
-  [
-    null,
-    {
-      "name": "学生44"
-    },
-    {
-      "name": "学生45"
-    },
-    {
-      "name": "学生46"
-    },
-    {
-      "name": "学生47",
-      "role": "monitor"
-    },
-    {
-      "name": "学生48"
-    },
-    {
-      "name": "学生49"
-    },
-    {
-      "name": "学生50"
-    },
-    "aisle",
-    {
-      "name": "学生51"
-    },
-    {
-      "name": "学生52"
-    },
-    {
-      "name": "学生53"
-    },
-    {
-      "name": "学生54"
-    },
-    {
-      "name": "学生55"
-    },
-    null,
-    {
-      "name": "学生56"
-    },
-    null
-  ],
-  [
-    null,
-    {
-      "name": "学生57"
-    },
-    {
-      "name": "学生58"
-    },
-    {
-      "name": "学生59",
-      "role": "leader"
-    },
-    {
-      "name": "学生60"
-    },
-    {
-      "name": "学生61"
-    },
-    {
-      "name": "学生62"
-    },
-    {
-      "name": "学生63"
-    },
-    "aisle",
-    {
-      "name": "学生64"
-    },
-    {
-      "name": "学生65"
-    },
-    {
-      "name": "学生66"
-    },
-    {
-      "name": "学生67"
-    },
-    {
-      "name": "学生68",
-      "role": "leader"
-    },
-    {
-      "name": "学生69"
-    },
-    {
-      "name": "学生70"
-    },
-    null
-  ],
-  [
-    null,
-    {
-      "name": "学生71",
-      "role": "leader"
-    },
-    {
-      "name": "学生72"
-    },
-    {
-      "name": "学生73"
-    },
-    {
-      "name": "学生74"
-    },
-    {
-      "name": "学生75"
-    },
-    {
-      "name": "学生76"
-    },
-    null,
-    "aisle",
-    {
-      "name": "学生77"
-    },
-    {
-      "name": "学生78"
-    },
-    {
-      "name": "学生79"
-    },
-    {
-      "name": "学生80"
-    },
-    {
-      "name": "学生81"
-    },
-    {
-      "name": "学生82"
-    },
-    {
-      "name": "学生83"
-    },
-    null
-  ],
-  [
-    null,
-    {
-      "name": "学生84"
-    },
-    {
-      "name": "学生85",
-      "role": "leader"
-    },
-    {
-      "name": "学生86"
-    },
-    {
-      "name": "学生87"
-    },
-    {
-      "name": "学生88"
-    },
-    null,
-    null,
-    "aisle",
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null
-  ]
-],
-            intros: {}
+                [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "stage",
+                    "stage",
+                    "stage",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                [
+                    null,
+                    {
+                        "name": "学生01"
+                    },
+                    {
+                        "name": "学生02"
+                    },
+                    {
+                        "name": "学生03"
+                    },
+                    {
+                        "name": "学生04"
+                    },
+                    {
+                        "name": "学生05",
+                        "role": "leader"
+                    },
+                    {
+                        "name": "学生06"
+                    },
+                    {
+                        "name": "学生07"
+                    },
+                    "aisle",
+                    {
+                        "name": "学生09"
+                    },
+                    {
+                        "name": "学生10",
+                        "role": "leader"
+                    },
+                    {
+                        "name": "学生11"
+                    },
+                    {
+                        "name": "学生12"
+                    },
+                    {
+                        "name": "学生13"
+                    },
+                    {
+                        "name": "学生14"
+                    },
+                    {
+                        "name": "学生15"
+                    },
+                    null
+                ],
+                [
+                    null,
+                    {
+                        "name": "学生16"
+                    },
+                    {
+                        "name": "学生17"
+                    },
+                    {
+                        "name": "学生18"
+                    },
+                    {
+                        "name": "学生19"
+                    },
+                    {
+                        "name": "学生20"
+                    },
+                    {
+                        "name": "学生21"
+                    },
+                    {
+                        "name": "学生22"
+                    },
+                    "aisle",
+                    {
+                        "name": "学生23"
+                    },
+                    {
+                        "name": "学生24"
+                    },
+                    {
+                        "name": "学生25"
+                    },
+                    {
+                        "name": "学生26"
+                    },
+                    {
+                        "name": "学生27"
+                    },
+                    {
+                        "name": "学生28"
+                    },
+                    {
+                        "name": "学生29"
+                    },
+                    null
+                ],
+                [
+                    null,
+                    {
+                        "name": "学生30"
+                    },
+                    {
+                        "name": "学生31",
+                        "role": "monitor"
+                    },
+                    {
+                        "name": "学生32",
+                        "role": "leader"
+                    },
+                    {
+                        "name": "学生33"
+                    },
+                    {
+                        "name": "学生34"
+                    },
+                    {
+                        "name": "学生35"
+                    },
+                    {
+                        "name": "学生36"
+                    },
+                    "aisle",
+                    {
+                        "name": "学生37"
+                    },
+                    {
+                        "name": "学生38"
+                    },
+                    {
+                        "name": "学生39"
+                    },
+                    {
+                        "name": "学生40",
+                        "role": "leader"
+                    },
+                    {
+                        "name": "学生41"
+                    },
+                    {
+                        "name": "学生42"
+                    },
+                    {
+                        "name": "学生43",
+                        "role": "leader"
+                    },
+                    null
+                ],
+                [
+                    null,
+                    {
+                        "name": "学生44"
+                    },
+                    {
+                        "name": "学生45"
+                    },
+                    {
+                        "name": "学生46"
+                    },
+                    {
+                        "name": "学生47",
+                        "role": "monitor"
+                    },
+                    {
+                        "name": "学生48"
+                    },
+                    {
+                        "name": "学生49"
+                    },
+                    {
+                        "name": "学生50"
+                    },
+                    "aisle",
+                    {
+                        "name": "学生51"
+                    },
+                    {
+                        "name": "学生52"
+                    },
+                    {
+                        "name": "学生53"
+                    },
+                    {
+                        "name": "学生54"
+                    },
+                    {
+                        "name": "学生55"
+                    },
+                    null,
+                    {
+                        "name": "学生56"
+                    },
+                    null
+                ],
+                [
+                    null,
+                    {
+                        "name": "学生57"
+                    },
+                    {
+                        "name": "学生58"
+                    },
+                    {
+                        "name": "学生59",
+                        "role": "leader"
+                    },
+                    {
+                        "name": "学生60"
+                    },
+                    {
+                        "name": "学生61"
+                    },
+                    {
+                        "name": "学生62"
+                    },
+                    {
+                        "name": "学生63"
+                    },
+                    "aisle",
+                    {
+                        "name": "学生64"
+                    },
+                    {
+                        "name": "学生65"
+                    },
+                    {
+                        "name": "学生66"
+                    },
+                    {
+                        "name": "学生67"
+                    },
+                    {
+                        "name": "学生68",
+                        "role": "leader"
+                    },
+                    {
+                        "name": "学生69"
+                    },
+                    {
+                        "name": "学生70"
+                    },
+                    null
+                ],
+                [
+                    null,
+                    {
+                        "name": "学生71",
+                        "role": "leader"
+                    },
+                    {
+                        "name": "学生72"
+                    },
+                    {
+                        "name": "学生73"
+                    },
+                    {
+                        "name": "学生74"
+                    },
+                    {
+                        "name": "学生75"
+                    },
+                    {
+                        "name": "学生76"
+                    },
+                    null,
+                    "aisle",
+                    {
+                        "name": "学生77"
+                    },
+                    {
+                        "name": "学生78"
+                    },
+                    {
+                        "name": "学生79"
+                    },
+                    {
+                        "name": "学生80"
+                    },
+                    {
+                        "name": "学生81"
+                    },
+                    {
+                        "name": "学生82"
+                    },
+                    {
+                        "name": "学生83"
+                    },
+                    null
+                ],
+                [
+                    null,
+                    {
+                        "name": "学生84"
+                    },
+                    {
+                        "name": "学生85",
+                        "role": "leader"
+                    },
+                    {
+                        "name": "学生86"
+                    },
+                    {
+                        "name": "学生87"
+                    },
+                    {
+                        "name": "学生88"
+                    },
+                    null,
+                    null,
+                    "aisle",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ]
+            ],
+            intros: {
+                "学生01": "示例：这里填写学生的姓名典故或个人介绍，点名后将在姓名右侧弹出展示，30秒后自动消失。",
+                "学生02": "示例：可以写学生的特长、兴趣爱好，或者名字的由来与含义，帮助老师快速了解每位同学。",
+                "学生03": "示例：也可以写一句激励的话，比如——志存高远，脚踏实地，每一步都算数。",
+                "学生04": "示例：这里填写学生的姓名典故或个人介绍，点名后将在姓名右侧弹出展示，30秒后自动消失。",
+                "学生05": "示例：可以写学生的特长、兴趣爱好，或者名字的由来与含义，帮助老师快速了解每位同学。",
+                "学生06": "示例：也可以写一句激励的话，比如——志存高远，脚踏实地，每一步都算数。",
+                "学生07": "示例：这里填写学生的姓名典故或个人介绍，点名后将在姓名右侧弹出展示，30秒后自动消失。",
+                "学生08": "示例：可以写学生的特长、兴趣爱好，或者名字的由来与含义，帮助老师快速了解每位同学。",
+                "学生09": "示例：也可以写一句激励的话，比如——志存高远，脚踏实地，每一步都算数。",          
+                "学生10": "示例：这里填写学生的姓名典故或个人介绍，点名后将在姓名右侧弹出展示，30秒后自动消失。",
+                "学生11": "示例：可以写学生的特长、兴趣爱好，或者名字的由来与含义，帮助老师快速了解每位同学。",
+                "学生12": "示例：也可以写一句激励的话，比如——志存高远，脚踏实地，每一步都算数。",
+                "学生13": "示例：这里填写学生的姓名典故或个人介绍，点名后将在姓名右侧弹出展示，30秒后自动消失。",
+                "学生14": "示例：可以写学生的特长、兴趣爱好，或者名字的由来与含义，帮助老师快速了解每位同学。",
+                "学生15": "示例：也可以写一句激励的话，比如——志存高远，脚踏实地，每一步都算数。",
+                "学生16": "示例：这里填写学生的姓名典故或个人介绍，点名后将在姓名右侧弹出展示，30秒后自动消失。",
+                "学生17": "示例：可以写学生的特长、兴趣爱好，或者名字的由来与含义，帮助老师快速了解每位同学。",
+                "学生18": "示例：也可以写一句激励的话，比如——志存高远，脚踏实地，每一步都算数。",
+                "学生19": "示例：这里填写学生的姓名典故或个人介绍，点名后将在姓名右侧弹出展示，30秒后自动消失。",
+                "学生20": "示例：可以写学生的特长、兴趣爱好，或者名字的由来与含义，帮助老师快速了解每位同学。",
+                "学生21": "示例：也可以写一句激励的话，比如——志存高远，脚踏实地，每一步都算数。"                                                                                    
+            }
         };
 
         // ===================== 座位渲染 =====================
@@ -1256,8 +1323,8 @@
             }
 
             // 每行连续 stage → colspan 合并
-            const stageSkip    = Array.from({length: numRows}, () => new Array(numCols).fill(false));
-            const stageColspan = Array.from({length: numRows}, () => new Array(numCols).fill(1));
+            const stageSkip = Array.from({ length: numRows }, () => new Array(numCols).fill(false));
+            const stageColspan = Array.from({ length: numRows }, () => new Array(numCols).fill(1));
             for (let r = 0; r < numRows; r++) {
                 let c = 0;
                 while (c < numCols) {
@@ -1314,6 +1381,21 @@
         }
 
         // ===================== 全局变量 =====================
+        // 检查是否有持久化的座位配置（来自 builder 应用或上次保存）
+        (function () {
+            try {
+                var saved = localStorage.getItem('index_config');
+                if (saved) {
+                    var cfg = JSON.parse(saved);
+                    if (cfg && cfg.seats) {
+                        CLASS_CONFIG.title = cfg.title || CLASS_CONFIG.title;
+                        CLASS_CONFIG.slogan = cfg.slogan || CLASS_CONFIG.slogan;
+                        CLASS_CONFIG.seats = cfg.seats;
+                        CLASS_CONFIG.intros = cfg.intros || CLASS_CONFIG.intros;
+                    }
+                }
+            } catch (e) { }
+        })();
         const name_intro = CLASS_CONFIG.intros;
         // 兼容旧版：如果有人直接改这里也能用
         // 本地化存储相关
@@ -1325,7 +1407,7 @@
         let isDarkMode = localStorage.getItem('darkMode') === 'true';
         let isHideRecord = localStorage.getItem('hideRecord') === 'true';
         let isShowCommittee = localStorage.getItem('showCommittee') === 'true';
-        let isShowIntro = localStorage.getItem('showIntro') === 'true';
+        let isShowIntro = localStorage.getItem('showIntro') === 'false' ? false : true;
 
         // 缓存所有学生姓名，避免重复查询 DOM
         const getAllStudentNames = () =>
@@ -1336,7 +1418,7 @@
         const manualBtn = document.getElementById('manual-btn');
         const nameDisplay = document.getElementById('current-name');
         const teacherView = document.getElementById('seat-table');
-                const settingsBtn = document.querySelector('.settings-btn');
+        const settingsBtn = document.querySelector('.settings-btn');
         const settingsPanel = document.querySelector('.settings-panel');
         const toggleViewBtn = document.getElementById('toggle-view');
         const toggleDarkModeBtn = document.getElementById('toggle-dark-mode');
@@ -1373,13 +1455,13 @@
                 const n = td.id;
                 td.classList.toggle('called', hasBeenCalled.has(n));
             });
-            
+
             // 更新记录显示状态
             updateRecordVisibilityUI();
 
             // 更新暗黑模式样式
             updateDarkModeUI();
-            
+
             // 更新所有座位的悬浮提示
             updateAllSeatTooltip();
         }
@@ -1389,10 +1471,10 @@
          */
         function updateAllSeatTooltip() {
             document.querySelectorAll('#seat-table td').forEach(td => {
-                if(td.classList.contains('aisle') || td.classList.contains('stage') || !td.id) return;
+                if (td.classList.contains('aisle') || td.classList.contains('stage') || !td.id) return;
                 const name = td.innerText.trim();
                 const realName = td.id;
-                if(hasBeenCalled.has(realName)){
+                if (hasBeenCalled.has(realName)) {
                     td.title = `鼠标双击 ${name} 可取消本次点名`;
                 } else {
                     td.title = `鼠标双击 ${name} 可对其手动点名`;
@@ -1431,11 +1513,11 @@
          * @param {string} name - 要高亮的姓名
          */
         function high(name) {
-            clearHigh(); 
+            clearHigh();
             last = name;
-            
+
             const el = document.getElementById(name);
-            if(el) {
+            if (el) {
                 el.classList.add('highlight');
                 el.title = `鼠标双击 ${name} 可取消本次点名`;
             }
@@ -1444,12 +1526,12 @@
         /**
          * 清除所有座位高亮
          */
-        function clearHigh() { 
+        function clearHigh() {
             document.querySelectorAll('td.highlight').forEach(x => {
                 x.classList.remove('highlight');
                 const name = x.innerText.trim();
                 x.title = `鼠标双击 ${name} 可对其手动点名`;
-            }); 
+            });
         }
 
         /**
@@ -1459,7 +1541,7 @@
         function randomName(onlyUncalled = true) {
             const allNames = getAllStudentNames();
             const candidates = onlyUncalled ? allNames.filter(name => !hasBeenCalled.has(name)) : allNames;
-            
+
             if (candidates.length === 0) {
                 alert('全部已点完！即将重置记录');
                 hasBeenCalled.clear();
@@ -1471,7 +1553,7 @@
                 refreshUI();
                 return null;
             }
-            
+
             return candidates[Math.floor(Math.random() * candidates.length)];
         }
 
@@ -1481,11 +1563,11 @@
          */
         function startRoll(onlyUncalled = true) {
             if (isRunning) return;
-            
+
             isRunning = true;
             startBtn.disabled = true;
             manualBtn.disabled = true;
-            
+
             const allNames = getAllStudentNames();
             let counter = 0;
             const maxCounter = 30;
@@ -1493,7 +1575,7 @@
                 const randomIdx = Math.floor(Math.random() * allNames.length);
                 nameDisplay.innerText = allNames[randomIdx];
                 counter++;
-                
+
                 if (counter >= maxCounter) {
                     clearInterval(interval);
                     const selected = randomName(onlyUncalled);
@@ -1505,9 +1587,9 @@
                         save();
                     } else {
                         nameDisplay.innerText = '点击开始';
-                clearIntro();
+                        clearIntro();
                     }
-                    
+
                     isRunning = false;
                     startBtn.disabled = false;
                     manualBtn.disabled = false;
@@ -1522,51 +1604,51 @@
          */
         function handleDoubleClick(event) {
             event.preventDefault();
-            
-            if(isRunning) return;
-            
+
+            if (isRunning) return;
+
             const td = event.target;
-            if(!td.id || td.classList.contains('aisle') || td.classList.contains('stage')) return;
-            
+            if (!td.id || td.classList.contains('aisle') || td.classList.contains('stage')) return;
+
             const realName = td.id;
             const displayName = td.innerText.trim();
             // 核心修改：判断是否高亮（而非hasBeenCalled）
             const isHighlighted = td.classList.contains('highlight');
-            
+
             // 已高亮 - 取消点名/取消高亮
-            if(isHighlighted){
-                if(confirm(`确定要取消对【${displayName}】的本次点名吗？`)){
-                    hasBeenCalled.delete(realName); 
-                    save(); 
+            if (isHighlighted) {
+                if (confirm(`确定要取消对【${displayName}】的本次点名吗？`)) {
+                    hasBeenCalled.delete(realName);
+                    save();
                     clearHigh(); // 清除高亮
                     nameDisplay.innerText = '点击开始';
-                clearIntro(); 
-                    last = ''; 
+                    clearIntro();
+                    last = '';
                     refreshUI();
                     // 触发mouseenter更新提示（修复this指向问题）
                     td.dispatchEvent(new MouseEvent('mouseenter'));
                 }
             }
             // 未高亮 - 手动点名/设置高亮
-            else{
+            else {
                 high(realName); // 设置高亮
-                nameDisplay.innerText = realName; 
+                nameDisplay.innerText = realName;
                 showIntro(realName);
-                hasBeenCalled.add(realName); 
-                save(); 
+                hasBeenCalled.add(realName);
+                save();
                 refreshUI();
                 // 触发mouseenter更新提示（修复this指向问题）
                 td.dispatchEvent(new MouseEvent('mouseenter'));
             }
         }
-        
+
         // 关闭设置面板的通用函数
         function closeSettingsPanel() {
             settingsPanel.classList.remove('show');
         }
 
         // 点击空白处面板消失
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             if (!settingsPanel.contains(e.target) && !settingsBtn.contains(e.target)) {
                 settingsPanel.classList.remove('show');
             }
@@ -1588,7 +1670,7 @@
             });
 
             clearHigh();
-            if(last) high(last);
+            if (last) high(last);
             save();
             refreshUI();
             // 新增：关闭设置面板
@@ -1642,7 +1724,7 @@
             if (!el) return;
             el.classList.remove('visible');
             if (introTimer) { clearTimeout(introTimer); introTimer = null; }
-            const text = name_intro[name];
+            const text = CLASS_CONFIG.intros[name];
             if (text) {
                 el.innerText = text;
                 if (isShowIntro) {
@@ -1682,7 +1764,7 @@
          * 重置点名记录
          */
         function resetRecord() {
-            if(confirm('确定要清空所有点名记录吗？此操作不可恢复！')){
+            if (confirm('确定要清空所有点名记录吗？此操作不可恢复！')) {
                 hasBeenCalled.clear();
                 clearHigh();
                 nameDisplay.innerText = '点击开始';
@@ -1700,16 +1782,16 @@
          */
         function openBuilder() {
             closeSettingsPanel();
-            if(!confirm('请确认 builder.html 和点名器文件在同一目录下，确认后将打开配置页面。')) return;
+            if (!confirm('请确认 builder.html 和点名器文件在同一目录下，确认后将打开配置页面。')) return;
             const draft = {
-                title:  CLASS_CONFIG.title,
+                title: CLASS_CONFIG.title,
                 slogan: CLASS_CONFIG.slogan,
-                cells:  CLASS_CONFIG.seats.map(row => row.map(cell => {
-                    if (cell === null || cell === undefined) return {type:'empty', name:'', role:'normal'};
-                    if (cell === 'aisle') return {type:'aisle', name:'', role:'normal'};
-                    if (cell === 'stage') return {type:'stage', name:'', role:'normal'};
-                    if (cell && cell.name) return {type:'student', name:cell.name, role:cell.role||'normal'};
-                    return {type:'empty', name:'', role:'normal'};
+                cells: CLASS_CONFIG.seats.map(row => row.map(cell => {
+                    if (cell === null || cell === undefined) return { type: 'empty', name: '', role: 'normal' };
+                    if (cell === 'aisle') return { type: 'aisle', name: '', role: 'normal' };
+                    if (cell === 'stage') return { type: 'stage', name: '', role: 'normal' };
+                    if (cell && cell.name) return { type: 'student', name: cell.name, role: cell.role || 'normal' };
+                    return { type: 'empty', name: '', role: 'normal' };
                 })),
                 intros: CLASS_CONFIG.intros || {}
             };
@@ -1753,14 +1835,14 @@
          */
         function initSeatEvents() {
             document.querySelectorAll('#seat-table td').forEach(td => {
-                if(td.classList.contains('aisle') || td.classList.contains('stage') || !td.id) return;
-                
+                if (td.classList.contains('aisle') || td.classList.contains('stage') || !td.id) return;
+
                 td.addEventListener('dblclick', handleDoubleClick);
                 td.addEventListener('mousedown', (e) => e.preventDefault());
-                
+
                 td.addEventListener('mouseenter', () => {
                     const displayName = td.innerText.trim();
-                    if(td.classList.contains('highlight')){
+                    if (td.classList.contains('highlight')) {
                         td.title = `鼠标双击 ${displayName} 可取消本次点名`;
                     } else {
                         td.title = `鼠标双击 ${displayName} 可对其手动点名`;
@@ -1788,14 +1870,14 @@
             toggleRecordVisibilityBtn.addEventListener('click', toggleRecordVisibility);
             viewInstructionBtn.addEventListener('click', openInstruction);
             closeInstructionBtn.addEventListener('click', closeInstruction);
-            
+
             // 点击弹窗外层关闭
             instructionModal.addEventListener('click', (e) => {
                 if (e.target === instructionModal) closeInstruction();
             });
 
             // 初始化座位视角
-            if(!isTeacher) teacherView.classList.add('student-mode');
+            if (!isTeacher) teacherView.classList.add('student-mode');
 
             // 初始化UI状态
             updateRecordVisibilityUI();
@@ -1803,7 +1885,7 @@
             updateClassCommitteeUI();
             refreshUI();
             updateIntroUI();
-            
+
             // 初始化座位事件
             initSeatEvents();
 
@@ -1826,29 +1908,37 @@
                 }
             });
         }
-        
+
 
         // 轮询检测 builder 写回的配置（file:// 协议下 storage 事件不可靠）
-        setInterval(function() {
+        setInterval(function () {
             var raw = localStorage.getItem('builder_apply');
             if (!raw) return;
             try {
                 var cfg = JSON.parse(raw);
                 if (cfg && cfg.seats) {
-                    CLASS_CONFIG.title  = cfg.title  || CLASS_CONFIG.title;
+                    CLASS_CONFIG.title = cfg.title || CLASS_CONFIG.title;
                     CLASS_CONFIG.slogan = cfg.slogan || CLASS_CONFIG.slogan;
-                    CLASS_CONFIG.seats  = cfg.seats;
+                    CLASS_CONFIG.seats = cfg.seats;
                     CLASS_CONFIG.intros = cfg.intros || {};
+                    // 持久化保存，刷新后不丢失
+                    localStorage.setItem('index_config', JSON.stringify({
+                        title: CLASS_CONFIG.title,
+                        slogan: CLASS_CONFIG.slogan,
+                        seats: CLASS_CONFIG.seats,
+                        intros: CLASS_CONFIG.intros
+                    }));
                     localStorage.removeItem('builder_apply');
                     renderSeats();
                     initSeatEvents();
                     refreshUI();
                 }
-            } catch(e) {}
+            } catch (e) { }
         }, 1000);
 
         // 启动初始化
         window.addEventListener('load', init);
     </script>
 </body>
+
 </html>
