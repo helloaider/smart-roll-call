@@ -384,8 +384,8 @@
   <div class="card" id="sec-seat">
     <h2>🪑 座位表</h2>
     <div class="gc">
-      <label>行</label><input type="number" id="cfg-rows" value="4" min="1" max="20">
-      <label>列</label><input type="number" id="cfg-cols" value="8" min="1" max="30">
+      <label>行</label><input type="number" id="cfg-rows" value="8" min="1" max="20">
+      <label>列</label><input type="number" id="cfg-cols" value="10" min="1" max="30">
       <button class="btn" onclick="rebuildGrid()">重新生成</button>
       <button class="btn" onclick="addRow()">+ 行</button>
       <button class="btn btn-r" onclick="delRow()">- 行</button>
@@ -438,8 +438,8 @@
       }
     }
     function rebuildGrid() {
-      var r = parseInt(document.getElementById('cfg-rows').value) || 4;
-      var c = parseInt(document.getElementById('cfg-cols').value) || 8;
+      var r = parseInt(document.getElementById('cfg-rows').value) || 8;
+      var c = parseInt(document.getElementById('cfg-cols').value) || 10;
       initCells(r, c); renderGrid();
     }
     function addRow() { syncDOM(); if (!cells.length) return; var c = cells[0].length, row = []; for (var i = 0; i < c; i++)row.push({ type: 'student', name: '', role: 'normal' }); cells.push(row); document.getElementById('cfg-rows').value = cells.length; renderGrid(); }
@@ -601,6 +601,14 @@
           });
           newCells.push(cellRow);
         }
+        // 裁掉尾部多余的空列：找出所有行中最后一个非空列的最大索引
+        var maxUsedCol = 0;
+        newCells.forEach(function (row) {
+          for (var c = row.length - 1; c >= 0; c--) {
+            if (row[c].type !== 'empty') { if (c > maxUsedCol) maxUsedCol = c; break; }
+          }
+        });
+        newCells = newCells.map(function (row) { return row.slice(0, maxUsedCol + 1); });
         cells = newCells;
         var numRows = cells.length;
         var numCols = cells[0] ? cells[0].length : 0;
@@ -779,6 +787,8 @@
       }), null, 2);
       var introsJS = JSON.stringify(getIntros(), null, 2);
       var html = getTemplate(title, slogan, seatsJS, introsJS);
+      // 移除 seating-chart 的 min-width: 100%，让容器随内容收缩
+      html = html.replace(/\.seating-chart\s*\{([^}]*?)min-width\s*:\s*100%\s*;?\s*/g, '.seating-chart {$1');
       // 注入 favicon
       if (faviconDataUrl) {
         html = html.replace(
