@@ -157,10 +157,11 @@
             transition: all 0.3s ease;
             font-size: 0.95em;
             padding-bottom: 2px;
+            animation: namePulse 0.8s ease-in-out infinite alternate;
         }
 
 
-        /* ===================== 姓名典故样式 ===================== */
+        /* ===================== 学生介绍样式 ===================== */
         #intro-display {
             position: fixed;
             width: 460px;
@@ -530,6 +531,220 @@
             }
         }
 
+        /* ===================== 右键菜单 & 介绍弹窗样式 ===================== */
+        .ctx-menu {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.98), rgba(42, 82, 152, 0.98));
+            border: 1px solid rgba(0, 255, 252, 0.5);
+            border-radius: 8px;
+            padding: 4px 0;
+            min-width: 150px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .ctx-menu-item {
+            padding: 9px 16px;
+            cursor: pointer;
+            font-size: .95em;
+            color: #fff;
+            transition: background .15s;
+        }
+
+        .ctx-menu-item:hover {
+            background: rgba(0, 255, 252, .15);
+        }
+
+        .intro-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, .75);
+            z-index: 9998;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .intro-modal-box {
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.98), rgba(42, 82, 152, 0.98));
+            border: 1px solid rgba(0, 255, 252, .5);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 480px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, .5);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .intro-modal-header {
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(0, 255, 252, .2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .intro-modal-title {
+            color: #00fffc;
+            font-size: 1.05em;
+            font-weight: bold;
+        }
+
+        .intro-modal-close {
+            cursor: pointer;
+            color: rgba(255, 255, 255, .6);
+            font-size: 1.2em;
+            line-height: 1;
+        }
+
+        .intro-modal-close:hover {
+            color: #fff;
+        }
+
+        .intro-modal-body {
+            padding: 16px 20px;
+        }
+
+        .intro-modal-textarea {
+            width: 100%;
+            min-height: 120px;
+            background: rgba(0, 0, 0, .35);
+            border: 1px solid rgba(255, 255, 255, .1);
+            border-radius: 8px;
+            color: rgba(255, 255, 255, .75);
+            padding: 10px 12px;
+            font-size: .95em;
+            font-family: inherit;
+            resize: none;
+            outline: none;
+            line-height: 1.7;
+            cursor: default;
+        }
+
+        .intro-modal-textarea:not([readonly]) {
+            background: rgba(0, 0, 0, .25);
+            border-color: rgba(255, 255, 255, .25);
+            color: #fff;
+            resize: vertical;
+            cursor: text;
+        }
+
+        .intro-modal-textarea:not([readonly]):focus {
+            border-color: rgba(0, 255, 252, .4);
+        }
+
+        .intro-modal-footer {
+            padding: 10px 20px 16px;
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        .intro-btn {
+            padding: 6px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: .88em;
+            min-width: auto;
+            color: #fff;
+            transition: background .2s;
+        }
+
+        .intro-btn-edit {
+            background: rgba(0, 255, 252, .12);
+            border: 1px solid rgba(0, 255, 252, .5);
+        }
+
+        .intro-btn-edit:hover {
+            background: rgba(0, 255, 252, .25);
+        }
+
+        .intro-btn-save {
+            background: rgba(0, 255, 252, .25);
+            border: 1px solid #00fffc;
+        }
+
+        .intro-btn-save:hover {
+            background: rgba(0, 255, 252, .4);
+        }
+
+        .intro-btn-close {
+            background: rgba(255, 255, 255, .08);
+            border: 1px solid rgba(255, 255, 255, .2);
+        }
+
+        .intro-btn-close:hover {
+            background: rgba(255, 255, 255, .18);
+        }
+
+        /* 暗黑模式 */
+        body.dark-mode .ctx-menu {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.98));
+            border-color: rgba(56, 189, 248, 0.4);
+        }
+
+        body.dark-mode .ctx-menu-item:hover {
+            background: rgba(56, 189, 248, .15);
+        }
+
+        body.dark-mode .intro-modal {
+            background: rgba(0, 0, 0, .88);
+        }
+
+        body.dark-mode .intro-modal-box {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.98));
+            border-color: rgba(56, 189, 248, 0.35);
+        }
+
+        body.dark-mode .intro-modal-header {
+            border-bottom-color: rgba(56, 189, 248, .2);
+        }
+
+        body.dark-mode .intro-modal-title {
+            color: #38bdf8;
+        }
+
+        body.dark-mode .intro-modal-textarea {
+            background: rgba(0, 0, 0, .45);
+            border-color: rgba(56, 189, 248, .15);
+            color: rgba(224, 242, 254, .7);
+            cursor: default;
+        }
+
+        body.dark-mode .intro-modal-textarea:not([readonly]) {
+            background: rgba(0, 0, 0, .35);
+            border-color: rgba(56, 189, 248, .2);
+            color: #e0f2fe;
+            cursor: text;
+        }
+
+        body.dark-mode .intro-modal-textarea:not([readonly]):focus {
+            border-color: rgba(56, 189, 248, .5);
+        }
+
+        body.dark-mode .intro-btn-edit {
+            background: rgba(56, 189, 248, .12);
+            border-color: rgba(56, 189, 248, .4);
+        }
+
+        body.dark-mode .intro-btn-edit:hover {
+            background: rgba(56, 189, 248, .25);
+        }
+
+        body.dark-mode .intro-btn-save {
+            background: rgba(56, 189, 248, .25);
+            border-color: #38bdf8;
+        }
+
+        body.dark-mode .intro-btn-save:hover {
+            background: rgba(56, 189, 248, .4);
+        }
+
         /* ===================== 使用说明弹窗样式 ===================== */
         .instruction-modal {
             position: fixed;
@@ -551,7 +766,7 @@
             border: 1px solid #00fffc;
             border-radius: 12px;
             width: 90%;
-            max-width: 700px;
+            max-width: 860px;
             height: 85vh;
             max-height: 800px;
             color: #fff;
@@ -617,17 +832,11 @@
             background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
         }
 
-        body.dark-mode .container {
-            backdrop-filter: blur(8px);
-            background: rgba(15, 23, 42, 0.3);
-            border-radius: 20px;
-            border: 1px solid rgba(56, 189, 248, 0.1);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-        }
+        body.dark-mode .container {}
 
         body.dark-mode h1 {
             text-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             background: linear-gradient(90deg, #38bdf8, #818cf8, #38bdf8);
             background-size: 200% 100%;
             -webkit-background-clip: text;
@@ -653,17 +862,9 @@
 
         body.dark-mode #name-display {
             text-shadow: 0 0 25px rgba(56, 189, 248, 0.8), 0 0 50px rgba(56, 189, 248, 0.5);
-            border-radius: 16px;
-            background: rgba(15, 23, 42, 0.4);
-            border: 1px solid rgba(56, 189, 248, 0.2);
         }
 
         body.dark-mode #current-name {
-            background: linear-gradient(90deg, #ffffff, #e0f2fe, #ffffff);
-            background-size: 200% 100%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
             animation: namePulse 0.8s ease-in-out infinite alternate;
         }
 
@@ -773,6 +974,11 @@
             filter: none !important;
         }
 
+        body.dark-mode .seating-chart {
+            background: rgba(15, 23, 42, 0.3);
+            border-color: rgba(56, 189, 248, 0.12);
+        }
+
         body.dark-mode .seating-chart td:not(.called):not(.aisle):not(.stage) {
             background: rgba(15, 23, 42, 0.4) !important;
             color: #e0f2fe !important;
@@ -808,7 +1014,7 @@
         <div class="settings-item" id="toggle-view">🔄 切换座位视角</div>
         <div class="settings-item" id="toggle-dark-mode">🌙 切换暗黑模式</div>
         <div class="settings-item" id="toggle-class-committee">🎖️ 显示班委标签</div>
-        <div class="settings-item" id="toggle-intro">📖 显示姓名典故</div>
+        <div class="settings-item" id="toggle-intro">📖 显示学生介绍</div>
 
         <div class="settings-item expanded" id="manage-record">
             📋 管理点名记录
@@ -822,6 +1028,31 @@
 
         <div class="settings-item" id="edit-config">✏️ 编辑座位信息</div>
         <div class="settings-item" id="view-instruction">❓ 查看使用说明</div>
+        <div class="settings-item" id="reset-config" style="color:rgba(255,120,120,0.9)">🗑️ 恢复默认配置</div>
+    </div>
+
+    <!-- 右键菜单 -->
+    <div id="ctx-menu" class="ctx-menu">
+        <div id="ctx-view-intro" class="ctx-menu-item">📖 查看介绍/备注</div>
+    </div>
+
+    <!-- 介绍弹窗 -->
+    <div id="intro-modal" class="intro-modal">
+        <div class="intro-modal-box">
+            <div class="intro-modal-header">
+                <span id="intro-modal-title" class="intro-modal-title"></span>
+                <span onclick="closeIntroModal()" class="intro-modal-close">✕</span>
+            </div>
+            <div class="intro-modal-body">
+                <textarea id="intro-modal-text" readonly class="intro-modal-textarea"></textarea>
+            </div>
+            <div class="intro-modal-footer">
+                <button id="intro-edit-btn" onclick="toggleIntroEdit()" class="intro-btn intro-btn-edit">✏️ 编辑</button>
+                <button id="intro-save-btn" onclick="saveIntroEdit()" class="intro-btn intro-btn-save"
+                    style="display:none">💾 保存</button>
+                <button onclick="closeIntroModal()" class="intro-btn intro-btn-close">关闭</button>
+            </div>
+        </div>
     </div>
 
     <!-- 使用说明弹窗 -->
@@ -837,9 +1068,9 @@
                 <p>3. 视角自由切换：支持教师视角（默认）与学生视角（座位反向）双向切换，适配不同使用场景；</p>
                 <p>4. 主题个性化：内置深蓝/暗黑两种主题模式，切换状态自动保存至浏览器；</p>
                 <p>5. 班委快速识别：通过彩色波浪下划线区分班委类型，课堂管理更高效；</p>
-                <p>6. 姓名典故展示：点名后可在姓名右侧弹出典故卡片，帮助老师快速了解学员背景；</p>
+                <p>6. 学生介绍展示：点名后可在姓名右侧弹出介绍卡片，帮助老师快速了解学员背景；</p>
                 <p>7. 点名记录管理：支持隐藏/显示已点名单、一键清空记录，灵活管控点名状态；</p>
-                <p>8. 编辑座位表：通过设置菜单「✏️ 编辑座位信息」可打开配置生成器，可视化编辑座位布局、学生姓名、班委角色及姓名典故，编辑完成后点击「应用到点名器」即时生效。</p>
+                <p>8. 编辑座位表：通过设置菜单「✏️ 编辑座位信息」可打开配置生成器，可视化编辑座位布局、学生姓名、班委角色及学生介绍，编辑完成后点击「应用到点名器」即时生效。</p>
 
                 <h3>二、操作指南</h3>
                 <p>1. 随机点名操作：</p>
@@ -855,21 +1086,28 @@
                 <p>&nbsp;&nbsp;&nbsp;🔴 红色波浪下划线：班长</p>
                 <p>&nbsp;&nbsp;&nbsp;🟢 绿色波浪下划线：组长</p>
                 </ul>
-                <p>6. 姓名典故说明（⚙️设置按钮 → 显示姓名典故）：</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 显示姓名典故：点名后，在姓名右侧弹出该学员的姓名典故卡片；</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 典故卡片将在显示 30 秒后自动消失；</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 隐藏姓名典故：关闭典故卡片显示，点名结果区恢复简洁样式；</p>
+                <p>6. 学生介绍说明（⚙️设置按钮 → 显示学生介绍）：</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 显示学生介绍：点名后，在姓名右侧弹出该学员的介绍卡片；</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 介绍卡片将在显示 30 秒后自动消失；</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 隐藏学生介绍：关闭介绍卡片显示，点名结果区恢复简洁样式；</p>
                 <p>&nbsp;&nbsp;&nbsp;&nbsp;- 设置状态自动保存，刷新页面后保持不变。</p>
                 <p>7. 点名记录管理（⚙️设置按钮 → 管理点名记录）：</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 显示记录：已点名学生座位呈灰色显示，清晰区分未点名状态；</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 灰显记录：已点名学生座位呈灰色显示，清晰区分未点名状态；</p>
                 <p>&nbsp;&nbsp;&nbsp;&nbsp;- 隐藏记录：已点名学生座位恢复默认样式，不显示点名标记；</p>
                 <p>&nbsp;&nbsp;&nbsp;&nbsp;- 删除记录：一键清空所有点名记录（操作不可逆，请谨慎执行）。</p>
 
                 <p>8. 数据保存：所有点名记录、主题/视角设置均自动保存在浏览器本地，刷新页面后数据不丢失。</p>
-                <p>9. 编辑座位表操作：</p>
+                <p>9. 查看/修改学生介绍（右键姓名格）：</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 在座位表上右键任意学生姓名，选择「📖 查看介绍/备注」；</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 弹窗默认只读显示该学生的介绍内容；</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 点击「✏️ 编辑」可修改内容，点击「💾 保存」后立即生效并自动保存。</p>
+                <p>10. 恢复默认配置（⚙️设置按钮 → 🗑️ 恢复默认配置）：</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 清除本地保存的座位数据、点名记录及偏好设置，页面自动刷新恢复初始状态；</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 此操作不可逆，执行前请确认无需保留现有数据。</p>
+                <p>11. 编辑座位表操作：</p>
                 <p>&nbsp;&nbsp;&nbsp;&nbsp;- 点击右上角⚙️设置按钮，选择「✏️ 编辑座位信息」；</p>
                 <p>&nbsp;&nbsp;&nbsp;&nbsp;- 确认 builder.html 与本文件在同一目录后，配置页面将自动打开并载入当前配置；</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 在配置页面修改座位布局、学生姓名、班委角色、姓名典故等信息；</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 在配置页面修改座位布局、学生姓名、班委角色、学生介绍等信息；</p>
                 <p>&nbsp;&nbsp;&nbsp;&nbsp;- 编辑完成后点击「↩ 应用到点名器」，切换回本页面即可看到更新效果（无需重新生成文件）。</p>
 
                 <h3>三、注意事项</h3>
@@ -1272,7 +1510,7 @@
                 "学生06": "示例：也可以写一句激励的话，比如——志存高远，脚踏实地，每一步都算数。",
                 "学生07": "示例：这里填写学生的姓名典故或个人介绍，点名后将在姓名右侧弹出展示，30秒后自动消失。",
                 "学生08": "示例：可以写学生的特长、兴趣爱好，或者名字的由来与含义，帮助老师快速了解每位同学。",
-                "学生09": "示例：也可以写一句激励的话，比如——志存高远，脚踏实地，每一步都算数。",          
+                "学生09": "示例：也可以写一句激励的话，比如——志存高远，脚踏实地，每一步都算数。",
                 "学生10": "示例：这里填写学生的姓名典故或个人介绍，点名后将在姓名右侧弹出展示，30秒后自动消失。",
                 "学生11": "示例：可以写学生的特长、兴趣爱好，或者名字的由来与含义，帮助老师快速了解每位同学。",
                 "学生12": "示例：也可以写一句激励的话，比如——志存高远，脚踏实地，每一步都算数。",
@@ -1284,7 +1522,7 @@
                 "学生18": "示例：也可以写一句激励的话，比如——志存高远，脚踏实地，每一步都算数。",
                 "学生19": "示例：这里填写学生的姓名典故或个人介绍，点名后将在姓名右侧弹出展示，30秒后自动消失。",
                 "学生20": "示例：可以写学生的特长、兴趣爱好，或者名字的由来与含义，帮助老师快速了解每位同学。",
-                "学生21": "示例：也可以写一句激励的话，比如——志存高远，脚踏实地，每一步都算数。"                                                                                    
+                "学生21": "示例：也可以写一句激励的话，比如——志存高远，脚踏实地，每一步都算数。"
             }
         };
 
@@ -1486,7 +1724,7 @@
          */
         function updateRecordVisibilityUI() {
             seatingChart.classList.toggle('hide-record', isHideRecord);
-            toggleRecordVisibilityBtn.innerText = isHideRecord ? '显示记录' : '隐藏记录';
+            toggleRecordVisibilityBtn.innerText = isHideRecord ? '灰显记录' : '隐藏记录';
         }
 
         /**
@@ -1708,7 +1946,7 @@
 
         function updateIntroUI() {
             const btn = document.getElementById('toggle-intro');
-            if (btn) btn.innerText = isShowIntro ? '📖 隐藏姓名典故' : '📖 显示姓名典故';
+            if (btn) btn.innerText = isShowIntro ? '📖 隐藏学生介绍' : '📖 显示学生介绍';
             const el = document.getElementById('intro-display');
             if (el) {
                 if (isShowIntro && el.innerText) el.classList.add('visible');
@@ -1729,7 +1967,14 @@
                 if (isShowIntro) {
                     // 计算 name-display 的位置，卡片贴在其右侧垂直居中
                     const nameBox = document.getElementById('name-display').getBoundingClientRect();
-                    el.style.left = (nameBox.right + 20) + 'px';
+                    const cardWidth = 460;
+                    const margin = 20;
+                    let left = nameBox.right + margin;
+                    // 超出视口右边界时，改为显示在左侧
+                    if (left + cardWidth > window.innerWidth - 10) {
+                        left = Math.max(10, nameBox.left - cardWidth - margin);
+                    }
+                    el.style.left = left + 'px';
                     el.style.top = (nameBox.top + nameBox.height / 2) + 'px';
                     el.style.transform = 'translateY(-50%)';
                     el.classList.add('visible');
@@ -1819,6 +2064,67 @@
             document.body.style.overflow = 'auto';
         }
 
+        function closeIntroModal() {
+            document.getElementById('intro-modal').style.display = 'none';
+        }
+
+        // 右键菜单点击"查看介绍/备注"
+        document.getElementById('ctx-view-intro').addEventListener('click', function () {
+            const menu = document.getElementById('ctx-menu');
+            const name = menu._targetName;
+            menu.style.display = 'none';
+            document.getElementById('intro-modal-title').textContent = name + ' 的介绍/备注';
+            const ta = document.getElementById('intro-modal-text');
+            ta.value = CLASS_CONFIG.intros[name] || '';
+            ta.readOnly = true;
+            document.getElementById('intro-edit-btn').style.display = '';
+            document.getElementById('intro-save-btn').style.display = 'none';
+            document.getElementById('intro-modal')._currentName = name;
+            document.getElementById('intro-modal').style.display = 'flex';
+        });
+
+        // 点击任意处关闭右键菜单
+        document.addEventListener('click', function () {
+            document.getElementById('ctx-menu').style.display = 'none';
+        });
+        document.addEventListener('contextmenu', function (e) {
+            // 非 td 右键时也关闭菜单
+            if (!e.target.closest('#seat-table td[id]')) {
+                document.getElementById('ctx-menu').style.display = 'none';
+            }
+        });
+
+        function toggleIntroEdit() {
+            const ta = document.getElementById('intro-modal-text');
+            ta.readOnly = false;
+            ta.focus();
+            document.getElementById('intro-edit-btn').style.display = 'none';
+            document.getElementById('intro-save-btn').style.display = '';
+        }
+
+        function saveIntroEdit() {
+            const modal = document.getElementById('intro-modal');
+            const name = modal._currentName;
+            const val = document.getElementById('intro-modal-text').value;
+            CLASS_CONFIG.intros[name] = val;
+            // 持久化
+            try {
+                const saved = localStorage.getItem('index_config');
+                const cfg = saved ? JSON.parse(saved) : {};
+                cfg.intros = CLASS_CONFIG.intros;
+                localStorage.setItem('index_config', JSON.stringify(cfg));
+            } catch (e) { }
+            const ta = document.getElementById('intro-modal-text');
+            ta.readOnly = true;
+            document.getElementById('intro-edit-btn').style.display = '';
+            document.getElementById('intro-save-btn').style.display = 'none';
+        }
+
+        // 点击介绍弹窗遮罩关闭
+        document.getElementById('intro-modal').addEventListener('click', function (e) {
+            if (e.target === this) closeIntroModal();
+        });
+
         /**
          * 切换设置面板子菜单
          */
@@ -1838,6 +2144,17 @@
 
                 td.addEventListener('dblclick', handleDoubleClick);
                 td.addEventListener('mousedown', (e) => e.preventDefault());
+
+                td.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    const menu = document.getElementById('ctx-menu');
+                    menu._targetName = td.id;
+                    menu.style.display = 'block';
+                    const mx = Math.min(e.clientX, window.innerWidth - 160);
+                    const my = Math.min(e.clientY, window.innerHeight - 60);
+                    menu.style.left = mx + 'px';
+                    menu.style.top = my + 'px';
+                });
 
                 td.addEventListener('mouseenter', () => {
                     const displayName = td.innerText.trim();
@@ -1868,6 +2185,15 @@
             clearRecordBtn.addEventListener('click', resetRecord);
             toggleRecordVisibilityBtn.addEventListener('click', toggleRecordVisibility);
             viewInstructionBtn.addEventListener('click', openInstruction);
+            document.getElementById('reset-config').addEventListener('click', function () {
+                settingsPanel.classList.remove('show');
+                if (confirm('确定要恢复默认配置吗？\n这将清除本地保存的座位数据、点名记录及偏好设置，清除后页面将自动刷新。')) {
+                    ['index_config', 'calledNames', 'viewMode', 'darkMode', 'hideRecord', 'showCommittee', 'showIntro', 'builder_apply'].forEach(function (k) {
+                        localStorage.removeItem(k);
+                    });
+                    location.reload();
+                }
+            });
             closeInstructionBtn.addEventListener('click', closeInstruction);
 
             // 点击弹窗外层关闭
