@@ -15,13 +15,14 @@
             box-sizing: border-box;
         }
 
-        /* ===================== 班委标签样式功能开始 ===================== */
+        /* ===================== 班委标记样式功能开始 ===================== */
         :root {
-            --committee-offset: 4px;
-            --monitor-color: #ff0000;
-            --leader-color: #00bb00;
+            --committee-offset: 6px;
+            --committee-thickness: 2px;
+            --monitor-color: #ff3333;
+            --leader-color: #00dd44;
             --dark-monitor-color: #ff6666;
-            --dark-leader-color: #66dd66;
+            --dark-leader-color: #44ee66;
         }
 
         .class-committee-monitor,
@@ -30,60 +31,30 @@
         }
 
         body.show-committee .class-committee-monitor {
-            text-decoration: underline wavy var(--monitor-color) !important;
+            text-decoration: underline var(--monitor-color) !important;
             text-underline-offset: var(--committee-offset);
+            text-decoration-thickness: var(--committee-thickness) !important;
         }
 
         body.show-committee .class-committee-leader {
-            text-decoration: underline wavy var(--leader-color) !important;
+            text-decoration: underline var(--leader-color) !important;
             text-underline-offset: var(--committee-offset);
-        }
-
-        td.highlight:not(.class-committee-monitor):not(.class-committee-leader),
-        td.highlight:not(.class-committee-monitor):not(.class-committee-leader) .name {
-            text-decoration: none !important;
-        }
-
-        body.show-committee td.highlight.class-committee-monitor,
-        body.show-committee td.highlight .name.class-committee-monitor {
-            text-decoration: underline wavy var(--monitor-color) !important;
-            text-underline-offset: var(--committee-offset);
-        }
-
-        body.show-committee td.highlight.class-committee-leader,
-        body.show-committee td.highlight .name.class-committee-leader {
-            text-decoration: underline wavy var(--leader-color) !important;
-            text-underline-offset: var(--committee-offset);
-        }
-
-        body.dark-mode.show-committee td.highlight.class-committee-monitor,
-        body.dark-mode.show-committee td.highlight .name.class-committee-monitor {
-            text-decoration: underline wavy var(--dark-monitor-color) !important;
-        }
-
-        body.dark-mode.show-committee td.highlight.class-committee-leader,
-        body.dark-mode.show-committee td.highlight .name.class-committee-leader {
-            text-decoration: underline wavy var(--dark-leader-color) !important;
-        }
-
-        td.grayed .name,
-        td.dimmed .name,
-        td.faded .name,
-        td.grayed,
-        td.dimmed,
-        td.faded {
-            text-decoration: inherit !important;
+            text-decoration-thickness: var(--committee-thickness) !important;
         }
 
         body.dark-mode.show-committee .class-committee-monitor {
-            text-decoration: underline wavy var(--dark-monitor-color) !important;
+            text-decoration: underline var(--dark-monitor-color) !important;
+            text-underline-offset: var(--committee-offset);
+            text-decoration-thickness: var(--committee-thickness) !important;
         }
 
         body.dark-mode.show-committee .class-committee-leader {
-            text-decoration: underline wavy var(--dark-leader-color) !important;
+            text-decoration: underline var(--dark-leader-color) !important;
+            text-underline-offset: var(--committee-offset);
+            text-decoration-thickness: var(--committee-thickness) !important;
         }
 
-        /* ===================== 班委标签样式功能结束 =====================*/
+        /* ===================== 班委标记样式功能结束 =====================*/
 
         body {
             font-family: 'Microsoft YaHei', 'Heiti SC', sans-serif;
@@ -160,11 +131,11 @@
             animation: namePulse 0.8s ease-in-out infinite alternate;
         }
 
-
         /* ===================== 学生介绍样式 ===================== */
         #intro-display {
             position: fixed;
             width: 460px;
+            height: 130px;
             background: linear-gradient(135deg, rgba(30, 60, 114, 0.95) 0%, rgba(42, 82, 152, 0.95) 100%);
             border: 1px solid rgba(0, 255, 252, 0.5);
             border-radius: 10px;
@@ -175,50 +146,49 @@
             text-align: justify;
             line-height: 1.8;
             text-shadow: none;
-            max-height: 0;
-            overflow: visible;
             opacity: 0;
             pointer-events: none;
-            transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
+            transition: opacity 0.3s ease;
             box-sizing: border-box;
             backdrop-filter: blur(8px);
             z-index: 9000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #intro-display .intro-name {
+            font-size: 1em;
+            font-weight: bold;
+            color: #00fffc;
+            margin-bottom: 6px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(0, 255, 252, 0.2);
+            letter-spacing: 1px;
+            flex-shrink: 0;
+        }
+
+        #intro-display .intro-text {
+            font-size: 0.93em;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.8;
+            text-align: justify;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        body.dark-mode #intro-display .intro-name {
+            color: #38bdf8;
+            border-bottom-color: rgba(56, 189, 248, 0.2);
+        }
+
+        body.dark-mode #intro-display .intro-text {
+            color: #c8e6fa;
         }
 
         #intro-display.visible {
-            max-height: 300px;
             opacity: 1;
-            padding: 14px 16px 20px;
+            padding: 14px 16px 16px;
             pointer-events: auto;
-            overflow: hidden;
-        }
-
-        /* 左侧箭头指向名字，垂直居中 */
-        #intro-display.visible::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: -10px;
-            transform: translateY(-50%);
-            width: 0;
-            height: 0;
-            border-top: 8px solid transparent;
-            border-bottom: 8px solid transparent;
-            border-right: 10px solid rgba(0, 255, 252, 0.5);
-        }
-
-        #intro-display.visible::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: -8px;
-            transform: translateY(-50%);
-            width: 0;
-            height: 0;
-            border-top: 7px solid transparent;
-            border-bottom: 7px solid transparent;
-            border-right: 9px solid rgba(30, 60, 114, 0.95);
-            z-index: 1;
         }
 
         body.dark-mode #intro-display {
@@ -227,19 +197,11 @@
             color: #e0f2fe;
         }
 
-        body.dark-mode #intro-display.visible::after {
-            border-right-color: rgba(56, 189, 248, 0.4);
-        }
-
-        body.dark-mode #intro-display.visible::before {
-            border-right-color: rgba(15, 23, 42, 0.97);
-        }
-
         /* ===================== 按钮基础样式 ===================== */
         .controls {
             margin: 20px 0;
             display: flex;
-            gap: 60px;
+            gap: 20px;
             align-items: center;
             justify-content: center;
             flex-wrap: wrap;
@@ -247,7 +209,7 @@
 
         button {
             background: rgba(255, 255, 255, 0.1);
-            border: 1px solid #00fffc;
+            border: 1px solid rgba(0, 255, 252, 0.5);
             color: #fff;
             padding: 12px 20px;
             font-size: 1.1em;
@@ -290,7 +252,7 @@
             height: 50px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.1);
-            border: 1px solid #00fffc;
+            border: 1px solid rgba(0, 255, 252, 0.5);
             color: #fff;
             font-size: 1.4em;
             display: flex;
@@ -311,17 +273,18 @@
             position: fixed;
             top: 100px;
             right: 20px;
-            width: 200px;
-            background: linear-gradient(135deg, rgba(30, 60, 114, 0.98) 0%, rgba(42, 82, 152, 0.98) 100%);
-            border: 1px solid rgba(0, 255, 252, 0.6);
-            border-radius: 12px;
-            padding: 16px;
+            width: fit-content;
+            background: rgba(50, 90, 160, 0.55);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 255, 252, 0.35);
+            border-radius: 16px;
+            padding: 16px 14px;
             z-index: 998;
             display: none;
             flex-direction: column;
-            gap: 8px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            gap: 2px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
             transition: all 0.3s ease;
         }
 
@@ -329,22 +292,53 @@
             display: flex;
         }
 
+        .settings-group-title {
+            font-size: 0.78em;
+            color: rgba(0, 255, 252, 0.5);
+            padding: 10px 10px 4px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .settings-group-title:not(:first-child) {
+            margin-top: 6px;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+            padding-top: 12px;
+        }
+
         .settings-item {
             padding: 10px 12px;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
+            border-radius: 9px;
+            background: transparent;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.15s;
             font-size: 1em;
             text-align: left;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 10px;
+            color: rgba(255, 255, 255, 0.8);
         }
 
         .settings-item:hover {
-            background: rgba(0, 255, 252, 0.15);
-            color: #00fffc;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .settings-item-icon {
+            font-size: 1.1em;
+            width: 22px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .settings-item-danger {
+            color: rgba(255, 120, 100, 0.85) !important;
+        }
+
+        .settings-item-danger:hover {
+            background: rgba(255, 80, 60, 0.15) !important;
+            color: rgba(255, 140, 120, 1) !important;
         }
 
         .arrow-icon {
@@ -409,10 +403,10 @@
         .seating-chart {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
-            padding: 20px;
+            padding: 20px 30px;
             margin-top: 30px;
             width: fit-content;
-            max-width: 1600px;
+            max-width: 1620px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             position: relative;
@@ -425,11 +419,29 @@
         }
 
         .chart-header {
-            font-size: 1.8em;
+            font-size: 1.6em;
             margin-bottom: 20px;
             color: #00fffc;
-            text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            white-space: nowrap;
+        }
+
+        .chart-header::before,
+        .chart-header::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(0, 255, 252, 0.6));
+            flex-shrink: 0;
+        }
+
+        .chart-header::after {
+            background: linear-gradient(to left, transparent, rgba(0, 255, 252, 0.6));
         }
 
         table {
@@ -473,30 +485,39 @@
         }
 
         .slogan {
-            margin-top: 20px;
-            font-size: 1.2em;
+            margin-top: 28px;
+            margin-bottom: 4px;
+            font-size: 1.15em;
             color: #ffd700;
             font-weight: bold;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
         }
 
-        td.called {
-            background: rgba(70, 70, 70, 0.4) !important;
-            color: #fff !important;
+        .slogan::before,
+        .slogan::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255, 215, 0, 0.5));
+            flex-shrink: 0;
         }
 
-        .hide-record td.called {
-            background: rgba(255, 255, 255, 0.05) !important;
-            color: #fff !important;
+        .slogan::after {
+            background: linear-gradient(to left, transparent, rgba(255, 215, 0, 0.5));
         }
 
-        .seating-chart td.highlight,
-        .seating-chart.hide-record td.highlight {
+        .seating-chart td.highlight {
             background: #ffeb3b !important;
             color: #000 !important;
             font-weight: bold !important;
             border: 1px solid rgba(231, 16, 16, 0.1) !important;
             animation: pulse 1s ease-out !important;
+            z-index: 5;
         }
 
         @keyframes pulse {
@@ -531,17 +552,381 @@
             }
         }
 
+        /* ===================== 点名统计弹窗样式 ===================== */
+        .stat-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 25, 60, 0.82);
+            z-index: 9997;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .stat-modal-box {
+            background: rgba(42, 82, 152, 0.92);
+            border: 1px solid rgba(255, 255, 255, .18);
+            border-radius: 16px;
+            width: 92%;
+            max-width: 860px;
+            max-height: 88vh;
+            height: 88vh;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .5);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-modal-header {
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(0, 255, 252, .2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .stat-modal-title {
+            color: #00fffc;
+            font-size: 1.05em;
+            font-weight: bold;
+            flex: 1;
+        }
+
+        .stat-modal-actions {
+            display: flex;
+            gap: 8px;
+            margin-right: 12px;
+        }
+
+        .stat-action-btn {
+            padding: 4px 14px;
+            font-size: .82em;
+            cursor: pointer;
+            background: rgba(0, 255, 252, 0.1);
+            border: 1px solid rgba(0, 255, 252, 0.35);
+            color: rgba(255, 255, 255, .85);
+            border-radius: 16px;
+            transition: all .2s;
+            white-space: nowrap;
+        }
+
+        .stat-action-btn:hover {
+            background: rgba(0, 255, 252, 0.25);
+            color: #fff;
+        }
+
+        .stat-modal-close {
+            cursor: pointer;
+            color: rgba(255, 255, 255, .6);
+            font-size: 1.2em;
+            line-height: 1;
+        }
+
+        .stat-modal-close:hover {
+            color: #fff;
+        }
+
+        .stat-modal-close:hover {
+            color: #fff;
+        }
+
+        .stat-summary {
+            display: flex;
+            gap: 12px;
+            padding: 16px 20px;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .stat-card {
+            flex: 1;
+            min-width: 110px;
+            background: rgba(255, 255, 255, .1);
+            border-radius: 10px;
+            padding: 12px 14px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, .15);
+        }
+
+        .stat-card-val {
+            font-size: 1.7em;
+            font-weight: bold;
+            color: #00fffc;
+            line-height: 1.1;
+        }
+
+        .stat-card-lbl {
+            font-size: .73em;
+            color: rgba(255, 255, 255, .55);
+            margin-top: 4px;
+        }
+
+        .stat-tabs {
+            display: flex;
+            gap: 0;
+            padding: 10px 20px 0;
+            flex-shrink: 0;
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .stat-tab {
+            padding: 7px 20px;
+            cursor: pointer;
+            font-size: .9em;
+            color: rgba(255, 255, 255, .6);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            transition: all .2s;
+        }
+
+        .stat-tab.active {
+            color: #00fffc;
+            border-bottom-color: #00fffc;
+        }
+
+        .stat-tab:hover {
+            color: #fff;
+        }
+
+        .stat-body {
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0;
+        }
+
+        .stat-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: .9em;
+        }
+
+        .stat-table thead tr {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        .stat-table th {
+            text-align: center;
+            padding: 8px 10px;
+            color: rgba(255, 255, 255, .75);
+            border-bottom: 1px solid rgba(255, 255, 255, .15);
+            font-weight: normal;
+            background: rgba(50, 95, 170, 0.98);
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        .stat-table th.th-left {
+            text-align: left;
+        }
+
+        .stat-table td {
+            padding: 6px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, .06);
+            text-align: center;
+        }
+
+        .stat-table td.td-left {
+            text-align: left;
+        }
+
+        .stat-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .stat-table tr:hover td {
+            background: rgba(255, 255, 255, .05);
+        }
+
+        /* 排序箭头 — 用 inline-flex 双箭头 */
+        .stat-th-sort {
+            display: inline-flex;
+            flex-direction: column;
+            gap: 1px;
+            vertical-align: middle;
+            margin-left: 5px;
+            cursor: pointer;
+            opacity: .35;
+            transition: opacity .2s;
+        }
+
+        .stat-th-sort:hover {
+            opacity: .7;
+        }
+
+        .stat-th-sort svg {
+            display: block;
+        }
+
+        .stat-th-sort .arr-up,
+        .stat-th-sort .arr-dn {
+            fill: rgba(255, 255, 255, .9);
+            transition: fill .15s;
+        }
+
+        .stat-th-sort.sort-asc .arr-up {
+            fill: #00fffc;
+            opacity: 1;
+        }
+
+        .stat-th-sort.sort-asc .arr-dn {
+            fill: rgba(255, 255, 255, .3);
+        }
+
+        .stat-th-sort.sort-desc .arr-dn {
+            fill: #00fffc;
+            opacity: 1;
+        }
+
+        .stat-th-sort.sort-desc .arr-up {
+            fill: rgba(255, 255, 255, .3);
+        }
+
+        .stat-th-sort.sort-asc,
+        .stat-th-sort.sort-desc {
+            opacity: 1;
+        }
+
+        .stat-table td.stat-note {
+            color: rgba(255, 255, 255, .45);
+            font-size: .82em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 0;
+            width: 99%;
+            text-align: left;
+        }
+
+        @keyframes roundDoneFade {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -48%);
+            }
+
+            10% {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+
+            80% {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -52%);
+            }
+        }
+
+        /* 座位格次数角标 — 右上角折角 */
+        .td-count-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 20px;
+            height: 20px;
+            pointer-events: none;
+            z-index: 10;
+            overflow: hidden;
+        }
+
+        /* 折角三角形背景 */
+        .td-count-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 20px 20px 0;
+            border-color: transparent var(--badge-color, rgba(0, 255, 252, 0.2)) transparent transparent;
+        }
+
+        /* 次数数字 */
+        .td-count-badge::after {
+            content: attr(data-n);
+            position: absolute;
+            top: 1px;
+            right: 1px;
+            font-size: 0.32em;
+            font-weight: normal;
+            color: rgba(255, 255, 255, 0.95);
+            line-height: 1;
+        }
+
+        /* 高亮时折角保持醒目 */
+        td.highlight .td-count-badge::before {
+            border-color: transparent rgba(255, 140, 0, 0.85) transparent transparent;
+        }
+
+        td.highlight .td-count-badge::after {
+            color: #fff;
+            text-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
+        }
+
+        /* 暗黑模式 */
+        body.dark-mode .stat-modal {
+            background: rgba(5, 10, 25, 0.88);
+        }
+
+        body.dark-mode .stat-modal-box {
+            background: rgba(15, 25, 55, 0.95);
+            border-color: rgba(56, 189, 248, 0.2);
+        }
+
+        body.dark-mode .stat-modal-header {
+            border-bottom-color: rgba(56, 189, 248, .2);
+        }
+
+        body.dark-mode .stat-modal-title {
+            color: #38bdf8;
+        }
+
+        body.dark-mode .stat-card {
+            background: rgba(255, 255, 255, .07);
+        }
+
+        body.dark-mode .stat-card-val {
+            color: #38bdf8;
+        }
+
+        body.dark-mode .stat-tab.active {
+            color: #38bdf8;
+            border-bottom-color: #38bdf8;
+        }
+
+        body.dark-mode .stat-table th {
+            background: rgba(10, 18, 40, 0.98);
+        }
+
+        body.dark-mode .stat-th-sort.sort-asc .arr-up,
+        body.dark-mode .stat-th-sort.sort-desc .arr-dn {
+            fill: #38bdf8;
+        }
+
         /* ===================== 右键菜单 & 介绍弹窗样式 ===================== */
         .ctx-menu {
             display: none;
             position: fixed;
             z-index: 9999;
-            background: linear-gradient(135deg, rgba(30, 60, 114, 0.98), rgba(42, 82, 152, 0.98));
-            border: 1px solid rgba(0, 255, 252, 0.5);
+            background: rgba(60, 100, 180, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 255, 252, 0.4);
             border-radius: 8px;
             padding: 4px 0;
             min-width: 150px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         }
 
         .ctx-menu-item {
@@ -571,28 +956,66 @@
         }
 
         .intro-modal-box {
-            background: linear-gradient(135deg, rgba(30, 60, 114, 0.98), rgba(42, 82, 152, 0.98));
-            border: 1px solid rgba(0, 255, 252, .5);
+            background: linear-gradient(135deg, rgba(50, 90, 160, 0.97), rgba(60, 100, 175, 0.97));
+            border: 1px solid rgba(0, 255, 252, .4);
             border-radius: 12px;
             width: 90%;
             max-width: 480px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, .5);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, .4);
             display: flex;
             flex-direction: column;
         }
 
         .intro-modal-header {
-            padding: 14px 20px;
-            border-bottom: 1px solid rgba(0, 255, 252, .2);
+            padding: 16px 20px 12px;
+            border-bottom: 1px solid rgba(0, 255, 252, .15);
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
         }
 
         .intro-modal-title {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .intro-modal-title-name {
             color: #00fffc;
-            font-size: 1.05em;
+            font-size: 1.15em;
             font-weight: bold;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .intro-modal-role-tag {
+            font-size: .62em;
+            font-weight: normal;
+            padding: 2px 8px;
+            border-radius: 10px;
+            letter-spacing: .5px;
+            vertical-align: middle;
+        }
+
+        .intro-modal-role-tag.monitor {
+            background: rgba(255, 60, 60, .2);
+            border: 1px solid rgba(255, 60, 60, .5);
+            color: #ff8080;
+        }
+
+        .intro-modal-role-tag.leader {
+            background: rgba(0, 200, 80, .2);
+            border: 1px solid rgba(0, 200, 80, .5);
+            color: #66dd88;
+        }
+
+        .intro-modal-title-sub {
+            color: rgba(255, 255, 255, .35);
+            font-size: .75em;
+            font-weight: normal;
+            letter-spacing: .5px;
         }
 
         .intro-modal-close {
@@ -607,28 +1030,30 @@
         }
 
         .intro-modal-body {
-            padding: 16px 20px;
+            padding: 16px 20px 8px;
         }
 
         .intro-modal-textarea {
             width: 100%;
-            min-height: 120px;
-            background: rgba(0, 0, 0, .35);
-            border: 1px solid rgba(255, 255, 255, .1);
-            border-radius: 8px;
-            color: rgba(255, 255, 255, .75);
-            padding: 10px 12px;
+            min-height: 110px;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            color: rgba(255, 255, 255, .88);
+            padding: 4px 2px;
             font-size: .95em;
             font-family: inherit;
             resize: none;
             outline: none;
-            line-height: 1.7;
+            line-height: 1.8;
             cursor: default;
         }
 
         .intro-modal-textarea:not([readonly]) {
-            background: rgba(0, 0, 0, .25);
-            border-color: rgba(255, 255, 255, .25);
+            background: rgba(255, 255, 255, .08);
+            border: 1px solid rgba(255, 255, 255, .2);
+            border-radius: 8px;
+            padding: 10px 12px;
             color: #fff;
             resize: vertical;
             cursor: text;
@@ -639,10 +1064,11 @@
         }
 
         .intro-modal-footer {
-            padding: 10px 20px 16px;
+            padding: 8px 20px 16px;
             display: flex;
             gap: 8px;
             justify-content: flex-end;
+            align-items: center;
         }
 
         .intro-btn {
@@ -710,15 +1136,14 @@
         }
 
         body.dark-mode .intro-modal-textarea {
-            background: rgba(0, 0, 0, .45);
-            border-color: rgba(56, 189, 248, .15);
-            color: rgba(224, 242, 254, .7);
+            color: rgba(224, 242, 254, .8);
             cursor: default;
         }
 
         body.dark-mode .intro-modal-textarea:not([readonly]) {
             background: rgba(0, 0, 0, .35);
-            border-color: rgba(56, 189, 248, .2);
+            border: 1px solid rgba(56, 189, 248, .2);
+            border-radius: 8px;
             color: #e0f2fe;
             cursor: text;
         }
@@ -752,78 +1177,214 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.45);
             z-index: 9999;
             display: none;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
-        }
-
-        .instruction-content {
-            background: linear-gradient(135deg, rgba(30, 60, 114, 0.98) 0%, rgba(42, 82, 152, 0.98) 100%);
-            border: 1px solid #00fffc;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 860px;
-            height: 85vh;
-            max-height: 800px;
-            color: #fff;
-            line-height: 1.8;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .instruction-header {
-            padding: 18px 30px;
-            border-bottom: 1px solid rgba(0, 252, 255, 0.3);
-        }
-
-        .instruction-header h2 {
-            color: #00fffc;
-            text-align: center;
-            margin: 0;
-        }
-
-        .instruction-body {
-            padding: 15px 30px;
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        .instruction-body h3 {
-            color: #ffeb3b;
-            margin: 15px 0 10px;
-        }
-
-        .instruction-body p {
-            margin: 8px 0;
-        }
-
-        .instruction-footer {
-            padding: 15px 30px;
-            text-align: center;
-            border-top: 1px solid rgba(0, 252, 255, 0.2);
-        }
-
-        .instruction-footer .close-btn {
-            padding: 8px 24px;
-            background: rgba(0, 255, 252, 0.2);
-            border: 1px solid #00fffc;
-            color: #fff;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .instruction-footer .close-btn:hover {
-            background: rgba(0, 255, 252, 0.4);
+            backdrop-filter: blur(8px);
         }
 
         .instruction-modal.show {
             display: flex;
+        }
+
+        .instruction-content {
+            background: linear-gradient(160deg, rgba(30, 60, 114, 0.88) 0%, rgba(42, 82, 152, 0.88) 100%);
+            border: 1px solid rgba(0, 255, 252, 0.25);
+            border-radius: 20px;
+            width: 92%;
+            max-width: 900px;
+            max-height: 90vh;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .instruction-header {
+            padding: 22px 28px;
+            border-bottom: 1px solid rgba(0, 252, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .instruction-header h2 {
+            color: #00fffc;
+            margin: 0;
+            font-size: 1.05em;
+            font-weight: bold;
+            letter-spacing: .08em;
+        }
+
+        .instruction-header-close {
+            cursor: pointer;
+            color: rgba(255, 255, 255, .35);
+            font-size: 1.3em;
+            line-height: 1;
+            transition: color .2s;
+            padding: 2px 4px;
+        }
+
+        .instruction-header-close:hover {
+            color: #fff;
+        }
+
+        .instruction-body {
+            padding: 24px 28px 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .ins-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .ins-section.full {
+            grid-template-columns: 1fr;
+        }
+
+        .ins-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 14px;
+            padding: 18px 20px;
+            backdrop-filter: blur(0);
+        }
+
+        .ins-card-title {
+            color: #00fffc;
+            font-size: .88em;
+            font-weight: bold;
+            letter-spacing: .05em;
+            margin-bottom: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .ins-row {
+            display: flex;
+            align-items: baseline;
+            gap: 9px;
+            margin: 8px 0;
+            font-size: .86em;
+            line-height: 1.6;
+        }
+
+        .ins-row .ins-key {
+            flex-shrink: 0;
+            color: rgba(255, 255, 255, .6);
+            font-size: .88em;
+            min-width: 0;
+        }
+
+        .ins-row .ins-val {
+            color: rgba(255, 255, 255, .88);
+        }
+
+        .ins-row .ins-tag {
+            display: inline-block;
+            padding: 2px 9px;
+            border-radius: 12px;
+            font-size: .8em;
+            background: rgba(0, 255, 252, 0.15);
+            border: 1px solid rgba(0, 255, 252, 0.35);
+            color: #00fffc;
+            flex-shrink: 0;
+            line-height: 1.7;
+            white-space: nowrap;
+        }
+
+        .ins-note {
+            font-size: .8em;
+            color: rgba(255, 255, 255, .4);
+            line-height: 1.8;
+            padding: 10px 16px;
+            background: rgba(0, 0, 0, .15);
+            border-radius: 10px;
+            margin-top: 4px;
+        }
+
+        .instruction-footer {
+            padding: 14px 28px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            flex-shrink: 0;
+        }
+
+        .instruction-footer .close-btn {
+            padding: 8px 40px;
+            background: rgba(0, 255, 252, 0.12);
+            border: 1px solid rgba(0, 255, 252, 0.4);
+            color: rgba(255, 255, 255, .9);
+            border-radius: 22px;
+            cursor: pointer;
+            font-size: .92em;
+            transition: all .2s;
+            min-width: auto;
+        }
+
+        .instruction-footer .close-btn:hover {
+            background: rgba(0, 255, 252, 0.25);
+            color: #fff;
+        }
+
+        /* 暗黑模式 */
+        body.dark-mode .instruction-modal {
+            background: rgba(0, 0, 0, 0.88);
+        }
+
+        body.dark-mode .instruction-content {
+            background: linear-gradient(160deg, rgba(10, 18, 38, 0.99) 0%, rgba(20, 32, 60, 0.99) 100%);
+            border-color: rgba(56, 189, 248, 0.22);
+        }
+
+        body.dark-mode .instruction-header {
+            border-bottom-color: rgba(56, 189, 248, .12);
+        }
+
+        body.dark-mode .instruction-header h2 {
+            color: #38bdf8;
+        }
+
+        body.dark-mode .ins-card {
+            border-color: rgba(56, 189, 248, 0.14);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        body.dark-mode .ins-card-title {
+            color: #38bdf8;
+            border-bottom-color: rgba(56, 189, 248, 0.1);
+        }
+
+        body.dark-mode .ins-row .ins-tag {
+            background: rgba(56, 189, 248, 0.1);
+            border-color: rgba(56, 189, 248, 0.25);
+            color: rgba(56, 189, 248, 0.9);
+        }
+
+        body.dark-mode .instruction-footer {
+            border-top-color: rgba(56, 189, 248, .1);
+        }
+
+        body.dark-mode .instruction-footer .close-btn {
+            background: rgba(56, 189, 248, 0.12);
+            border-color: rgba(56, 189, 248, 0.35);
+        }
+
+        body.dark-mode .instruction-footer .close-btn:hover {
+            background: rgba(56, 189, 248, 0.25);
         }
 
         /* ===================== 暗黑模式样式 ===================== */
@@ -900,19 +1461,22 @@
         }
 
         body.dark-mode .settings-panel {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+            background: rgba(15, 30, 60, 0.6);
+            border: 1px solid rgba(56, 189, 248, 0.25);
         }
 
         body.dark-mode .settings-item {
-            background: rgba(56, 189, 248, 0.05);
-            color: #e0f2fe;
+            background: transparent;
+            color: rgba(224, 242, 254, 0.8);
+        }
+
+        body.dark-mode .settings-group-title {
+            color: rgba(56, 189, 248, 0.5);
         }
 
         body.dark-mode .settings-item:hover {
-            background: rgba(56, 189, 248, 0.15);
-            color: #38bdf8;
+            background: rgba(255, 255, 255, 0.08);
+            color: #e0f2fe;
         }
 
         body.dark-mode .submenu-item {
@@ -925,45 +1489,10 @@
             color: #38bdf8;
         }
 
-        body.dark-mode .instruction-modal {
-            background: rgba(0, 0, 0, 0.9);
-        }
-
-        body.dark-mode .instruction-content {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-        }
-
-        body.dark-mode .instruction-header {
-            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
-        }
-
-        body.dark-mode .instruction-header h2 {
-            color: #38bdf8;
-        }
-
-        body.dark-mode .instruction-body h3 {
-            color: #fbbf24;
-        }
-
-        body.dark-mode .instruction-footer {
-            border-top: 1px solid rgba(56, 189, 248, 0.2);
-        }
-
-        body.dark-mode .instruction-footer .close-btn {
-            background: rgba(56, 189, 248, 0.15);
-            border: 1px solid rgba(56, 189, 248, 0.4);
-            color: #e0f2fe;
-        }
-
-        body.dark-mode .instruction-footer .close-btn:hover {
-            background: rgba(56, 189, 248, 0.3);
-        }
-
         body.dark-mode td.called {
             background: rgba(15, 23, 42, 0.6) !important;
             color: rgba(224, 242, 254, 0.6) !important;
-            border: 1px solid rgba(56, 189, 248, 0.1) !important;
+            border: 1px solid rgba(56, 189, 248, 0.45) !important;
         }
 
         body.dark-mode .hide-record td.called {
@@ -979,19 +1508,150 @@
             border-color: rgba(56, 189, 248, 0.12);
         }
 
-        body.dark-mode .seating-chart td:not(.called):not(.aisle):not(.stage) {
+        body.dark-mode .seating-chart td:not(.aisle):not(.stage):not(.highlight) {
             background: rgba(15, 23, 42, 0.4) !important;
             color: #e0f2fe !important;
             border: 1px solid rgba(56, 189, 248, 0.2) !important;
         }
 
-        body.dark-mode .seating-chart td.highlight,
-        body.dark-mode .seating-chart.hide-record td.highlight {
+        body.dark-mode .seating-chart td.highlight {
             background: #ffeb3b !important;
             color: #000 !important;
             font-weight: bold !important;
             border: 1px solid rgba(255, 215, 0, 0.5) !important;
             animation: pulse 1s ease-out !important;
+        }
+
+        /* ===================== 自定义 Alert / Confirm 弹框样式 ===================== */
+        .custom-dialog-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+        }
+
+        .custom-dialog-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .custom-dialog-box {
+            width: 92%;
+            max-width: 400px;
+            background: rgba(42, 82, 152, 0.85);
+            border: 1px solid rgba(0, 255, 252, 0.25);
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            transform: scale(0.9);
+            opacity: 0;
+            transition: transform 0.24s cubic-bezier(0.34, 1.4, 0.64, 1), opacity 0.18s ease;
+        }
+
+        .custom-dialog-overlay.show .custom-dialog-box {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .custom-dialog-header {
+            padding: 22px 24px 10px;
+            text-align: center;
+        }
+
+        .custom-dialog-header-title {
+            font-size: 1.05em;
+            font-weight: bold;
+            color: #00fffc;
+            letter-spacing: 1px;
+        }
+
+        .custom-dialog-msg {
+            padding: 6px 24px 22px;
+            color: rgba(255, 255, 255, 0.82);
+            font-size: 0.92em;
+            line-height: 1.8;
+            text-align: center;
+            white-space: pre-wrap;
+            max-height: 45vh;
+            overflow-y: auto;
+        }
+
+        .custom-dialog-msg::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .custom-dialog-msg::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 252, 0.2);
+            border-radius: 2px;
+        }
+
+        .custom-dialog-footer {
+            display: flex;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .custom-dialog-footer .custom-dialog-btn {
+            flex: 1;
+        }
+
+        .custom-dialog-footer:not(.single) .custom-dialog-btn:first-child {
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .custom-dialog-btn {
+            padding: 15px 0;
+            border: none;
+            border-radius: 0;
+            font-size: 0.95em;
+            cursor: pointer;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.5);
+            transition: background 0.15s, color 0.15s;
+            min-width: auto;
+        }
+
+        .custom-dialog-btn:hover {
+            background: rgba(255, 255, 255, 0.07);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .custom-dialog-btn:active {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .custom-dialog-btn.primary {
+            color: #00fffc;
+            font-weight: bold;
+        }
+
+        .custom-dialog-btn.primary:hover {
+            background: rgba(0, 255, 252, 0.08);
+        }
+
+        .custom-dialog-btn.danger {
+            color: #ff7b6b;
+            font-weight: bold;
+        }
+
+        .custom-dialog-btn.danger:hover {
+            background: rgba(255, 80, 60, 0.1);
+        }
+
+        body.dark-mode .custom-dialog-btn.primary {
+            color: #38bdf8;
+        }
+
+        body.dark-mode .custom-dialog-btn.primary:hover {
+            background: rgba(56, 189, 248, 0.08);
         }
     </style>
     <script>
@@ -1011,24 +1671,41 @@
 
     <!-- 设置面板 -->
     <div class="settings-panel">
-        <div class="settings-item" id="toggle-view">🔄 切换座位视角</div>
-        <div class="settings-item" id="toggle-dark-mode">🌙 切换暗黑模式</div>
-        <div class="settings-item" id="toggle-class-committee">🎖️ 显示班委标签</div>
-        <div class="settings-item" id="toggle-intro">📖 显示学生介绍</div>
+        <div class="settings-group-title">点名管理</div>
+        <div class="settings-item" id="toggle-record-visibility"><span class="settings-item-icon">�</span>显示被点次数</div>
+        <div class="settings-item" id="clear-record"><span class="settings-item-icon">🗑️</span>清空点名记录</div>
+        <div class="settings-item" id="export-log"><span class="settings-item-icon">📤</span>导出点名记录</div>
+        <div class="settings-item" id="import-log"><span class="settings-item-icon">📥</span>导入点名记录</div>
+        <input type="file" id="import-log-input" accept=".xlsx" style="display:none" onchange="importCallLog(event)">
+        <div class="settings-item" id="show-stat"><span class="settings-item-icon">📊</span>点名数据统计</div>
 
-        <div class="settings-item expanded" id="manage-record">
-            📋 管理点名记录
-            <span class="arrow-icon">▼</span>
+        <div class="settings-group-title">显示偏好</div>
+        <div class="settings-item" id="toggle-class-committee"><span class="settings-item-icon">🏅</span>显示班委标记</div>
+        <div class="settings-item" id="toggle-intro"><span class="settings-item-icon">�</span>显示学生介绍</div>
+        <div class="settings-item" id="toggle-view"><span class="settings-item-icon">🔄</span>切换座位视角</div>
+        <div class="settings-item" id="toggle-dark-mode"><span class="settings-item-icon">☀️</span>切换暗黑模式</div>
+
+        <div class="settings-group-title">其他</div>
+        <div class="settings-item" id="edit-config"><span class="settings-item-icon">✏️</span>编辑座位信息</div>
+        <div class="settings-item" id="view-instruction"><span class="settings-item-icon">📋</span>查看使用说明</div>
+        <div class="settings-item settings-item-danger" id="reset-config"><span
+                class="settings-item-icon">⚠️</span>恢复默认配置</div>
+    </div>
+
+    <!-- 点名统计弹窗 -->
+    <div id="stat-modal" class="stat-modal">
+        <div class="stat-modal-box">
+            <div class="stat-modal-header">
+                <span class="stat-modal-title">📊 点名数据统计</span>
+                <span class="stat-modal-close" onclick="closeStatModal()">✕</span>
+            </div>
+            <div class="stat-summary" id="stat-summary"></div>
+            <div class="stat-tabs">
+                <div class="stat-tab active" id="stat-tab-count" onclick="switchStatTab('count')">点名统计</div>
+                <div class="stat-tab" id="stat-tab-log" onclick="switchStatTab('log')">记录明细</div>
+            </div>
+            <div class="stat-body" id="stat-body"></div>
         </div>
-
-        <div class="submenu-container show" id="record-submenu">
-            <div class="submenu-item" id="clear-record">删除记录</div>
-            <div class="submenu-item" id="toggle-record-visibility">隐藏记录</div>
-        </div>
-
-        <div class="settings-item" id="edit-config">✏️ 编辑座位信息</div>
-        <div class="settings-item" id="view-instruction">❓ 查看使用说明</div>
-        <div class="settings-item" id="reset-config" style="color:rgba(255,120,120,0.9)">🗑️ 恢复默认配置</div>
     </div>
 
     <!-- 右键菜单 -->
@@ -1047,6 +1724,8 @@
                 <textarea id="intro-modal-text" readonly class="intro-modal-textarea"></textarea>
             </div>
             <div class="intro-modal-footer">
+                <span id="intro-call-count"
+                    style="margin-right:auto;align-self:center;font-size:.78em;color:rgba(255,255,255,.5);background:rgba(255,255,255,.07);padding:3px 10px;border-radius:20px;letter-spacing:.5px"></span>
                 <button id="intro-edit-btn" onclick="toggleIntroEdit()" class="intro-btn intro-btn-edit">✏️ 编辑</button>
                 <button id="intro-save-btn" onclick="saveIntroEdit()" class="intro-btn intro-btn-save"
                     style="display:none">💾 保存</button>
@@ -1055,76 +1734,189 @@
         </div>
     </div>
 
+    <!-- 自定义 Alert / Confirm 弹框 -->
+    <div class="custom-dialog-overlay" id="customDialogOverlay">
+        <div class="custom-dialog-box">
+            <div class="custom-dialog-header">
+                <span class="custom-dialog-header-title" id="customDialogTitle"></span>
+            </div>
+            <div class="custom-dialog-msg" id="customDialogMsg"></div>
+            <div class="custom-dialog-footer" id="customDialogFooter"></div>
+        </div>
+    </div>
+
     <!-- 使用说明弹窗 -->
     <div class="instruction-modal" id="instructionModal">
         <div class="instruction-content">
             <div class="instruction-header">
-                <h2>智能课堂点名器(v1.1) 使用说明</h2>
+                <h2>📋 智能课堂点名器 · 使用说明</h2>
+                <span class="instruction-header-close" id="closeInstructionBtnHeader">✕</span>
             </div>
             <div class="instruction-body">
-                <h3>一、功能概述</h3>
-                <p>1. 智能随机点名：支持「仅抽未点过」和「抽取所有人」两种模式，满足不同点名场景需求；</p>
-                <p>2. 手动点名交互：双击座位表姓名即可标记/取消点名状态，操作直观便捷；</p>
-                <p>3. 视角自由切换：支持教师视角（默认）与学生视角（座位反向）双向切换，适配不同使用场景；</p>
-                <p>4. 主题个性化：内置深蓝/暗黑两种主题模式，切换状态自动保存至浏览器；</p>
-                <p>5. 班委快速识别：通过彩色波浪下划线区分班委类型，课堂管理更高效；</p>
-                <p>6. 学生介绍展示：点名后可在姓名右侧弹出介绍卡片，帮助老师快速了解学员背景；</p>
-                <p>7. 点名记录管理：支持隐藏/显示已点名单、一键清空记录，灵活管控点名状态；</p>
-                <p>8. 编辑座位表：通过设置菜单「✏️ 编辑座位信息」可打开配置生成器，可视化编辑座位布局、学生姓名、班委角色及学生介绍，编辑完成后点击「应用到点名器」即时生效。</p>
 
-                <h3>二、操作指南</h3>
-                <p>1. 随机点名操作：</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 点击「随机抽未点过」：系统仅从尚未点名的学生中随机抽取，抽取后自动标记为已点名，无重复；</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 点击「随机抽所有人」：从全班学生中随机抽取，已点名学生仍可能被重复选中；</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 触发后姓名区域会自动滚动2秒并停止，对应座位同步高亮提示。</p>
+                <!-- 第一行：随机点名 + 手动点名 -->
+                <div class="ins-section">
+                    <div class="ins-card">
+                        <div class="ins-card-title">🎲 随机点名</div>
+                        <div class="ins-row">
+                            <span class="ins-tag">⚖️ 均衡抽取</span>
+                            <span class="ins-val">优先从被点次数最少的同学中随机抽取，保证机会均等；本轮全部点完后自动进入下一轮并弹出提示</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-tag">🌐 全员随机</span>
+                            <span class="ins-val">不考虑被点次数，每次从全班完全随机抽取，适合需要重复点名的场景</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">🌀</span>
+                            <span class="ins-val">姓名滚动约 1 秒后定格，对应座位同步高亮闪烁</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">⏳</span>
+                            <span class="ins-val">滚动期间按钮禁用，等待定格后即可继续点名</span>
+                        </div>
+                    </div>
+                    <div class="ins-card">
+                        <div class="ins-card-title">✋ 手动点名</div>
+                        <div class="ins-row">
+                            <span class="ins-key">👆 双击座位</span>
+                            <span class="ins-val">直接标记该学生为已点名，座位高亮显示，姓名同步更新到顶部</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">↩️ 再次双击</span>
+                            <span class="ins-val">弹出确认框，确认后取消点名记录，座位恢复未点状态</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">🖱️ 右键座位</span>
+                            <span class="ins-val">弹出菜单，可查看或编辑该学生的介绍 / 备注</span>
+                        </div>
+                    </div>
+                </div>
 
-                <p>2. 手动点名操作：双击座位表中任意学生姓名，即可标记为已点名（座位高亮）；已点名状态下再次双击，可取消点名。</p>
-                <p>3. 视角切换：点击页面右上角⚙️设置按钮，选择「切换座位视角」，即可在教师/学生视角间切换。</p>
-                <p>4. 主题切换：点击⚙️设置按钮，选择「切换暗黑模式」或「切换深蓝模式」，完成界面主题切换，设置自动保存。</p>
+                <!-- 第二行：点名管理 + 数据统计 -->
+                <div class="ins-section">
+                    <div class="ins-card">
+                        <div class="ins-card-title">⚙️ 点名管理</div>
+                        <div class="ins-row">
+                            <span class="ins-key">🗑️ 清空记录</span>
+                            <span class="ins-val">一键清除本轮所有点名记录，⚠️ 操作不可撤销</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">🔢 被点次数</span>
+                            <span class="ins-val">开启后座位右上角显示累计被点次数，再次点击可隐藏</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">📤 导出记录</span>
+                            <span class="ins-val">将所有点名数据保存为 Excel 文件，方便存档或换设备使用</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">📥 导入记录</span>
+                            <span class="ins-val">从之前导出的 Excel 文件恢复数据，支持跨设备迁移历史记录</span>
+                        </div>
+                    </div>
+                    <div class="ins-card">
+                        <div class="ins-card-title">📊 数据统计</div>
+                        <div class="ins-row">
+                            <span class="ins-key">📋 点名统计</span>
+                            <span class="ins-val">查看每位学生的累计被点次数，支持按表头次数排序</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">🕐 记录明细</span>
+                            <span class="ins-val">按时间顺序查看每次点名详情，同样支持按表头时间排序</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">💾</span>
+                            <span class="ins-val">统计数据跨会话保存，刷新页面后不丢失</span>
+                        </div>
+                    </div>
+                </div>
 
-                <p>5. 班委标识说明：</p>
-                <p>&nbsp;&nbsp;&nbsp;🔴 红色波浪下划线：班长</p>
-                <p>&nbsp;&nbsp;&nbsp;🟢 绿色波浪下划线：组长</p>
-                </ul>
-                <p>6. 学生介绍说明（⚙️设置按钮 → 显示学生介绍）：</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 显示学生介绍：点名后，在姓名右侧弹出该学员的介绍卡片；</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 介绍卡片将在显示 30 秒后自动消失；</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 隐藏学生介绍：关闭介绍卡片显示，点名结果区恢复简洁样式；</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 设置状态自动保存，刷新页面后保持不变。</p>
-                <p>7. 点名记录管理（⚙️设置按钮 → 管理点名记录）：</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 灰显记录：已点名学生座位呈灰色显示，清晰区分未点名状态；</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 隐藏记录：已点名学生座位恢复默认样式，不显示点名标记；</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 删除记录：一键清空所有点名记录（操作不可逆，请谨慎执行）。</p>
+                <!-- 第三行：显示偏好 + 学生介绍 -->
+                <div class="ins-section">
+                    <div class="ins-card">
+                        <div class="ins-card-title">🎨 显示偏好</div>
+                        <div class="ins-row">
+                            <span class="ins-key">🏅 班委标记</span>
+                            <span class="ins-val">开启后姓名下方显示彩色下划线：<span style="color:#ff8888">红色</span> = 班长，<span
+                                    style="color:#88dd88">绿色</span> = 组长</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">🔄 座位视角</span>
+                            <span class="ins-val">教师视角 / 学生视角切换，学生视角下座位表整体左右翻转</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">☀️ 主题切换</span>
+                            <span class="ins-val">深蓝 / 暗黑两种主题，切换后自动记住偏好</span>
+                        </div>
+                    </div>
+                    <div class="ins-card">
+                        <div class="ins-card-title">📖 学生介绍</div>
+                        <div class="ins-row">
+                            <span class="ins-key">🔛 开启方式</span>
+                            <span class="ins-val">⚙️ → 显示学生介绍，开启后每次点名自动弹出介绍卡片</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">📍 显示位置</span>
+                            <span class="ins-val">卡片出现在姓名右侧，约 20 秒后自动消失</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">✏️ 编辑内容</span>
+                            <span class="ins-val">右键座位 → 查看介绍，点击「编辑」修改，保存后立即生效</span>
+                        </div>
+                    </div>
+                </div>
 
-                <p>8. 数据保存：所有点名记录、主题/视角设置均自动保存在浏览器本地，刷新页面后数据不丢失。</p>
-                <p>9. 查看/修改学生介绍（右键姓名格）：</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 在座位表上右键任意学生姓名，选择「📖 查看介绍/备注」；</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 弹窗默认只读显示该学生的介绍内容；</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 点击「✏️ 编辑」可修改内容，点击「💾 保存」后立即生效并自动保存。</p>
-                <p>10. 恢复默认配置（⚙️设置按钮 → 🗑️ 恢复默认配置）：</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 清除本地保存的座位数据、点名记录及偏好设置，页面自动刷新恢复初始状态；</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 此操作不可逆，执行前请确认无需保留现有数据。</p>
-                <p>11. 编辑座位表操作：</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 点击右上角⚙️设置按钮，选择「✏️ 编辑座位信息」；</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 确认 builder.html 与本文件在同一目录后，配置页面将自动打开并载入当前配置；</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 在配置页面修改座位布局、学生姓名、班委角色、学生介绍等信息；</p>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;- 编辑完成后点击「↩ 应用到点名器」，切换回本页面即可看到更新效果（无需重新生成文件）。</p>
+                <!-- 第四行：编辑座位表（全宽） -->
+                <div class="ins-section full">
+                    <div class="ins-card">
+                        <div class="ins-card-title">✏️ 编辑座位表 &amp; 配置管理</div>
+                        <div class="ins-section" style="margin-bottom:0;gap:12px">
+                            <div>
+                                <div class="ins-row">
+                                    <span class="ins-key">🖥️ 打开编辑器</span>
+                                    <span class="ins-val">⚙️ → 编辑座位信息，在 builder.html 中可对点名器中的座位及其他信息进行编辑</span>
+                                </div>
+                                <div class="ins-row">
+                                    <span class="ins-key">⚡ 应用配置</span>
+                                    <span class="ins-val">编辑完成后点击「↩ 应用到点名器」，无需刷新即时生效</span>
+                                </div>
+                                <div class="ins-row">
+                                    <span class="ins-key">📥 导入 Excel</span>
+                                    <span class="ins-val">在编辑器中导入座位表.xlsx 文件或者前期导出的点名器.html文件，批量填入姓名和介绍内容</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="ins-row">
+                                    <span class="ins-key">📤 导出备份</span>
+                                    <span class="ins-val">可导出为 Excel 表格，或打包成独立 HTML 文件方便分享和存档</span>
+                                </div>
+                                <div class="ins-row">
+                                    <span class="ins-key">🔁 恢复默认</span>
+                                    <span class="ins-val">⚙️ → 恢复默认配置，将清除全部本地数据，⚠️ 操作不可逆，请提前导出备份</span>
+                                </div>
+                                <div class="ins-row">
+                                    <span class="ins-key">🌐 浏览器配置</span>
+                                    <span class="ins-val">可以给页面配置浏览器顶部选项卡显示的标题及icon，页面正文顶部的标题文字等</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                <h3>三、注意事项</h3>
-                <p>1. 当「随机抽未点过」触发「全部已点完」提示时，系统会自动重置所有点名记录，可重新开始新一轮点名；</p>
-                <p>2. 操作过程中请勿频繁、快速点击按钮，避免程序响应异常；</p>
-                <p>3. 清空点名记录后无法恢复，执行前请确认无需保留现有记录；</p>
-                <p>4. 建议使用Chrome、Edge等现代浏览器访问，以保障所有功能正常运行。</p>
+                <!-- 底部提示 -->
+                <div class="ins-note">
+                    💾 点名记录、介绍内容、主题及所有偏好设置均自动保存在浏览器本地，关闭或刷新页面后不丢失 &nbsp;·&nbsp; 🌐 建议使用 Chrome / Edge 等现代浏览器以获得最佳体验
+                </div>
+
             </div>
             <div class="instruction-footer">
-                <button class="close-btn" id="closeInstructionBtn">关闭说明</button>
+                <button class="close-btn" id="closeInstructionBtn" onclick="closeInstruction()">关闭</button>
             </div>
         </div>
     </div>
 
     <!-- 主内容容器 -->
     <div class="container">
-        <h1>智能课堂点名器(v1.1)</h1>
+        <h1 id="page-main-title">智能课堂点名器</h1>
 
         <!-- 姓名显示区域 -->
         <div id="name-display">
@@ -1134,8 +1926,14 @@
 
         <!-- 控制按钮区域 -->
         <div class="controls">
-            <button id="start-btn" title="只抽取未点过的人，不会重复！">随机抽未点过</button>
-            <button id="manual-btn" title="从全班抽取，点过的人可能被重复点！">随机抽所有人</button>
+            <button id="start-btn" title="优先抽取被点次数少的同学，保证机会均等，被点次数最少的同学被点完后自动进入下一轮">均衡抽取</button>
+            <div id="round-status" style="text-align:center;line-height:1.6;pointer-events:none;">
+                <div id="round-label"
+                    style="font-size:0.95em;color:#00fffc;font-weight:bold;letter-spacing:1px;text-shadow:0 0 8px rgba(0,255,252,0.5)">
+                </div>
+                <div id="round-remain" style="font-size:0.72em;color:rgba(255,255,255,0.45);margin-top:1px"></div>
+            </div>
+            <button id="manual-btn" title="忽略被点次数，从全班随机抽取">全员随机</button>
         </div>
 
         <!-- 座位表区域 -->
@@ -1145,6 +1943,14 @@
             <!-- 教师视角表格（由 JS 动态渲染） -->
             <table id="seat-table"></table>
             <div class="slogan">请将此处替换为你班级的专属口号！</div>
+        </div>
+        <div
+            style="margin-top:56px;margin-bottom:48px;font-size:.72em;color:rgba(255,255,255,.25);text-align:center;letter-spacing:1px">
+            智能课堂点名器 v1.2 &nbsp;·&nbsp; © 2026 helloaider &nbsp;·&nbsp;
+            <a href="https://github.com/helloaider/smart-roll-call" target="_blank"
+                style="color:rgba(255,255,255,.3);text-decoration:none"
+                onmouseover="this.style.color='rgba(255,255,255,.6)'"
+                onmouseout="this.style.color='rgba(255,255,255,.3)'">github.com/helloaider/smart-roll-call</a>
         </div>
     </div>
 
@@ -1160,9 +1966,9 @@
         //   'aisle'                       — 过道（整列都是 aisle 时自动合并行）
         //   'stage'                       — 讲台
         const CLASS_CONFIG = {
-            title: "xx学校-xx教室座位表",
-            slogan: "请将此处替换为你班级的专属口号！",
-            seats: [
+            "title": "XX学校-XX教室座位表",
+            "slogan": "请将此处替换为你班级的专属口号!",
+            "seats": [
                 [
                     null,
                     null,
@@ -1501,7 +2307,7 @@
                     null
                 ]
             ],
-            intros: {
+            "intros": {
                 "学生01": "示例：这里填写学生的姓名典故或个人介绍，点名后将在姓名右侧弹出展示，30秒后自动消失。",
                 "学生02": "示例：可以写学生的特长、兴趣爱好，或者名字的由来与含义，帮助老师快速了解每位同学。",
                 "学生03": "示例：也可以写一句激励的话，比如——志存高远，脚踏实地，每一步都算数。",
@@ -1524,7 +2330,7 @@
                 "学生20": "示例：可以写学生的特长、兴趣爱好，或者名字的由来与含义，帮助老师快速了解每位同学。",
                 "学生21": "示例：也可以写一句激励的话，比如——志存高远，脚踏实地，每一步都算数。"
             }
-        };
+        }
 
         // ===================== 座位渲染 =====================
         function renderSeats() {
@@ -1629,6 +2435,16 @@
                         CLASS_CONFIG.slogan = cfg.slogan || CLASS_CONFIG.slogan;
                         CLASS_CONFIG.seats = cfg.seats;
                         CLASS_CONFIG.intros = cfg.intros || CLASS_CONFIG.intros;
+                        if (cfg.pageTitle) {
+                            document.title = cfg.pageTitle;
+                            const h1 = document.getElementById('page-main-title');
+                            if (h1) h1.textContent = cfg.pageTitle;
+                        }
+                        if (cfg.favicon) {
+                            let link = document.querySelector("link[rel~='icon']");
+                            if (!link) { link = document.createElement('link'); link.rel = 'icon'; document.head.appendChild(link); }
+                            link.href = cfg.favicon;
+                        }
                     }
                 }
             } catch (e) { }
@@ -1637,14 +2453,19 @@
         // 兼容旧版：如果有人直接改这里也能用
         // 本地化存储相关
 
-        let hasBeenCalled = new Set(JSON.parse(localStorage.getItem('calledNames') || '[]'));
+        // 点名日志：[{name, time}]，用于统计
+        let callLog = JSON.parse(localStorage.getItem('callLog') || '[]');
+
+        // 从 callLog 派生，避免维护两份数据
+        function hasBeenCalledSet() { return new Set(callLog.map(r => r.name)); }
         let isRunning = false;
         let last = '';
         let isTeacher = localStorage.getItem('viewMode') === 'student' ? false : true;
         let isDarkMode = localStorage.getItem('darkMode') === 'true';
-        let isHideRecord = localStorage.getItem('hideRecord') === 'true';
+        let isHideRecord = false; // 保留变量避免其他引用报错，固定为false（不再灰显）
+        let isShowCount = localStorage.getItem('showCount') !== null ? localStorage.getItem('showCount') === 'true' : false;
         let isShowCommittee = localStorage.getItem('showCommittee') === 'true';
-        let isShowIntro = localStorage.getItem('showIntro') === 'false' ? false : true;
+        let isShowIntro = localStorage.getItem('showIntro') === 'true';
 
         // 缓存所有学生姓名，避免重复查询 DOM
         const getAllStudentNames = () =>
@@ -1660,9 +2481,9 @@
         const toggleViewBtn = document.getElementById('toggle-view');
         const toggleDarkModeBtn = document.getElementById('toggle-dark-mode');
         const toggleClassCommitteeBtn = document.getElementById('toggle-class-committee');
-        const manageRecordBtn = document.getElementById('manage-record');
-        const recordSubmenu = document.getElementById('record-submenu');
         const clearRecordBtn = document.getElementById('clear-record');
+        const exportLogBtn = document.getElementById('export-log');
+        const importLogBtn = document.getElementById('import-log');
         const toggleRecordVisibilityBtn = document.getElementById('toggle-record-visibility');
         const viewInstructionBtn = document.getElementById('view-instruction');
         const instructionModal = document.getElementById('instructionModal');
@@ -1672,27 +2493,79 @@
         // ===================== 工具方法 =====================
 
         /**
+         * 自定义 Alert 弹框
+         * @param {string} msg 提示内容
+         * @param {object} [opts] { icon, btnText }
+         * @returns {Promise<void>}
+         */
+        function showAlert(msg, opts = {}) {
+            return new Promise(resolve => {
+                const overlay = document.getElementById('customDialogOverlay');
+                const titleEl = document.getElementById('customDialogTitle');
+                const msgEl = document.getElementById('customDialogMsg');
+                const footer = document.getElementById('customDialogFooter');
+                titleEl.textContent = opts.title || '提示';
+                msgEl.textContent = msg;
+                footer.innerHTML = '';
+                footer.className = 'custom-dialog-footer single';
+                const btn = document.createElement('button');
+                btn.className = 'custom-dialog-btn primary';
+                btn.textContent = opts.btnText || '确定';
+                btn.onclick = () => { overlay.classList.remove('show'); resolve(); };
+                footer.appendChild(btn);
+                overlay.classList.add('show');
+                setTimeout(() => btn.focus(), 50);
+            });
+        }
+
+        /**
+         * 自定义 Confirm 弹框
+         * @param {string} msg 提示内容
+         * @param {object} [opts] { title, confirmText, cancelText, danger }
+         * @returns {Promise<boolean>}
+         */
+        function showConfirm(msg, opts = {}) {
+            return new Promise(resolve => {
+                const overlay = document.getElementById('customDialogOverlay');
+                const titleEl = document.getElementById('customDialogTitle');
+                const msgEl = document.getElementById('customDialogMsg');
+                const footer = document.getElementById('customDialogFooter');
+                titleEl.textContent = opts.title || '确认';
+                msgEl.textContent = msg;
+                footer.innerHTML = '';
+                footer.className = 'custom-dialog-footer';
+                const cancelBtn = document.createElement('button');
+                cancelBtn.className = 'custom-dialog-btn';
+                cancelBtn.textContent = opts.cancelText || '取消';
+                cancelBtn.onclick = () => { overlay.classList.remove('show'); resolve(false); };
+                const confirmBtn = document.createElement('button');
+                confirmBtn.className = 'custom-dialog-btn ' + (opts.danger ? 'danger' : 'primary');
+                confirmBtn.textContent = opts.confirmText || '确定';
+                confirmBtn.onclick = () => { overlay.classList.remove('show'); resolve(true); };
+                footer.appendChild(cancelBtn);
+                footer.appendChild(confirmBtn);
+                overlay.classList.add('show');
+                setTimeout(() => confirmBtn.focus(), 50);
+            });
+        }
+
+        /**
          * 保存数据到本地存储
          */
         function save() {
-            localStorage.setItem('calledNames', JSON.stringify(Array.from(hasBeenCalled)));
+            localStorage.setItem('callLog', JSON.stringify(callLog));
             localStorage.setItem('viewMode', isTeacher ? 'teacher' : 'student');
             localStorage.setItem('darkMode', isDarkMode);
             localStorage.setItem('hideRecord', isHideRecord);
+            localStorage.setItem('showCount', isShowCount);
             localStorage.setItem('showCommittee', isShowCommittee);
             localStorage.setItem('showIntro', isShowIntro);
         }
 
         /**
-         * 刷新UI - 更新已点名样式、记录显示状态、座位提示
+         * 刷新UI - 更新记录显示状态、座位提示
          */
         function refreshUI() {
-            // 更新已点名样式
-            document.querySelectorAll('td').forEach(td => {
-                const n = td.id;
-                td.classList.toggle('called', hasBeenCalled.has(n));
-            });
-
             // 更新记录显示状态
             updateRecordVisibilityUI();
 
@@ -1701,6 +2574,9 @@
 
             // 更新所有座位的悬浮提示
             updateAllSeatTooltip();
+
+            // 更新轮次状态
+            updateRoundStatus();
         }
 
         /**
@@ -1709,9 +2585,8 @@
         function updateAllSeatTooltip() {
             document.querySelectorAll('#seat-table td').forEach(td => {
                 if (td.classList.contains('aisle') || td.classList.contains('stage') || !td.id) return;
-                const name = td.innerText.trim();
-                const realName = td.id;
-                if (hasBeenCalled.has(realName)) {
+                const name = td.id;
+                if (hasBeenCalledSet().has(name)) {
                     td.title = `鼠标双击 ${name} 可取消本次点名`;
                 } else {
                     td.title = `鼠标双击 ${name} 可对其手动点名`;
@@ -1720,11 +2595,17 @@
         }
 
         /**
-         * 更新记录显示状态UI
+         * 更新次数角标显示状态UI
          */
         function updateRecordVisibilityUI() {
-            seatingChart.classList.toggle('hide-record', isHideRecord);
-            toggleRecordVisibilityBtn.innerText = isHideRecord ? '灰显记录' : '隐藏记录';
+            seatingChart.classList.toggle('hide-record', false); // 不再灰显
+            toggleRecordVisibilityBtn.innerHTML = isShowCount
+                ? '<span class="settings-item-icon">🙈</span>隐藏被点次数'
+                : '<span class="settings-item-icon">🔢</span>显示被点次数';
+            // 控制所有座位角标的显示/隐藏
+            document.querySelectorAll('.td-count-badge').forEach(el => {
+                el.style.display = isShowCount ? '' : 'none';
+            });
         }
 
         /**
@@ -1733,15 +2614,17 @@
         function updateDarkModeUI() {
             document.body.classList.toggle('dark-mode', isDarkMode);
             document.documentElement.classList.toggle('dark-mode-pre', isDarkMode);
-            toggleDarkModeBtn.innerText = isDarkMode ? '🌙 切换深蓝模式' : '🌙 切换暗黑模式';
+            toggleDarkModeBtn.innerHTML = isDarkMode
+                ? '<span class="settings-item-icon">🌙</span>切换深蓝模式'
+                : '<span class="settings-item-icon">☀️</span>切换暗黑模式';
         }
 
         /**
-         * 更新班委标签显示UI
+         * 更新班委标记显示UI
          */
         function updateClassCommitteeUI() {
             document.body.classList.toggle('show-committee', isShowCommittee);
-            toggleClassCommitteeBtn.innerText = isShowCommittee ? '🎖️ 隐藏班委标签' : '🎖️ 显示班委标签';
+            toggleClassCommitteeBtn.innerText = isShowCommittee ? '🎖️ 隐藏班委标记' : '🏅 显示班委标记';
         }
 
         // ===================== 核心功能方法 =====================
@@ -1766,44 +2649,78 @@
         function clearHigh() {
             document.querySelectorAll('td.highlight').forEach(x => {
                 x.classList.remove('highlight');
-                const name = x.innerText.trim();
+                const name = x.id;
                 x.title = `鼠标双击 ${name} 可对其手动点名`;
             });
         }
 
         /**
          * 随机抽取姓名
-         * @param {boolean} onlyUncalled - 是否只抽取未点名的
+         * @param {boolean} balanced - 是否均衡抽取（从被点次数最少的人中抽）
+         * @returns {string|null|'roundDone'} 姓名 / null / 'roundDone'（本轮最少次数已全部点完）
          */
-        function randomName(onlyUncalled = true) {
+        function randomName(balanced = true) {
             const allNames = getAllStudentNames();
-            const candidates = onlyUncalled ? allNames.filter(name => !hasBeenCalled.has(name)) : allNames;
+            if (!allNames.length) return null;
 
-            if (candidates.length === 0) {
-                alert('全部已点完！即将重置记录');
-                hasBeenCalled.clear();
-                clearHigh();
-                nameDisplay.innerText = '点击开始';
-                clearIntro();
-                last = '';
-                save();
-                refreshUI();
-                return null;
+            if (!balanced) {
+                // 全员随机：直接从全班抽
+                return allNames[Math.floor(Math.random() * allNames.length)];
             }
 
+            // 均衡抽取：找出被点次数最少的人作为候选池
+            const cnt = getCallCount();
+            const minCount = Math.min(...allNames.map(n => cnt[n] || 0));
+            const candidates = allNames.filter(n => (cnt[n] || 0) === minCount);
+
+            // 从候选池中排除本轮已点过（次数 > minCount）的人
+            // 实际上候选池已经是次数 = minCount 的人，直接抽即可
+            if (candidates.length === 0) return null;
+
+            // 检查候选池是否已在本轮全部被点完
+            // 判断依据：候选池里所有人的次数都已经 > minCount（即本轮都被点过了）
+            // 但由于候选池本身就是 minCount 的人，这里直接返回候选池中随机一个
             return candidates[Math.floor(Math.random() * candidates.length)];
         }
 
         /**
-         * 开始随机滚动点名
-         * @param {boolean} onlyUncalled - 是否只抽未点过的
+         * 获取均衡抽取的当前状态：最小次数和候选人数
          */
-        function startRoll(onlyUncalled = true) {
+        function getBalancedStatus() {
+            const allNames = getAllStudentNames();
+            const cnt = getCallCount();
+            const minCount = Math.min(...allNames.map(n => cnt[n] || 0));
+            const candidates = allNames.filter(n => (cnt[n] || 0) === minCount);
+            return { minCount, candidates };
+        }
+
+        /**
+         * 更新两按钮中间的轮次状态显示
+         */
+        function updateRoundStatus() {
+            const label = document.getElementById('round-label');
+            const remain = document.getElementById('round-remain');
+            if (!label || !remain) return;
+            const allNames = getAllStudentNames();
+            if (!allNames.length) { label.textContent = ''; remain.textContent = ''; return; }
+            const { minCount, candidates } = getBalancedStatus();
+            label.textContent = `第 ${minCount + 1} 轮`;
+            remain.textContent = `还剩 ${candidates.length} 人`;
+        }
+
+        /**
+         * 开始随机滚动点名
+         * @param {boolean} balanced - true=均衡抽取，false=全员随机
+         */
+        function startRoll(balanced = true) {
             if (isRunning) return;
 
             isRunning = true;
             startBtn.disabled = true;
             manualBtn.disabled = true;
+
+            // 均衡抽取前记录本次抽取前的最小次数，用于判断是否完成一轮
+            const preStatus = balanced ? getBalancedStatus() : null;
 
             const allNames = getAllStudentNames();
             let counter = 0;
@@ -1815,13 +2732,23 @@
 
                 if (counter >= maxCounter) {
                     clearInterval(interval);
-                    const selected = randomName(onlyUncalled);
+                    const selected = randomName(balanced);
                     if (selected) {
                         nameDisplay.innerText = selected;
                         high(selected);
-                        hasBeenCalled.add(selected);
+                        callLog.push({ name: selected, time: new Date().toISOString() });
+                        showCountToast(selected);
                         showIntro(selected);
                         save();
+
+                        // 均衡抽取：检查本轮是否已全部点完
+                        if (balanced && preStatus) {
+                            const postStatus = getBalancedStatus();
+                            // 点完这个人后，最小次数提升了，说明本轮结束
+                            if (postStatus.minCount > preStatus.minCount) {
+                                showRoundDoneToast(preStatus.minCount);
+                            }
+                        }
                     } else {
                         nameDisplay.innerText = '点击开始';
                         clearIntro();
@@ -1836,6 +2763,33 @@
         }
 
         /**
+         * 均衡抽取完成一轮时的提示
+         */
+        function showRoundDoneToast(completedMinCount) {
+            const newMin = completedMinCount + 1;
+            const el = document.createElement('div');
+            el.style.cssText = `
+                position: fixed; top: 50%; left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(135deg, rgba(30,60,114,0.97), rgba(42,82,152,0.97));
+                border: 1px solid rgba(0,255,252,0.5);
+                border-radius: 12px; padding: 18px 28px;
+                color: #fff; font-size: 1em; text-align: center;
+                z-index: 9999; pointer-events: none;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+                animation: roundDoneFade 5s ease forwards;
+            `;
+            el.innerHTML = `<div style="font-size:1.4em;margin-bottom:6px">🎉</div>
+                <div style="color:#00fffc;font-weight:bold;margin-bottom:4px">第 ${completedMinCount + 1} 轮点名完成</div>
+                <div style="color:rgba(255,255,255,.65);font-size:.85em">每人已至少被点 ${newMin} 次，下次均衡抽取将开始新一轮</div>`;
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 8000);
+        }
+
+        /**
+         * 全部点完后的确认弹窗
+         */
+        /**
          * 处理座位双击事件 - 手动点名/取消点名
          * @param {Event} event - 双击事件对象
          */
@@ -1848,30 +2802,37 @@
             if (!td.id || td.classList.contains('aisle') || td.classList.contains('stage')) return;
 
             const realName = td.id;
-            const displayName = td.innerText.trim();
+            const displayName = td.id;
             // 核心修改：判断是否高亮（而非hasBeenCalled）
             const isHighlighted = td.classList.contains('highlight');
 
             // 已高亮 - 取消点名/取消高亮
             if (isHighlighted) {
-                if (confirm(`确定要取消对【${displayName}】的本次点名吗？`)) {
-                    hasBeenCalled.delete(realName);
-                    save();
-                    clearHigh(); // 清除高亮
-                    nameDisplay.innerText = '点击开始';
-                    clearIntro();
-                    last = '';
-                    refreshUI();
-                    // 触发mouseenter更新提示（修复this指向问题）
-                    td.dispatchEvent(new MouseEvent('mouseenter'));
-                }
+                showConfirm(`确定要取消对【${displayName}】的本次点名吗？`, {}).then(ok => {
+                    if (ok) {
+                        // 删除最近一条该学生的日志
+                        for (let i = callLog.length - 1; i >= 0; i--) {
+                            if (callLog[i].name === realName) { callLog.splice(i, 1); break; }
+                        }
+                        save();
+                        showCancelToast(realName);
+                        clearHigh(); // 清除高亮
+                        nameDisplay.innerText = '点击开始';
+                        clearIntro();
+                        last = '';
+                        refreshUI();
+                        // 触发mouseenter更新提示（修复this指向问题）
+                        td.dispatchEvent(new MouseEvent('mouseenter'));
+                    }
+                });
             }
             // 未高亮 - 手动点名/设置高亮
             else {
                 high(realName); // 设置高亮
                 nameDisplay.innerText = realName;
                 showIntro(realName);
-                hasBeenCalled.add(realName);
+                callLog.push({ name: realName, time: new Date().toISOString() });
+                showCountToast(realName);
                 save();
                 refreshUI();
                 // 触发mouseenter更新提示（修复this指向问题）
@@ -1927,7 +2888,7 @@
         }
 
         /**
-         * 切换班委标签显示
+         * 切换班委标记显示
          */
         function toggleClassCommittee() {
             isShowCommittee = !isShowCommittee;
@@ -1946,61 +2907,78 @@
 
         function updateIntroUI() {
             const btn = document.getElementById('toggle-intro');
-            if (btn) btn.innerText = isShowIntro ? '📖 隐藏学生介绍' : '📖 显示学生介绍';
+            if (btn) btn.innerText = isShowIntro ? '📖 隐藏学生介绍' : '📕 显示学生介绍';
             const el = document.getElementById('intro-display');
             if (el) {
-                if (isShowIntro && el.innerText) el.classList.add('visible');
+                if (isShowIntro && el.innerHTML) el.classList.add('visible');
                 else el.classList.remove('visible');
             }
         }
 
         let introTimer = null;
+        let introTypeTimer = null;
 
         function showIntro(name) {
             const el = document.getElementById('intro-display');
             if (!el) return;
             el.classList.remove('visible');
             if (introTimer) { clearTimeout(introTimer); introTimer = null; }
+            if (introTypeTimer) { clearInterval(introTypeTimer); introTypeTimer = null; }
             const text = CLASS_CONFIG.intros[name];
             if (text) {
-                el.innerText = text;
+                // 先渲染标题，正文容器留空等打字机填入
+                el.innerHTML = `<div class="intro-name">${name}</div><div class="intro-text"></div>`;
                 if (isShowIntro) {
-                    // 计算 name-display 的位置，卡片贴在其右侧垂直居中
                     const nameBox = document.getElementById('name-display').getBoundingClientRect();
                     const cardWidth = 460;
+                    const cardHeight = 130;
                     const margin = 20;
                     let left = nameBox.right + margin;
-                    // 超出视口右边界时，改为显示在左侧
                     if (left + cardWidth > window.innerWidth - 10) {
                         left = Math.max(10, nameBox.left - cardWidth - margin);
                     }
+                    // 卡片垂直居中对齐名字
+                    const top = nameBox.top + nameBox.height / 2 - cardHeight / 2;
                     el.style.left = left + 'px';
-                    el.style.top = (nameBox.top + nameBox.height / 2) + 'px';
-                    el.style.transform = 'translateY(-50%)';
+                    el.style.top = top + 'px';
+                    el.style.transform = '';
                     el.classList.add('visible');
-                    introTimer = setTimeout(() => clearIntro(), 30000);
+
+                    // 打字机逐字输出
+                    const textEl = el.querySelector('.intro-text');
+                    let i = 0;
+                    introTypeTimer = setInterval(() => {
+                        if (i < text.length) {
+                            textEl.textContent += text[i++];
+                        } else {
+                            clearInterval(introTypeTimer);
+                            introTypeTimer = null;
+                        }
+                    }, 40);
+
+                    introTimer = setTimeout(() => clearIntro(), 20000);
                 }
             } else {
-                el.innerText = '';
+                el.innerHTML = '';
             }
         }
 
         function clearIntro() {
             const el = document.getElementById('intro-display');
             if (!el) return;
-            el.innerText = '';
+            el.innerHTML = '';
             el.classList.remove('visible');
             if (introTimer) { clearTimeout(introTimer); introTimer = null; }
+            if (introTypeTimer) { clearInterval(introTypeTimer); introTypeTimer = null; }
         }
 
         /**
-         * 切换记录显示/隐藏
+         * 切换次数角标显示/隐藏
          */
         function toggleRecordVisibility() {
-            isHideRecord = !isHideRecord;
+            isShowCount = !isShowCount;
             updateRecordVisibilityUI();
             save();
-            // 新增：关闭设置面板
             closeSettingsPanel();
         }
 
@@ -2008,15 +2986,19 @@
          * 重置点名记录
          */
         function resetRecord() {
-            if (confirm('确定要清空所有点名记录吗？此操作不可恢复！')) {
-                hasBeenCalled.clear();
-                clearHigh();
-                nameDisplay.innerText = '点击开始';
-                clearIntro();
-                last = '';
-                save();
-                refreshUI();
-            }
+            showConfirm('确定要清空所有点名记录吗？此操作不可恢复！', { danger: true }).then(ok => {
+                if (ok) {
+                    callLog = [];
+                    clearHigh();
+                    nameDisplay.innerText = '点击开始';
+                    clearIntro();
+                    last = '';
+                    // 清除所有座位角标
+                    document.querySelectorAll('.td-count-badge').forEach(el => el.remove());
+                    save();
+                    refreshUI();
+                }
+            });
             // 新增：关闭设置面板
             closeSettingsPanel();
         }
@@ -2026,24 +3008,39 @@
          */
         function openBuilder() {
             closeSettingsPanel();
-            if (!confirm('请确认 builder.html 和点名器文件在同一目录下，确认后将打开配置页面。')) return;
-            const draft = {
-                title: CLASS_CONFIG.title,
-                slogan: CLASS_CONFIG.slogan,
-                cells: CLASS_CONFIG.seats.map(row => row.map(cell => {
-                    if (cell === null || cell === undefined) return { type: 'empty', name: '', role: 'normal' };
-                    if (cell === 'aisle') return { type: 'aisle', name: '', role: 'normal' };
-                    if (cell === 'stage') return { type: 'stage', name: '', role: 'normal' };
-                    if (cell && cell.name) return { type: 'student', name: cell.name, role: cell.role || 'normal' };
-                    return { type: 'empty', name: '', role: 'normal' };
-                })),
-                intros: CLASS_CONFIG.intros || {}
-            };
-            localStorage.setItem('builder_draft', JSON.stringify(draft));
-            const win = window.open('./builder.html', '_blank');
-            if (!win) {
-                alert('未找到 builder.html，请将 builder.html 文件放到与本文件相同的目录下。');
-            }
+            showConfirm('请确认 builder.html 和点名器文件在同一目录下，确认后将打开编辑生成页面。', {}).then(ok => {
+                if (!ok) return;
+                // 读取当前已存的 index_config 里的 pageTitle 和 favicon
+                let savedPageTitle = '智能课堂点名器';
+                let savedFavicon = '';
+                try {
+                    const saved = localStorage.getItem('index_config');
+                    if (saved) {
+                        const cfg = JSON.parse(saved);
+                        if (cfg.pageTitle) savedPageTitle = cfg.pageTitle;
+                        if (cfg.favicon) savedFavicon = cfg.favicon;
+                    }
+                } catch (e) { }
+                const draft = {
+                    title: CLASS_CONFIG.title,
+                    pageTitle: savedPageTitle,
+                    slogan: CLASS_CONFIG.slogan,
+                    favicon: savedFavicon,
+                    cells: CLASS_CONFIG.seats.map(row => row.map(cell => {
+                        if (cell === null || cell === undefined) return { type: 'empty', name: '', role: 'normal' };
+                        if (cell === 'aisle') return { type: 'aisle', name: '', role: 'normal' };
+                        if (cell === 'stage') return { type: 'stage', name: '', role: 'normal' };
+                        if (cell && cell.name) return { type: 'student', name: cell.name, role: cell.role || 'normal' };
+                        return { type: 'empty', name: '', role: 'normal' };
+                    })),
+                    intros: CLASS_CONFIG.intros || {}
+                };
+                localStorage.setItem('builder_draft', JSON.stringify(draft));
+                const win = window.open('./builder.html', '_blank');
+                if (!win) {
+                    showAlert('未找到 builder.html，请将 builder.html 文件放到与本文件相同的目录下。');
+                }
+            });
         }
 
         /**
@@ -2064,6 +3061,281 @@
             document.body.style.overflow = 'auto';
         }
 
+        // ===================== 点名统计 =====================
+        function getCallCount() {
+            const cnt = {};
+            callLog.forEach(r => { cnt[r.name] = (cnt[r.name] || 0) + 1; });
+            return cnt;
+        }
+
+        function setBadgeCount(badge, n) {
+            badge.setAttribute('data-n', n);
+            // 青色系，透明度随次数加深：1次很浅，5次及以上明显
+            const alpha = Math.min(0.15 + (n - 1) * 0.18, 0.9).toFixed(2);
+            badge.style.setProperty('--badge-color', `rgba(0,255,252,${alpha})`);
+        }
+
+        function restoreCountBadges() {
+            const cnt = getCallCount();
+            Object.entries(cnt).forEach(([name, n]) => {
+                const td = document.getElementById(name);
+                if (!td) return;
+                let tdBadge = td.querySelector('.td-count-badge');
+                if (!tdBadge) {
+                    tdBadge = document.createElement('span');
+                    tdBadge.className = 'td-count-badge';
+                    td.appendChild(tdBadge);
+                }
+                setBadgeCount(tdBadge, n);
+                tdBadge.style.display = isShowCount ? '' : 'none';
+            });
+        }
+
+        function showCountToast(name) {
+            const cnt = getCallCount();
+            const n = cnt[name] || 1;
+
+            // ── 座位格：只更新常驻次数角标，不飘动 ──
+            const td = document.getElementById(name);
+            if (td) {
+                let tdBadge = td.querySelector('.td-count-badge');
+                if (!tdBadge) {
+                    tdBadge = document.createElement('span');
+                    tdBadge.className = 'td-count-badge';
+                    td.appendChild(tdBadge);
+                }
+                setBadgeCount(tdBadge, n);
+                tdBadge.style.display = isShowCount ? '' : 'none';
+            }
+        }
+
+        function showCancelToast(name) {
+            const cnt = getCallCount(); // 已在调用前删除了日志，所以这里是减后的值
+            const n = cnt[name] || 0;
+
+            // ── 座位格：更新常驻角标 ──
+            const td = document.getElementById(name);
+            if (td) {
+                const tdBadge = td.querySelector('.td-count-badge');
+                if (tdBadge) {
+                    if (n <= 0) {
+                        tdBadge.remove();
+                    } else {
+                        setBadgeCount(tdBadge, n);
+                        tdBadge.style.display = isShowCount ? '' : 'none';
+                    }
+                }
+            }
+        }
+
+        function openStatModal() {
+            settingsPanel.classList.remove('show');
+            statSortCount = 'desc'; statSortTime = 'desc'; statCurrentTab = 'count';
+            renderStatModal('count');
+            document.getElementById('stat-modal').style.display = 'flex';
+        }
+
+        function closeStatModal() {
+            document.getElementById('stat-modal').style.display = 'none';
+        }
+
+        // ---- 点名记录 导出/导入 ----
+        function _loadXlsxLib(cb) {
+            if (typeof XLSX !== 'undefined') { cb(); return; }
+            var s = document.createElement('script');
+            s.src = 'https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';
+            s.onload = cb;
+            document.head.appendChild(s);
+        }
+
+        function exportCallLog() {
+            _loadXlsxLib(function () {
+                var allNames = getAllStudentNames();
+                var logs = [...callLog]
+                    .filter(r => allNames.includes(r.name))
+                    .sort((a, b) => a.time < b.time ? 1 : -1);
+
+                var rows = [['序号', '姓名', '点名时间']];
+                logs.forEach(function (r, i) {
+                    var d = new Date(r.time);
+                    var fmt = d.getFullYear() + '-' +
+                        String(d.getMonth() + 1).padStart(2, '0') + '-' +
+                        String(d.getDate()).padStart(2, '0') + ' ' +
+                        String(d.getHours()).padStart(2, '0') + ':' +
+                        String(d.getMinutes()).padStart(2, '0') + ':' +
+                        String(d.getSeconds()).padStart(2, '0');
+                    rows.push([i + 1, r.name, fmt]);
+                });
+
+                var ws = XLSX.utils.aoa_to_sheet(rows);
+                ws['!cols'] = [{ wch: 6 }, { wch: 14 }, { wch: 22 }];
+                var wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, '点名记录');
+
+                var title = CLASS_CONFIG.title || '点名记录';
+                var now = new Date();
+                var datePart = now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0');
+                XLSX.writeFile(wb, '点名记录-' + title + '-' + datePart + '.xlsx');
+            });
+        }
+
+        function importCallLog(event) {
+            var file = event.target.files[0];
+            event.target.value = '';
+            if (!file) return;
+            _loadXlsxLib(function () {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    try {
+                        var wb = XLSX.read(e.target.result, { type: 'array' });
+                        var ws = wb.Sheets['点名记录'] || wb.Sheets[wb.SheetNames[0]];
+                        var data = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
+                        // 跳过标题行，读取姓名和时间
+                        var imported = [];
+                        for (var i = 1; i < data.length; i++) {
+                            var name = String(data[i][1] || '').trim();
+                            var timeStr = String(data[i][2] || '').trim();
+                            if (!name || !timeStr) continue;
+                            var t = new Date(timeStr);
+                            if (isNaN(t.getTime())) continue;
+                            imported.push({ name: name, time: t.toISOString() });
+                        }
+                        if (!imported.length) { showAlert('未读取到有效记录，请确认文件格式正确。'); return; }
+                        showConfirm('读取到 ' + imported.length + ' 条记录，追加到现有记录？', {
+                            confirmText: '追加', cancelText: '取消'
+                        }).then(function (ok) {
+                            if (!ok) return;
+                            var existing = new Set(callLog.map(r => r.name + '|' + r.time));
+                            var added = imported.filter(r => !existing.has(r.name + '|' + r.time));
+                            callLog = callLog.concat(added);
+                            save();
+                            restoreCountBadges();
+                            renderStatModal(statCurrentTab);
+                            showAlert('导入成功，新增 ' + added.length + ' 条记录（跳过重复 ' + (imported.length - added.length) + ' 条）。');
+                        });
+                    } catch (err) {
+                        showAlert('导入失败：' + err.message);
+                    }
+                };
+                reader.readAsArrayBuffer(file);
+            });
+        }
+
+        function switchStatTab(tab) {
+            statCurrentTab = tab;
+            document.getElementById('stat-tab-count').classList.toggle('active', tab === 'count');
+            document.getElementById('stat-tab-log').classList.toggle('active', tab === 'log');
+            renderStatBody(tab);
+        }
+
+        // 排序状态
+        let statSortCount = 'desc', statSortTime = 'desc', statCurrentTab = 'count';
+
+        function renderStatModal(tab) {
+            const cnt = getCallCount();
+            const allNames = getAllStudentNames(); // 当前座位表学生
+            const totalStudents = allNames.length;
+            // 只统计当前学生的点名记录
+            const totalCalls = callLog.filter(r => allNames.includes(r.name)).length;
+            const avg = totalStudents ? (totalCalls / totalStudents).toFixed(1) : 0;
+            const vals = allNames.map(n => cnt[n] || 0);
+            const maxCalls = vals.length ? Math.max(...vals) : 0;
+            const minCalls = vals.length ? Math.min(...vals) : 0;
+
+            // 记录开始时间
+            const validLogs = callLog.filter(r => allNames.includes(r.name));
+            let startTimeStr = '暂无记录';
+            if (validLogs.length) {
+                const earliest = validLogs.reduce((a, b) => a.time < b.time ? a : b);
+                const d = new Date(earliest.time);
+                startTimeStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`;
+            }
+
+            // 更新标题
+            document.querySelector('.stat-modal-title').textContent = validLogs.length
+                ? `📊 点名数据统计（${startTimeStr} 至今）`
+                : `📊 点名数据统计（暂无记录）`;
+
+            document.getElementById('stat-summary').innerHTML = `
+                <div class="stat-card"><div class="stat-card-val">${totalStudents}</div><div class="stat-card-lbl">学生人数</div></div>
+                <div class="stat-card"><div class="stat-card-val">${totalCalls}</div><div class="stat-card-lbl">总点名次数</div></div>
+                <div class="stat-card"><div class="stat-card-val">${avg}</div><div class="stat-card-lbl">人均被点次数</div></div>
+                <div class="stat-card"><div class="stat-card-val">${maxCalls}</div><div class="stat-card-lbl">最大被点次数</div></div>
+                <div class="stat-card"><div class="stat-card-val">${minCalls}</div><div class="stat-card-lbl">最小被点次数</div></div>`;
+            renderStatBody(tab);
+        }
+
+        function renderStatBody(tab) {
+            const body = document.getElementById('stat-body');
+            const allNames = getAllStudentNames();
+            // SVG 双箭头排序图标
+            function sortArrows(field) {
+                const state = field === 'count' ? statSortCount : statSortTime;
+                const cls = state === 'desc' ? 'sort-desc' : 'sort-asc';
+                return `<span class="stat-th-sort ${cls}" onclick="toggleStatSort('${field}')">` +
+                    `<svg width="8" height="5" viewBox="0 0 8 5"><polygon class="arr-up" points="4,0 8,5 0,5"/></svg>` +
+                    `<svg width="8" height="5" viewBox="0 0 8 5"><polygon class="arr-dn" points="0,0 8,0 4,5"/></svg>` +
+                    `</span>`;
+            }
+            if (tab === 'count') {
+                const cnt = getCallCount();
+                let rows = allNames.map(n => ({ name: n, count: cnt[n] || 0, note: (CLASS_CONFIG.intros[n] || '').replace(/\n/g, ' ') }));
+                rows.sort((a, b) => statSortCount === 'desc' ? b.count - a.count : a.count - b.count);
+                body.innerHTML = `<table class="stat-table">
+                    <thead><tr>
+                        <th style="width:44px">序号</th>
+                        <th class="th-left" style="width:90px">姓名</th>
+                        <th style="width:100px; cursor: pointer;" onclick="toggleStatSort('count')">点名次数<span class="stat-th-sort ${statSortCount === 'desc' ? 'sort-desc' : 'sort-asc'}" style="display:inline-flex; vertical-align:middle; margin-left:5px; opacity:.7;">` +
+                    `<svg width="8" height="5" viewBox="0 0 8 5"><polygon class="arr-up" points="4,0 8,5 0,5"/></svg>` +
+                    `<svg width="8" height="5" viewBox="0 0 8 5"><polygon class="arr-dn" points="0,0 8,0 4,5"/></svg>` +
+                    `</span></th>
+                        <th class="th-left">备注</th>
+                    </tr></thead>
+                    <tbody>${rows.map((r, i) => `<tr>
+                        <td>${i + 1}</td>
+                        <td class="td-left">${r.name}</td>
+                        <td style="color:${r.count > 0 ? '#00fffc' : 'rgba(255,255,255,.35)'}">${r.count}</td>
+                        <td class="stat-note" title="${r.note}">${r.note || '—'}</td>
+                    </tr>`).join('')}</tbody>
+                </table>`;
+            } else {
+                const logs = [...callLog].filter(r => allNames.includes(r.name));
+                logs.sort((a, b) => {
+                    if (a.time < b.time) return statSortTime === 'desc' ? 1 : -1;
+                    if (a.time > b.time) return statSortTime === 'desc' ? -1 : 1;
+                    return 0;
+                });
+                body.innerHTML = `<table class="stat-table">
+                    <thead><tr>
+                        <th style="width:44px">序号</th>
+                        <th class="th-left" style="width:90px">姓名</th>
+                        <th style="cursor: pointer;" onclick="toggleStatSort('time')">点名时间<span class="stat-th-sort ${statSortTime === 'desc' ? 'sort-desc' : 'sort-asc'}" style="display:inline-flex; vertical-align:middle; margin-left:5px; opacity:.7;">` +
+                    `<svg width="8" height="5" viewBox="0 0 8 5"><polygon class="arr-up" points="4,0 8,5 0,5"/></svg>` +
+                    `<svg width="8" height="5" viewBox="0 0 8 5"><polygon class="arr-dn" points="0,0 8,0 4,5"/></svg>` +
+                    `</span></th>
+                    </tr></thead>
+                    <tbody>${logs.map((r, i) => {
+                        const d = new Date(r.time);
+                        const fmt = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`;
+                        return `<tr><td>${i + 1}</td><td class="td-left">${r.name}</td><td>${fmt}</td></tr>`;
+                    }).join('')}</tbody>
+                </table>`;
+            }
+        }
+
+        function toggleStatSort(field) {
+            if (field === 'count') {
+                statSortCount = statSortCount === 'desc' ? 'asc' : 'desc';
+            } else {
+                statSortTime = statSortTime === 'desc' ? 'asc' : 'desc';
+            }
+            renderStatBody(statCurrentTab);
+        }
+
+        document.getElementById('stat-modal').addEventListener('click', function (e) {
+            if (e.target === this) closeStatModal();
+        });
+
         function closeIntroModal() {
             document.getElementById('intro-modal').style.display = 'none';
         }
@@ -2073,13 +3345,29 @@
             const menu = document.getElementById('ctx-menu');
             const name = menu._targetName;
             menu.style.display = 'none';
-            document.getElementById('intro-modal-title').textContent = name + ' 的介绍/备注';
+
+            // 查找该学生的身份
+            let role = null;
+            outer: for (const row of CLASS_CONFIG.seats) {
+                for (const cell of row) {
+                    if (cell && cell.name === name) { role = cell.role || null; break outer; }
+                }
+            }
+            let roleTag = '';
+            if (role === 'monitor') roleTag = '<span class="intro-modal-role-tag monitor">班长</span>';
+            else if (role === 'leader') roleTag = '<span class="intro-modal-role-tag leader">组长</span>';
+
+            document.getElementById('intro-modal-title').innerHTML =
+                `<span class="intro-modal-title-name">${name}${roleTag}</span><span class="intro-modal-title-sub">介绍 / 备注</span>`;
             const ta = document.getElementById('intro-modal-text');
             ta.value = CLASS_CONFIG.intros[name] || '';
             ta.readOnly = true;
             document.getElementById('intro-edit-btn').style.display = '';
             document.getElementById('intro-save-btn').style.display = 'none';
             document.getElementById('intro-modal')._currentName = name;
+            // 显示点名次数
+            const cnt = getCallCount();
+            document.getElementById('intro-call-count').textContent = `已被点名：${cnt[name] || 0} 次`;
             document.getElementById('intro-modal').style.display = 'flex';
         });
 
@@ -2125,15 +3413,6 @@
             if (e.target === this) closeIntroModal();
         });
 
-        /**
-         * 切换设置面板子菜单
-         */
-        function toggleSubmenu() {
-            manageRecordBtn.classList.toggle('expanded');
-            manageRecordBtn.classList.toggle('collapsed');
-            recordSubmenu.classList.toggle('show');
-        }
-
         // ===================== 事件绑定 =====================
         /**
          * 初始化座位单元格事件
@@ -2157,7 +3436,7 @@
                 });
 
                 td.addEventListener('mouseenter', () => {
-                    const displayName = td.innerText.trim();
+                    const displayName = td.id;
                     if (td.classList.contains('highlight')) {
                         td.title = `鼠标双击 ${displayName} 可取消本次点名`;
                     } else {
@@ -2172,6 +3451,9 @@
             // 先渲染座位表
             renderSeats();
 
+            // 恢复座位次数角标
+            restoreCountBadges();
+
             // 初始化按钮事件
             startBtn.addEventListener('click', () => startRoll(true));
             manualBtn.addEventListener('click', () => startRoll(false));
@@ -2180,21 +3462,28 @@
             toggleViewBtn.addEventListener('click', toggleView);
             toggleDarkModeBtn.addEventListener('click', toggleDarkMode);
             toggleClassCommitteeBtn.addEventListener('click', toggleClassCommittee);
-            manageRecordBtn.addEventListener('click', toggleSubmenu);
             document.getElementById('toggle-intro').addEventListener('click', toggleIntro);
             clearRecordBtn.addEventListener('click', resetRecord);
+            exportLogBtn.addEventListener('click', function () { settingsPanel.classList.remove('show'); exportCallLog(); });
+            importLogBtn.addEventListener('click', function () { settingsPanel.classList.remove('show'); document.getElementById('import-log-input').click(); });
             toggleRecordVisibilityBtn.addEventListener('click', toggleRecordVisibility);
+            document.getElementById('show-stat').addEventListener('click', openStatModal);
             viewInstructionBtn.addEventListener('click', openInstruction);
             document.getElementById('reset-config').addEventListener('click', function () {
                 settingsPanel.classList.remove('show');
-                if (confirm('确定要恢复默认配置吗？\n这将清除本地保存的座位数据、点名记录及偏好设置，清除后页面将自动刷新。')) {
-                    ['index_config', 'calledNames', 'viewMode', 'darkMode', 'hideRecord', 'showCommittee', 'showIntro', 'builder_apply'].forEach(function (k) {
-                        localStorage.removeItem(k);
-                    });
-                    location.reload();
-                }
+                showConfirm('确定要恢复默认配置吗？\n这将清除本地保存的座位数据、备注及介绍数据、点名记录及偏好设置，清除后页面将自动刷新。\n\n1、如需备份座位及备注数据请点击编辑座位数据菜单进入编辑页面导出excel或者html\n2、如需备份点名记录数据请在本页面选择导出点名记录Excel', {
+                    danger: true, confirmText: '确定清除'
+                }).then(ok => {
+                    if (ok) {
+                        ['index_config', 'calledNames', 'callLog', 'viewMode', 'darkMode', 'hideRecord', 'showCount', 'showCommittee', 'showIntro', 'builder_apply'].forEach(function (k) {
+                            localStorage.removeItem(k);
+                        });
+                        location.reload();
+                    }
+                });
             });
             closeInstructionBtn.addEventListener('click', closeInstruction);
+            document.getElementById('closeInstructionBtnHeader').addEventListener('click', closeInstruction);
 
             // 点击弹窗外层关闭
             instructionModal.addEventListener('click', (e) => {
@@ -2242,19 +3531,61 @@
             try {
                 var cfg = JSON.parse(raw);
                 if (cfg && cfg.seats) {
+                    // 在覆盖前先记录旧名单，用于后续对比
+                    const oldNames = new Set(
+                        CLASS_CONFIG.seats.flat()
+                            .filter(s => s && typeof s === 'object' && s.name && s.name.trim())
+                            .map(s => s.name.trim())
+                    );
+
                     CLASS_CONFIG.title = cfg.title || CLASS_CONFIG.title;
                     CLASS_CONFIG.slogan = cfg.slogan || CLASS_CONFIG.slogan;
                     CLASS_CONFIG.seats = cfg.seats;
                     CLASS_CONFIG.intros = cfg.intros || {};
+                    // 应用网页标题
+                    if (cfg.pageTitle) {
+                        document.title = cfg.pageTitle;
+                        const h1 = document.getElementById('page-main-title');
+                        if (h1) h1.textContent = cfg.pageTitle;
+                    }
+                    // 应用 favicon
+                    if (cfg.favicon) {
+                        let link = document.querySelector("link[rel~='icon']");
+                        if (!link) { link = document.createElement('link'); link.rel = 'icon'; document.head.appendChild(link); }
+                        link.href = cfg.favicon;
+                    }
                     // 持久化保存，刷新后不丢失
                     localStorage.setItem('index_config', JSON.stringify({
                         title: CLASS_CONFIG.title,
                         slogan: CLASS_CONFIG.slogan,
                         seats: CLASS_CONFIG.seats,
-                        intros: CLASS_CONFIG.intros
+                        intros: CLASS_CONFIG.intros,
+                        pageTitle: cfg.pageTitle || document.title,
+                        favicon: cfg.favicon || ''
                     }));
                     localStorage.removeItem('builder_apply');
+
+                    // 对比新旧名单，只统计"旧名单有、新名单没有"的人
+                    const newNames = new Set(
+                        cfg.seats.flat()
+                            .filter(s => s && typeof s === 'object' && s.name && s.name.trim())
+                            .map(s => s.name.trim())
+                    );
+                    const removedNames = [...oldNames].filter(n => !newNames.has(n));
+
                     renderSeats();
+
+                    // 清理所有不在新名单里的记录（含历史脏数据）
+                    callLog = callLog.filter(r => newNames.has(r.name));
+                    save();
+
+                    // 提示"旧名单有、新名单没有"的人（真正被移除的）
+                    if (removedNames.length > 0) {
+                        const listStr = removedNames.map(n => `· ${n}`).join('\n');
+                        showAlert(`本次同步后，以下 ${removedNames.length} 人不在新名单中，其点名记录已自动清除：\n\n${listStr}`);
+                    }
+
+                    restoreCountBadges();
                     initSeatEvents();
                     refreshUI();
                 }

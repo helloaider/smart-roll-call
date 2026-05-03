@@ -6,4 +6,7 @@ Thumbs.db
 index\ -\ *.html
 _*.py
 _*.txt
+ignorefiles
 
+# 本地备份副本
+builder\ -\ *.html
