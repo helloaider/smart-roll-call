@@ -316,7 +316,7 @@
             text-align: left;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
             color: rgba(255, 255, 255, 0.8);
         }
 
@@ -326,10 +326,15 @@
         }
 
         .settings-item-icon {
-            font-size: 1.1em;
+            font-size: 1em;
             width: 22px;
+            max-width: 22px;
             text-align: center;
             flex-shrink: 0;
+            display: inline-block;
+            line-height: 1;
+            overflow: hidden;
+            vertical-align: middle;
         }
 
         .settings-item-danger {
@@ -1671,25 +1676,24 @@
 
     <!-- 设置面板 -->
     <div class="settings-panel">
+        <div class="settings-group-title">显示偏好</div>
+        <div class="settings-item" id="toggle-record-visibility"><span class="settings-item-icon">🔢</span>显示被点次数</div>
+        <div class="settings-item" id="toggle-class-committee"><span class="settings-item-icon">🏅</span>显示班委标记</div>
+        <div class="settings-item" id="toggle-intro"><span class="settings-item-icon">💬</span>显示学生介绍</div>
+        <div class="settings-item" id="toggle-view"><span class="settings-item-icon">🔄</span>切换座位视角</div>
+        <div class="settings-item" id="toggle-dark-mode"><span class="settings-item-icon">☀️</span>切换暗黑模式</div>
+        
         <div class="settings-group-title">点名管理</div>
-        <div class="settings-item" id="toggle-record-visibility"><span class="settings-item-icon">�</span>显示被点次数</div>
         <div class="settings-item" id="clear-record"><span class="settings-item-icon">🗑️</span>清空点名记录</div>
         <div class="settings-item" id="export-log"><span class="settings-item-icon">📤</span>导出点名记录</div>
         <div class="settings-item" id="import-log"><span class="settings-item-icon">📥</span>导入点名记录</div>
         <input type="file" id="import-log-input" accept=".xlsx" style="display:none" onchange="importCallLog(event)">
         <div class="settings-item" id="show-stat"><span class="settings-item-icon">📊</span>点名数据统计</div>
 
-        <div class="settings-group-title">显示偏好</div>
-        <div class="settings-item" id="toggle-class-committee"><span class="settings-item-icon">🏅</span>显示班委标记</div>
-        <div class="settings-item" id="toggle-intro"><span class="settings-item-icon">�</span>显示学生介绍</div>
-        <div class="settings-item" id="toggle-view"><span class="settings-item-icon">🔄</span>切换座位视角</div>
-        <div class="settings-item" id="toggle-dark-mode"><span class="settings-item-icon">☀️</span>切换暗黑模式</div>
-
         <div class="settings-group-title">其他</div>
         <div class="settings-item" id="edit-config"><span class="settings-item-icon">✏️</span>编辑座位信息</div>
         <div class="settings-item" id="view-instruction"><span class="settings-item-icon">📋</span>查看使用说明</div>
-        <div class="settings-item settings-item-danger" id="reset-config"><span
-                class="settings-item-icon">⚠️</span>恢复默认配置</div>
+        <div class="settings-item settings-item-danger" id="reset-config"><span class="settings-item-icon">⚠️</span>恢复默认配置</div>
     </div>
 
     <!-- 点名统计弹窗 -->
@@ -1793,47 +1797,13 @@
                 </div>
 
                 <!-- 第二行：点名管理 + 数据统计 -->
-                <div class="ins-section">
+               <div class="ins-section">
                     <div class="ins-card">
-                        <div class="ins-card-title">⚙️ 点名管理</div>
-                        <div class="ins-row">
-                            <span class="ins-key">🗑️ 清空记录</span>
-                            <span class="ins-val">一键清除本轮所有点名记录，⚠️ 操作不可撤销</span>
-                        </div>
+                        <div class="ins-card-title">🎨 显示偏好</div>
                         <div class="ins-row">
                             <span class="ins-key">🔢 被点次数</span>
                             <span class="ins-val">开启后座位右上角显示累计被点次数，再次点击可隐藏</span>
                         </div>
-                        <div class="ins-row">
-                            <span class="ins-key">📤 导出记录</span>
-                            <span class="ins-val">将所有点名数据保存为 Excel 文件，方便存档或换设备使用</span>
-                        </div>
-                        <div class="ins-row">
-                            <span class="ins-key">📥 导入记录</span>
-                            <span class="ins-val">从之前导出的 Excel 文件恢复数据，支持跨设备迁移历史记录</span>
-                        </div>
-                    </div>
-                    <div class="ins-card">
-                        <div class="ins-card-title">📊 数据统计</div>
-                        <div class="ins-row">
-                            <span class="ins-key">📋 点名统计</span>
-                            <span class="ins-val">查看每位学生的累计被点次数，支持按表头次数排序</span>
-                        </div>
-                        <div class="ins-row">
-                            <span class="ins-key">🕐 记录明细</span>
-                            <span class="ins-val">按时间顺序查看每次点名详情，同样支持按表头时间排序</span>
-                        </div>
-                        <div class="ins-row">
-                            <span class="ins-key">💾</span>
-                            <span class="ins-val">统计数据跨会话保存，刷新页面后不丢失</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 第三行：显示偏好 + 学生介绍 -->
-                <div class="ins-section">
-                    <div class="ins-card">
-                        <div class="ins-card-title">🎨 显示偏好</div>
                         <div class="ins-row">
                             <span class="ins-key">🏅 班委标记</span>
                             <span class="ins-val">开启后姓名下方显示彩色下划线：<span style="color:#ff8888">红色</span> = 班长，<span
@@ -1861,6 +1831,40 @@
                         <div class="ins-row">
                             <span class="ins-key">✏️ 编辑内容</span>
                             <span class="ins-val">右键座位 → 查看介绍，点击「编辑」修改，保存后立即生效</span>
+                        </div>
+                    </div>
+                </div>                 
+
+                <!-- 第三行：显示偏好 + 学生介绍 -->
+                 <div class="ins-section">
+                    <div class="ins-card">
+                        <div class="ins-card-title">⚙️ 点名管理</div>
+                        <div class="ins-row">
+                            <span class="ins-key">🗑️ 清空记录</span>
+                            <span class="ins-val">一键清除本轮所有点名记录，⚠️ 操作不可撤销</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">📤 导出记录</span>
+                            <span class="ins-val">将所有点名数据保存为 Excel 文件，方便存档或换设备使用</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">📥 导入记录</span>
+                            <span class="ins-val">从之前导出的 Excel 文件恢复数据，支持跨设备迁移历史记录</span>
+                        </div>
+                    </div>
+                    <div class="ins-card">
+                        <div class="ins-card-title">📊 数据统计</div>
+                        <div class="ins-row">
+                            <span class="ins-key">📋 点名统计</span>
+                            <span class="ins-val">查看每位学生的累计被点次数，支持按表头次数排序</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">🕐 记录明细</span>
+                            <span class="ins-val">按时间顺序查看每次点名详情，同样支持按表头时间排序</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">💾</span>
+                            <span class="ins-val">统计数据跨会话保存，刷新页面后不丢失</span>
                         </div>
                     </div>
                 </div>
@@ -2624,7 +2628,9 @@
          */
         function updateClassCommitteeUI() {
             document.body.classList.toggle('show-committee', isShowCommittee);
-            toggleClassCommitteeBtn.innerText = isShowCommittee ? '🎖️ 隐藏班委标记' : '🏅 显示班委标记';
+            toggleClassCommitteeBtn.innerHTML = isShowCommittee
+                ? '<span class="settings-item-icon">🎖️</span>隐藏班委标记'
+                : '<span class="settings-item-icon">🏅</span>显示班委标记';
         }
 
         // ===================== 核心功能方法 =====================
@@ -2907,7 +2913,9 @@
 
         function updateIntroUI() {
             const btn = document.getElementById('toggle-intro');
-            if (btn) btn.innerText = isShowIntro ? '📖 隐藏学生介绍' : '📕 显示学生介绍';
+            if (btn) btn.innerHTML = isShowIntro
+                ? '<span class="settings-item-icon">📖</span>隐藏学生介绍'
+                : '<span class="settings-item-icon">💬</span>显示学生介绍';
             const el = document.getElementById('intro-display');
             if (el) {
                 if (isShowIntro && el.innerHTML) el.classList.add('visible');
