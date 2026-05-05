@@ -3029,6 +3029,15 @@
                         if (cfg.favicon) savedFavicon = cfg.favicon;
                     }
                 } catch (e) { }
+                // CLASS_CONFIG 里的 pageTitle 优先级更高（直接打开时 index_config 可能没有）
+                if (CLASS_CONFIG.pageTitle) savedPageTitle = CLASS_CONFIG.pageTitle;
+                // favicon 从当前页面 <link rel="icon"> 读取（仅 data: 内嵌格式）
+                if (!savedFavicon) {
+                    const iconLink = document.querySelector('link[rel="icon"]');
+                    if (iconLink && iconLink.href && iconLink.href.startsWith('data:')) {
+                        savedFavicon = iconLink.href;
+                    }
+                }
                 const draft = {
                     title: CLASS_CONFIG.title,
                     pageTitle: savedPageTitle,
