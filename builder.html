@@ -757,14 +757,12 @@
           });
           newCells.push(cellRow);
         }
-        // 裁掉尾部多余的空列：找出所有行中最后一个非空列的最大索引
-        var maxUsedCol = 0;
-        newCells.forEach(function (row) {
-          for (var c = row.length - 1; c >= 0; c--) {
-            if (row[c].type !== 'empty') { if (c > maxUsedCol) maxUsedCol = c; break; }
-          }
+        // 以 Excel !ref 范围的列数为准，确保每行都有 totalCols 列（不裁剪）
+        newCells = newCells.map(function (rowData) {
+          var trimmed = rowData.slice(0, totalCols);
+          while (trimmed.length < totalCols) trimmed.push({ type: 'empty', name: '', role: 'normal' });
+          return trimmed;
         });
-        newCells = newCells.map(function (row) { return row.slice(0, maxUsedCol + 1); });
         cells = newCells;
         var numRows = cells.length;
         var numCols = cells[0] ? cells[0].length : 0;
