@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>智能课堂点名器</title>
-    <!-- 浏览器标签页图标，将 favicon.png 替换为你自己的图标文件 -->
+    <!-- 浏览器标签页图标（favicon），推荐正方形，32×32 或 64×64 像素，PNG/JPG/SVG/ICO 格式 -->
     <link rel="icon" type="image/png" href="./favicon.png">
     <style>
         /* ===================== 全局基础样式 ===================== */
@@ -489,6 +489,8 @@
             cursor: default;
         }
 
+        /* ===================== 小组背景色（由 JS 动态注入 inline style，无需硬编码）===================== */
+
         .slogan {
             margin-top: 28px;
             margin-bottom: 4px;
@@ -557,6 +559,218 @@
             }
         }
 
+        /* ===================== 日历范围选择器样式（浮层模式）===================== */
+
+        /* 标题栏里的日期范围按钮 */
+        .stat-date-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: .8em;
+            color: rgba(255,255,255,.75);
+            background: rgba(255,255,255,.1);
+            border: 1px solid rgba(0,255,252,.3);
+            border-radius: 14px;
+            padding: 3px 10px 3px 8px;
+            cursor: pointer;
+            transition: all .2s;
+            white-space: nowrap;
+            user-select: none;
+            max-width: 260px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin: 0 auto;
+        }
+
+        .stat-date-btn:hover {
+            background: rgba(0,255,252,.15);
+            color: #fff;
+            border-color: rgba(0,255,252,.6);
+        }
+
+        .stat-date-btn.active {
+            background: rgba(0,255,252,.18);
+            color: #00fffc;
+            border-color: #00fffc;
+        }
+
+        .stat-date-btn-icon { font-size: .95em; }
+
+        /* 浮层容器 */
+        .stat-cal-popup {
+            display: none;
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            z-index: 10010;
+            background: rgba(42, 82, 152, 0.72);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0,255,252,.2);
+            border-radius: 12px;
+            padding: 12px 14px 14px;
+            box-shadow: 0 8px 32px rgba(0,0,0,.3);
+            width: 300px;
+            user-select: none;
+        }
+
+        .stat-cal-popup.show { display: block; }
+
+        /* 浮层顶部：提示文字 + 重置 */
+        .stat-cal-popup-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .stat-cal-popup-hint {
+            font-size: .75em;
+            color: rgba(255,255,255,.45);
+        }
+
+        .stat-cal-popup-hint.selecting {
+            color: #ffd700;
+        }
+
+        .stat-date-reset {
+            font-size: .73em;
+            color: rgba(255,255,255,.4);
+            cursor: pointer;
+            padding: 2px 8px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,.15);
+            transition: all .2s;
+        }
+
+        .stat-date-reset:hover {
+            color: #fff;
+            border-color: rgba(255,255,255,.4);
+            background: rgba(255,255,255,.08);
+        }
+
+        .stat-cal-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .stat-cal-nav-btn {
+            cursor: pointer;
+            color: rgba(255,255,255,.5);
+            font-size: 1.1em;
+            padding: 2px 8px;
+            border-radius: 6px;
+            transition: all .15s;
+            line-height: 1.6;
+        }
+
+        .stat-cal-nav-btn:hover {
+            color: #fff;
+            background: rgba(255,255,255,.1);
+        }
+
+        .stat-cal-month-title {
+            font-size: .85em;
+            color: rgba(255,255,255,.8);
+            letter-spacing: .05em;
+        }
+
+        .stat-cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+        }
+
+        .stat-cal-dow {
+            text-align: center;
+            font-size: .65em;
+            color: rgba(255,255,255,.3);
+            padding: 2px 0 4px;
+        }
+
+        .stat-cal-day {
+            position: relative;
+            text-align: center;
+            padding: 3px 1px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: .78em;
+            color: rgba(255,255,255,.65);
+            transition: background .12s, color .12s;
+            line-height: 1.2;
+            min-height: 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1px;
+        }
+
+        .stat-cal-day:hover:not(.stat-cal-day-empty) {
+            background: rgba(255,255,255,.12);
+            color: #fff;
+        }
+
+        .stat-cal-day-empty { cursor: default; }
+
+        .stat-cal-day-num { font-size: 1em; line-height: 1; }
+
+        .stat-cal-day-count {
+            font-size: .68em;
+            color: rgba(0,255,252,.6);
+            line-height: 1;
+            min-height: 9px;
+        }
+
+        .stat-cal-day.has-data .stat-cal-day-count { color: #00fffc; }
+
+        .stat-cal-day.in-range {
+            background: rgba(0,255,252,.1);
+            border-radius: 0;
+        }
+
+        .stat-cal-day.range-start,
+        .stat-cal-day.range-end {
+            background: rgba(0,255,252,.3) !important;
+            color: #fff !important;
+            border-radius: 5px !important;
+        }
+
+        .stat-cal-day.range-start.in-range { border-radius: 5px 0 0 5px !important; }
+        .stat-cal-day.range-end.in-range   { border-radius: 0 5px 5px 0 !important; }
+        .stat-cal-day.range-start.range-end { border-radius: 5px !important; }
+
+        .stat-cal-day.today .stat-cal-day-num { color: #ffd700; font-weight: bold; }
+        .stat-cal-day.other-month { opacity: .28; }
+
+        /* 暗黑模式 */
+        body.dark-mode .stat-cal-popup {
+            background: rgba(15, 30, 65, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-color: rgba(56,189,248,.2);
+        }
+
+        body.dark-mode .stat-date-btn {
+            border-color: rgba(56,189,248,.3);
+        }
+
+        body.dark-mode .stat-date-btn:hover,
+        body.dark-mode .stat-date-btn.active {
+            background: rgba(56,189,248,.15);
+            color: #38bdf8;
+            border-color: #38bdf8;
+        }
+
+        body.dark-mode .stat-cal-day.has-data .stat-cal-day-count { color: #38bdf8; }
+
+        body.dark-mode .stat-cal-day.in-range { background: rgba(56,189,248,.1); }
+
+        body.dark-mode .stat-cal-day.range-start,
+        body.dark-mode .stat-cal-day.range-end { background: rgba(56,189,248,.32) !important; }
+
         /* ===================== 点名统计弹窗样式 ===================== */
         .stat-modal {
             display: none;
@@ -578,8 +792,8 @@
             border-radius: 16px;
             width: 92%;
             max-width: 860px;
-            max-height: 88vh;
-            height: 88vh;
+            max-height: 75vh;
+            height: 75vh;
             box-shadow: 0 20px 60px rgba(0, 0, 0, .5);
             display: flex;
             flex-direction: column;
@@ -598,7 +812,7 @@
             color: #00fffc;
             font-size: 1.05em;
             font-weight: bold;
-            flex: 1;
+            white-space: nowrap;
         }
 
         .stat-modal-actions {
@@ -720,10 +934,12 @@
         .stat-table th {
             text-align: center;
             padding: 8px 10px;
-            color: rgba(255, 255, 255, .75);
-            border-bottom: 1px solid rgba(255, 255, 255, .15);
+            color: rgba(255, 255, 255, .6);
+            border-bottom: 1px solid rgba(255, 255, 255, .1);
             font-weight: normal;
-            background: rgba(50, 95, 170, 0.98);
+            background: rgba(42, 82, 152, 0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             white-space: nowrap;
             user-select: none;
         }
@@ -911,7 +1127,8 @@
         }
 
         body.dark-mode .stat-table th {
-            background: rgba(10, 18, 40, 0.98);
+            background: rgba(15, 25, 55, 0.75);
+            border-bottom-color: rgba(56, 189, 248, .12);
         }
 
         body.dark-mode .stat-th-sort.sort-asc .arr-up,
@@ -1513,11 +1730,22 @@
             border-color: rgba(56, 189, 248, 0.12);
         }
 
-        body.dark-mode .seating-chart td:not(.aisle):not(.stage):not(.highlight) {
+        body.dark-mode .seating-chart td:not(.aisle):not(.stage):not(.highlight):not([data-group]) {
             background: rgba(15, 23, 42, 0.4) !important;
             color: #e0f2fe !important;
             border: 1px solid rgba(56, 189, 248, 0.2) !important;
         }
+        body.dark-mode .seating-chart td[data-group] {
+            color: #e0f2fe !important;
+            border: 1px solid rgba(56, 189, 248, 0.2) !important;
+        }
+        /* 隐藏小组背景时（inline style 为空），data-group 格子也用暗黑背景 */
+        body.dark-mode .seating-chart td[data-group]:not([style*="background"]) {
+            background: rgba(15, 23, 42, 0.4) !important;
+        }
+            border: 1px solid rgba(56, 189, 248, 0.2) !important;
+        }
+        /* 深色模式下小组背景色由 JS 动态注入，无需硬编码 */
 
         body.dark-mode .seating-chart td.highlight {
             background: #ffeb3b !important;
@@ -1615,6 +1843,7 @@
         .custom-dialog-btn {
             padding: 15px 0;
             border: none;
+            outline: none;
             border-radius: 0;
             font-size: 0.95em;
             cursor: pointer;
@@ -1622,15 +1851,22 @@
             color: rgba(255, 255, 255, 0.5);
             transition: background 0.15s, color 0.15s;
             min-width: auto;
+            transform: none;
+        }
+
+        .custom-dialog-btn:focus {
+            outline: none;
         }
 
         .custom-dialog-btn:hover {
             background: rgba(255, 255, 255, 0.07);
             color: rgba(255, 255, 255, 0.9);
+            transform: none;
         }
 
         .custom-dialog-btn:active {
             background: rgba(255, 255, 255, 0.12);
+            transform: none;
         }
 
         .custom-dialog-btn.primary {
@@ -1679,6 +1915,7 @@
         <div class="settings-group-title">显示偏好</div>
         <div class="settings-item" id="toggle-record-visibility"><span class="settings-item-icon">🔢</span>显示被点次数</div>
         <div class="settings-item" id="toggle-class-committee"><span class="settings-item-icon">🏅</span>显示班委标记</div>
+        <div class="settings-item" id="toggle-group-bg"><span class="settings-item-icon">🎨</span>显示小组背景</div>
         <div class="settings-item" id="toggle-intro"><span class="settings-item-icon">💬</span>显示学生介绍</div>
         <div class="settings-item" id="toggle-view"><span class="settings-item-icon">🔄</span>切换座位视角</div>
         <div class="settings-item" id="toggle-dark-mode"><span class="settings-item-icon">☀️</span>切换暗黑模式</div>
@@ -1699,14 +1936,43 @@
     <!-- 点名统计弹窗 -->
     <div id="stat-modal" class="stat-modal">
         <div class="stat-modal-box">
-            <div class="stat-modal-header">
+            <div class="stat-modal-header" style="position:relative; display:flex; align-items:center; justify-content:space-between;">
                 <span class="stat-modal-title">📊 点名数据统计</span>
                 <span class="stat-modal-close" onclick="closeStatModal()">✕</span>
+            </div>
+            <!-- 筛选控制条 -->
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:10px 20px 8px; border-bottom:1px solid rgba(255,255,255,.06); position:relative;">
+                <span style="font-size:.8em; color:rgba(255,255,255,.45);">
+                    <span id="stat-range-text">统计范围：全部记录</span>
+                </span>
+                <div style="display:flex; align-items:center; gap:8px; position:relative;">
+                    <span id="stat-date-btn" class="stat-date-btn" onclick="toggleStatCalPopup(event)" title="点击选择统计时间范围">
+                        <span class="stat-date-btn-icon">📅</span>
+                        <span id="stat-date-range-display">选择时间范围</span>
+                        <span style="font-size:.75em; opacity:.6; margin-left:2px;">▾</span>
+                    </span>
+                    <span class="stat-date-btn" onclick="exportStatData()" title="导出当前统计数据">
+                        📤 导出
+                    </span>
+                    <!-- 日历浮层 -->
+                    <div class="stat-cal-popup" id="stat-cal-popup" style="right:0; left:auto;">
+                        <div class="stat-cal-popup-top">
+                            <span class="stat-cal-popup-hint" id="stat-cal-hint">点击选择开始日期</span>
+                            <span class="stat-date-reset" onclick="resetStatDateRange()">重置</span>
+                        </div>
+                        <div class="stat-cal-nav">
+                            <span class="stat-cal-nav-btn" onclick="statCalPrevMonth()">‹</span>
+                            <span class="stat-cal-month-title" id="stat-cal-month-title"></span>
+                            <span class="stat-cal-nav-btn" onclick="statCalNextMonth()">›</span>
+                        </div>
+                        <div class="stat-cal-grid" id="stat-cal-grid"></div>
+                    </div>
+                </div>
             </div>
             <div class="stat-summary" id="stat-summary"></div>
             <div class="stat-tabs">
                 <div class="stat-tab active" id="stat-tab-count" onclick="switchStatTab('count')">点名统计</div>
-                <div class="stat-tab" id="stat-tab-log" onclick="switchStatTab('log')">记录明细</div>
+                <div class="stat-tab" id="stat-tab-log" onclick="switchStatTab('log')">点名记录</div>
             </div>
             <div class="stat-body" id="stat-body"></div>
         </div>
@@ -1796,8 +2062,8 @@
                     </div>
                 </div>
 
-                <!-- 第二行：点名管理 + 数据统计 -->
-               <div class="ins-section">
+                <!-- 第二行：显示偏好 + 学生介绍 -->
+                <div class="ins-section">
                     <div class="ins-card">
                         <div class="ins-card-title">🎨 显示偏好</div>
                         <div class="ins-row">
@@ -1806,8 +2072,11 @@
                         </div>
                         <div class="ins-row">
                             <span class="ins-key">🏅 班委标记</span>
-                            <span class="ins-val">开启后姓名下方显示彩色下划线：<span style="color:#ff8888">红色</span> = 班长，<span
-                                    style="color:#88dd88">绿色</span> = 组长</span>
+                            <span class="ins-val">开启后姓名下方显示彩色下划线：<span style="color:#ff8888">红色</span> = 班长，<span style="color:#88dd88">绿色</span> = 组长</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">🎨 小组背景</span>
+                            <span class="ins-val">开启后同组学生座位显示相同背景色，关闭后恢复统一配色</span>
                         </div>
                         <div class="ins-row">
                             <span class="ins-key">🔄 座位视角</span>
@@ -1833,10 +2102,10 @@
                             <span class="ins-val">右键座位 → 查看介绍，点击「编辑」修改，保存后立即生效</span>
                         </div>
                     </div>
-                </div>                 
+                </div>
 
-                <!-- 第三行：显示偏好 + 学生介绍 -->
-                 <div class="ins-section">
+                <!-- 第三行：点名管理 + 数据统计 -->
+                <div class="ins-section">
                     <div class="ins-card">
                         <div class="ins-card-title">⚙️ 点名管理</div>
                         <div class="ins-row">
@@ -1859,7 +2128,7 @@
                             <span class="ins-val">查看每位学生的累计被点次数，支持按表头次数排序</span>
                         </div>
                         <div class="ins-row">
-                            <span class="ins-key">🕐 记录明细</span>
+                            <span class="ins-key">🕐 点名记录</span>
                             <span class="ins-val">按时间顺序查看每次点名详情，同样支持按表头时间排序</span>
                         </div>
                         <div class="ins-row">
@@ -1869,37 +2138,41 @@
                     </div>
                 </div>
 
-                <!-- 第四行：编辑座位表（全宽） -->
+                <!-- 第四行：编辑器（全宽） -->
                 <div class="ins-section full">
                     <div class="ins-card">
-                        <div class="ins-card-title">✏️ 编辑座位表 &amp; 配置管理</div>
+                        <div class="ins-card-title">✏️ 编辑器（builder.html）</div>
                         <div class="ins-section" style="margin-bottom:0;gap:12px">
                             <div>
                                 <div class="ins-row">
                                     <span class="ins-key">🖥️ 打开编辑器</span>
-                                    <span class="ins-val">⚙️ → 编辑座位信息，在 builder.html 中可对点名器中的座位及其他信息进行编辑</span>
+                                    <span class="ins-val">⚙️ → 编辑座位信息，在 builder.html 中编辑座位表、班级信息、小组、学生介绍等所有配置</span>
                                 </div>
                                 <div class="ins-row">
-                                    <span class="ins-key">⚡ 应用配置</span>
-                                    <span class="ins-val">编辑完成后点击「↩ 应用到点名器」，无需刷新即时生效</span>
+                                    <span class="ins-key">📥 导入配置</span>
+                                    <span class="ins-val">支持从之前生成的点名器 HTML 文件导入，或从 Excel 导入（Sheet1 座位表 / Sheet2 学生介绍）</span>
                                 </div>
                                 <div class="ins-row">
-                                    <span class="ins-key">📥 导入 Excel</span>
-                                    <span class="ins-val">在编辑器中导入座位表.xlsx 文件或者前期导出的点名器.html文件，批量填入姓名和介绍内容</span>
+                                    <span class="ins-key">👫 小组管理</span>
+                                    <span class="ins-val">为学生分配小组后，同组座位显示相同背景色；导入 Excel 时若有背景色会自动建组</span>
                                 </div>
                             </div>
                             <div>
                                 <div class="ins-row">
-                                    <span class="ins-key">📤 导出备份</span>
-                                    <span class="ins-val">可导出为 Excel 表格，或打包成独立 HTML 文件方便分享和存档</span>
+                                    <span class="ins-key">⬇️ 生成 HTML</span>
+                                    <span class="ins-val">将当前配置打包成独立 HTML 文件，双击即可使用，建议与 builder.html 放在同一目录</span>
+                                </div>
+                                <div class="ins-row">
+                                    <span class="ins-key">📊 下载 XLSX</span>
+                                    <span class="ins-val">导出包含座位表和学生介绍的 Excel 文件，方便备份或二次编辑后重新导入</span>
+                                </div>
+                                <div class="ins-row">
+                                    <span class="ins-key">↩️ 立即应用</span>
+                                    <span class="ins-val">编辑完成后点击「↩ 立即应用」，无需刷新即时生效；需从点名器「✏️ 编辑座位信息」跳转，或两个文件在同一目录下</span>
                                 </div>
                                 <div class="ins-row">
                                     <span class="ins-key">🔁 恢复默认</span>
                                     <span class="ins-val">⚙️ → 恢复默认配置，将清除全部本地数据，⚠️ 操作不可逆，请提前导出备份</span>
-                                </div>
-                                <div class="ins-row">
-                                    <span class="ins-key">🌐 浏览器配置</span>
-                                    <span class="ins-val">可以给页面配置浏览器顶部选项卡显示的标题及icon，页面正文顶部的标题文字等</span>
                                 </div>
                             </div>
                         </div>
@@ -1950,7 +2223,7 @@
         </div>
         <div
             style="margin-top:56px;margin-bottom:48px;font-size:.72em;color:rgba(255,255,255,.25);text-align:center;letter-spacing:1px">
-            智能课堂点名器 v1.2 &nbsp;·&nbsp; © 2026 helloaider &nbsp;·&nbsp;
+            智能课堂点名器 v1.3 &nbsp;·&nbsp; © 2026 helloaider &nbsp;·&nbsp;
             <a href="https://github.com/helloaider/smart-roll-call" target="_blank"
                 style="color:rgba(255,255,255,.3);text-decoration:none"
                 onmouseover="this.style.color='rgba(255,255,255,.6)'"
@@ -1959,7 +2232,7 @@
     </div>
 
     <!-- 粒子背景JS -->
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js" onerror="console.warn('particles.js 加载失败（可能无网络），粒子背景将不显示')"></script>
     <script>
         // ===================== 班级配置（在这里修改所有内容）=====================
         // seats 每行是一个数组，每个元素可以是：
@@ -1972,6 +2245,7 @@
         const CLASS_CONFIG = {
             "title": "XX学校-XX教室座位表",
             "slogan": "请将此处替换为你班级的专属口号!",
+            "groups": [],
             "seats": [
                 [
                     null,
@@ -2417,6 +2691,37 @@
                         td.textContent = cell.name;
                         if (cell.role === 'monitor') td.className = 'class-committee-monitor';
                         else if (cell.role === 'leader') td.className = 'class-committee-leader';
+                        if (cell.group) {
+                            td.dataset.group = cell.group;
+                            if (isShowGroup) {
+                                // 从 CLASS_CONFIG.groups 查找颜色
+                                const groups = CLASS_CONFIG.groups || [];
+                                const gDef = groups.find(g => g.id === cell.group);
+                                if (gDef) {
+                                    const isDark = document.body.classList.contains('dark-mode');
+                                    // 内置颜色表（兜底，兼容只有 color key 的旧配置）
+                                    const COLOR_TABLE = {
+                                        blue:   { light: 'rgba(140,221,250,0.22)', dark: 'rgba(140,221,250,0.30)' },
+                                        green:  { light: 'rgba(134,239,172,0.20)', dark: 'rgba(134,239,172,0.28)' },
+                                        orange: { light: 'rgba(253,186,116,0.22)', dark: 'rgba(253,186,116,0.30)' },
+                                        pink:   { light: 'rgba(249,168,212,0.22)', dark: 'rgba(249,168,212,0.30)' },
+                                        purple: { light: 'rgba(216,180,254,0.22)', dark: 'rgba(216,180,254,0.30)' },
+                                        cyan:   { light: 'rgba(251,191,36,0.22)',  dark: 'rgba(251,191,36,0.30)'  },
+                                        yellow: { light: 'rgba(254,240,138,0.22)', dark: 'rgba(254,240,138,0.30)' },
+                                        mint:   { light: 'rgba(45,212,191,0.20)',  dark: 'rgba(45,212,191,0.30)'  },
+                                        red:    { light: 'rgba(252,165,165,0.22)', dark: 'rgba(252,165,165,0.30)' },
+                                        indigo: { light: 'rgba(99,102,241,0.20)',  dark: 'rgba(99,102,241,0.30)'  },
+                                    };
+                                    const fallback = COLOR_TABLE[gDef.color] || COLOR_TABLE.blue;
+                                    const lightColor = gDef.lightColor || fallback.light;
+                                    const darkColor  = gDef.darkColor  || fallback.dark;
+                                    td.style.background = isDark ? darkColor : lightColor;
+                                }
+                            } else {
+                                // 隐藏小组背景时清空 inline style，让 CSS 规则统一接管
+                                td.style.background = '';
+                            }
+                        }
                     }
                     tr.appendChild(td);
                 }
@@ -2439,6 +2744,7 @@
                         CLASS_CONFIG.slogan = cfg.slogan || CLASS_CONFIG.slogan;
                         CLASS_CONFIG.seats = cfg.seats;
                         CLASS_CONFIG.intros = cfg.intros || CLASS_CONFIG.intros;
+                        CLASS_CONFIG.groups = cfg.groups || CLASS_CONFIG.groups || [];
                         if (cfg.pageTitle) {
                             document.title = cfg.pageTitle;
                             const h1 = document.getElementById('page-main-title');
@@ -2469,6 +2775,7 @@
         let isHideRecord = false; // 保留变量避免其他引用报错，固定为false（不再灰显）
         let isShowCount = localStorage.getItem('showCount') !== null ? localStorage.getItem('showCount') === 'true' : false;
         let isShowCommittee = localStorage.getItem('showCommittee') === 'true';
+        let isShowGroup = localStorage.getItem('showGroup') !== null ? localStorage.getItem('showGroup') === 'true' : false;
         let isShowIntro = localStorage.getItem('showIntro') === 'true';
 
         // 缓存所有学生姓名，避免重复查询 DOM
@@ -2485,6 +2792,7 @@
         const toggleViewBtn = document.getElementById('toggle-view');
         const toggleDarkModeBtn = document.getElementById('toggle-dark-mode');
         const toggleClassCommitteeBtn = document.getElementById('toggle-class-committee');
+        const toggleGroupBgBtn = document.getElementById('toggle-group-bg');
         const clearRecordBtn = document.getElementById('clear-record');
         const exportLogBtn = document.getElementById('export-log');
         const importLogBtn = document.getElementById('import-log');
@@ -2563,6 +2871,7 @@
             localStorage.setItem('hideRecord', isHideRecord);
             localStorage.setItem('showCount', isShowCount);
             localStorage.setItem('showCommittee', isShowCommittee);
+            localStorage.setItem('showGroup', isShowGroup);
             localStorage.setItem('showIntro', isShowIntro);
         }
 
@@ -2644,6 +2953,14 @@
 
             const el = document.getElementById(name);
             if (el) {
+                // 保存小组 inline 背景色，高亮期间强制覆盖为黄色
+                el.dataset.savedBg = el.style.background || '';
+                el.dataset.savedColor = el.style.color || '';
+                el.dataset.savedTextShadow = el.style.textShadow || '';
+                // 用 setProperty + important 确保覆盖 CSS !important 规则
+                el.style.setProperty('background', '#ffeb3b', 'important');
+                el.style.setProperty('color', '#1a1a1a', 'important');
+                el.style.setProperty('text-shadow', 'none', 'important');
                 el.classList.add('highlight');
                 el.title = `鼠标双击 ${name} 可取消本次点名`;
             }
@@ -2655,6 +2972,14 @@
         function clearHigh() {
             document.querySelectorAll('td.highlight').forEach(x => {
                 x.classList.remove('highlight');
+                // 恢复小组 inline 背景色和文字颜色
+                x.style.removeProperty('background');
+                x.style.removeProperty('color');
+                x.style.removeProperty('text-shadow');
+                if (x.dataset.savedBg) x.style.background = x.dataset.savedBg;
+                delete x.dataset.savedBg;
+                delete x.dataset.savedColor;
+                delete x.dataset.savedTextShadow;
                 const name = x.id;
                 x.title = `鼠标双击 ${name} 可对其手动点名`;
             });
@@ -2904,6 +3229,24 @@
             closeSettingsPanel();
         }
 
+        function updateGroupBgUI(skipRender) {
+            if (!skipRender) {
+                renderSeats();
+                initSeatEvents(); // 重新绑定座位事件
+                restoreCountBadges(); // 恢复次数角标
+            }
+            toggleGroupBgBtn.innerHTML = isShowGroup
+                ? '<span class="settings-item-icon">🎨</span>隐藏小组背景'
+                : '<span class="settings-item-icon">🎨</span>显示小组背景';
+        }
+
+        function toggleGroupBg() {
+            isShowGroup = !isShowGroup;
+            updateGroupBgUI();
+            save();
+            closeSettingsPanel();
+        }
+
         function toggleIntro() {
             isShowIntro = !isShowIntro;
             updateIntroUI();
@@ -2985,6 +3328,7 @@
          */
         function toggleRecordVisibility() {
             isShowCount = !isShowCount;
+            restoreCountBadges(); // 先确保所有角标都已创建
             updateRecordVisibilityUI();
             save();
             closeSettingsPanel();
@@ -3038,6 +3382,30 @@
                         savedFavicon = iconLink.href;
                     }
                 }
+                // builder 内部用颜色 key（'blue'/'green' 等），CLASS_CONFIG.groups 存的是完整 rgba 字符串
+                // 需要反查回 key；同时兼容已经是 key 的情况
+                const GROUP_COLOR_MAP = [
+                    { key: 'blue',   light: 'rgba(140,221,250,0.20)' },
+                    { key: 'green',  light: 'rgba(134,239,172,0.18)' },
+                    { key: 'orange', light: 'rgba(253,186,116,0.20)' },
+                    { key: 'pink',   light: 'rgba(249,168,212,0.20)' },
+                    { key: 'purple', light: 'rgba(216,180,254,0.20)' },
+                    { key: 'cyan',   light: 'rgba(251,191,36,0.20)'  },
+                    { key: 'yellow', light: 'rgba(254,240,138,0.20)' },
+                    { key: 'mint',   light: 'rgba(167,243,208,0.18)' },
+                    { key: 'red',    light: 'rgba(252,165,165,0.20)' },
+                    { key: 'indigo', light: 'rgba(165,180,252,0.20)' },
+                ];
+                const COLOR_KEYS_SET = new Set(GROUP_COLOR_MAP.map(c => c.key));
+                function rgbaToKey(rgba) {
+                    if (!rgba) return 'blue';
+                    if (COLOR_KEYS_SET.has(rgba)) return rgba; // 已经是 key
+                    // 去掉空格后比较
+                    const norm = rgba.replace(/\s/g, '');
+                    const found = GROUP_COLOR_MAP.find(c => c.light.replace(/\s/g, '') === norm);
+                    return found ? found.key : 'blue';
+                }
+
                 const draft = {
                     title: CLASS_CONFIG.title,
                     pageTitle: savedPageTitle,
@@ -3047,10 +3415,18 @@
                         if (cell === null || cell === undefined) return { type: 'empty', name: '', role: 'normal' };
                         if (cell === 'aisle') return { type: 'aisle', name: '', role: 'normal' };
                         if (cell === 'stage') return { type: 'stage', name: '', role: 'normal' };
-                        if (cell && cell.name) return { type: 'student', name: cell.name, role: cell.role || 'normal' };
+                        if (cell && cell.name) return { type: 'student', name: cell.name, role: cell.role || 'normal', group: cell.group || 0 };
                         return { type: 'empty', name: '', role: 'normal' };
                     })),
-                    intros: CLASS_CONFIG.intros || {}
+                    intros: CLASS_CONFIG.intros || {},
+                    groups: (CLASS_CONFIG.groups || []).map(g => ({
+                        id: g.id,
+                        name: g.name,
+                        lightColor: rgbaToKey(g.lightColor),
+                        darkColor:  rgbaToKey(g.darkColor || g.lightColor),
+                        members: []  // members 从 cells 的 group 字段重建，builder 会调用 syncCellsToGroups
+                    })),
+                    groupIdCounter: Math.max(0, ...(CLASS_CONFIG.groups || []).map(g => g.id || 0))
                 };
                 localStorage.setItem('builder_draft', JSON.stringify(draft));
                 const win = window.open('./builder.html', '_blank');
@@ -3148,12 +3524,316 @@
         function openStatModal() {
             settingsPanel.classList.remove('show');
             statSortCount = 'desc'; statSortTime = 'desc'; statCurrentTab = 'count';
+            statRangeStart = null; statRangeEnd = null; statRangeHover = null; statRangePhase = 0;
+            // 初始化日历到当前月，若有记录则跳到最早记录所在月
+            const now = new Date();
+            statCalYear = now.getFullYear();
+            statCalMonth = now.getMonth();
+            const allNames = getAllStudentNames();
+            const validLogs = callLog.filter(r => allNames.includes(r.name));
+            if (validLogs.length) {
+                const earliest = validLogs.reduce((a, b) => a.time < b.time ? a : b);
+                const ed = new Date(earliest.time);
+                statCalYear = ed.getFullYear();
+                statCalMonth = ed.getMonth();
+            }
+            updateStatDateRangeDisplay();
+            renderStatCalendar();
             renderStatModal('count');
             document.getElementById('stat-modal').style.display = 'flex';
         }
 
         function closeStatModal() {
+            closeStatCalPopup();
             document.getElementById('stat-modal').style.display = 'none';
+        }
+
+        function exportStatData() {
+            _loadXlsxLib(function () {
+                const allNames = getAllStudentNames();
+                const filteredLogs = getStatFilteredLogs();
+                const title = CLASS_CONFIG.title || '点名统计';
+
+                // 时间范围描述
+                let rangeLabel, rangeDisplay;
+                if (!statRangeStart) {
+                    rangeLabel = '全部';
+                    rangeDisplay = '全部记录';
+                } else if (!statRangeEnd || statRangeStart === statRangeEnd) {
+                    rangeLabel = statRangeStart;
+                    rangeDisplay = statRangeStart;
+                } else {
+                    rangeLabel = `${statRangeStart}_${statRangeEnd}`;
+                    rangeDisplay = `${statRangeStart} 至 ${statRangeEnd}`;
+                }
+
+                const now = new Date();
+                const exportTime = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+
+                // ── Sheet1：点名统计 ──
+                const filteredCnt = {};
+                filteredLogs.forEach(r => { filteredCnt[r.name] = (filteredCnt[r.name] || 0) + 1; });
+                const sortedRows = allNames
+                    .map(n => ({ name: n, count: filteredCnt[n] || 0, note: (CLASS_CONFIG.intros[n] || '').replace(/\n/g, ' ') }))
+                    .sort((a, b) => b.count - a.count);
+
+                const countRows = [
+                    [`${title}·点名统计`],
+                    [`统计范围：${rangeDisplay}`],
+                    [`导出时间：${exportTime}`],
+                    [],
+                    ['序号', '姓名', '点名次数', '备注']
+                ];
+                sortedRows.forEach((r, i) => countRows.push([i + 1, r.name, r.count, r.note || '']));
+
+                // ── Sheet2：点名记录 ──
+                const logRows = [
+                    [`${title}·点名记录`],
+                    [`统计范围：${rangeDisplay}`],
+                    [`导出时间：${exportTime}`],
+                    [],
+                    ['序号', '姓名', '点名时间']
+                ];
+                [...filteredLogs]
+                    .sort((a, b) => a.time < b.time ? 1 : -1)
+                    .forEach((r, i) => {
+                        const d = new Date(r.time);
+                        const fmt = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`;
+                        logRows.push([i + 1, r.name, fmt]);
+                    });
+
+                const ws1 = XLSX.utils.aoa_to_sheet(countRows);
+                ws1['!cols'] = [{ wch: 6 }, { wch: 14 }, { wch: 10 }, { wch: 30 }];
+                // 合并标题行（A1:D1）、范围行、时间行
+                ws1['!merges'] = [
+                    { s: { r: 0, c: 0 }, e: { r: 0, c: 3 } },
+                    { s: { r: 1, c: 0 }, e: { r: 1, c: 3 } },
+                    { s: { r: 2, c: 0 }, e: { r: 2, c: 3 } },
+                ];
+
+                const ws2 = XLSX.utils.aoa_to_sheet(logRows);
+                ws2['!cols'] = [{ wch: 6 }, { wch: 14 }, { wch: 22 }];
+                ws2['!merges'] = [
+                    { s: { r: 0, c: 0 }, e: { r: 0, c: 2 } },
+                    { s: { r: 1, c: 0 }, e: { r: 1, c: 2 } },
+                    { s: { r: 2, c: 0 }, e: { r: 2, c: 2 } },
+                ];
+
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws1, '点名统计');
+                XLSX.utils.book_append_sheet(wb, ws2, '点名记录');
+
+                const datePart = now.getFullYear() + String(now.getMonth()+1).padStart(2,'0') + String(now.getDate()).padStart(2,'0');
+                const filename = `点名统计-${title}-${rangeLabel}-${datePart}.xlsx`;
+                const xlsxBuf = XLSX.write(wb, { type: 'array', bookType: 'xlsx' });
+                _injectStatCenterStyle(xlsxBuf, filename);
+            });
+        }
+
+        // 给统计导出的 xlsx 注入居中样式（直接操作 zip XML，同 builder 方式）
+        async function _injectStatCenterStyle(xlsxBuf, filename, extraSheetMaps) {
+            try {
+                const bytes = new Uint8Array(xlsxBuf);
+                function u16(b,o){ return b[o]|(b[o+1]<<8); }
+                function u32(b,o){ return (b[o]|(b[o+1]<<8)|(b[o+2]<<16)|(b[o+3]<<24))>>>0; }
+                function w16(b,o,v){ b[o]=v&0xff; b[o+1]=(v>>8)&0xff; }
+                function w32(b,o,v){ b[o]=v&0xff; b[o+1]=(v>>8)&0xff; b[o+2]=(v>>16)&0xff; b[o+3]=(v>>24)&0xff; }
+
+                // 1. 解析 zip entries
+                const entries = [];
+                let pos = 0;
+                while (pos < bytes.length - 30) {
+                    if (bytes[pos]===0x50&&bytes[pos+1]===0x4B&&bytes[pos+2]===0x03&&bytes[pos+3]===0x04) {
+                        const comp=u16(bytes,pos+8), crc=u32(bytes,pos+14), csz=u32(bytes,pos+18), usz=u32(bytes,pos+22);
+                        const fnLen=u16(bytes,pos+26), exLen=u16(bytes,pos+28);
+                        const fname=new TextDecoder().decode(bytes.slice(pos+30,pos+30+fnLen));
+                        const dstart=pos+30+fnLen+exLen;
+                        entries.push({ fname, comp, crc, csz, usz, fnLen,
+                            extra: bytes.slice(pos+30+fnLen, dstart),
+                            data: bytes.slice(dstart, dstart+csz), headerStart: pos });
+                        pos = dstart + (csz||1);
+                    } else { pos++; }
+                }
+
+                // 2. 解码函数
+                async function decode(entry) {
+                    if (entry.comp === 0) return new TextDecoder().decode(entry.data);
+                    return new TextDecoder().decode(await _zlibInflate(entry.data));
+                }
+
+                const stylesEntry = entries.find(e => e.fname === 'xl/styles.xml');
+                // 找所有 sheet（sheet1, sheet2...）
+                const sheetEntries = entries.filter(e => /^xl\/worksheets\/sheet\d+\.xml$/.test(e.fname));
+                if (!stylesEntry || !sheetEntries.length) { _fallbackDownload(xlsxBuf, filename); return; }
+
+                let stylesXml = await decode(stylesEntry);
+
+                // 3. 在 styles.xml 里追加一个居中+加粗样式
+                const cxfsM = /<cellXfs[^>]*>([\s\S]*?)<\/cellXfs>/.exec(stylesXml);
+                const existingXfs = cxfsM ? (cxfsM[1].match(/<xf\b/g)||[]).length : 0;
+                const baseXfM = cxfsM ? /(<xf\b[^>]*\/>|<xf\b[^>]*>[\s\S]*?<\/xf>)/.exec(cxfsM[1]) : null;
+                let baseNumFmt='0', baseFont='0', baseBorder='0';
+                if (baseXfM) {
+                    const bx = baseXfM[1];
+                    const nm=/numFmtId="(\d+)"/.exec(bx); if(nm) baseNumFmt=nm[1];
+                    const fm=/fontId="(\d+)"/.exec(bx);   if(fm) baseFont=fm[1];
+                    const bm=/borderId="(\d+)"/.exec(bx); if(bm) baseBorder=bm[1];
+                }
+                // 追加两个样式：居中普通 + 居中加粗
+                // 先在 fonts 里追加一个加粗字体
+                const existingFonts = (stylesXml.match(/<font[\s\S]*?<\/font>/g)||[]).length;
+                const boldFontXml = '<font><b/><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font>';
+                const fontsCountRe = /(<fonts[^>]*count=")(\d+)(")/;
+                const fcm2 = fontsCountRe.exec(stylesXml);
+                if (fcm2) stylesXml = stylesXml.replace(fontsCountRe, fcm2[1]+(parseInt(fcm2[2])+1)+fcm2[3]);
+                stylesXml = stylesXml.replace('</fonts>', boldFontXml + '</fonts>');
+                const boldFontId = existingFonts; // 新字体的 index
+
+                // 追加两个 xf：[0] 居中普通（范围/时间行），[1] 居中加粗（标题行）
+                const centerXf     = `<xf numFmtId="${baseNumFmt}" fontId="${baseFont}" fillId="0" borderId="${baseBorder}" xfId="0" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>`;
+                const centerBoldXf = `<xf numFmtId="${baseNumFmt}" fontId="${boldFontId}" fillId="0" borderId="${baseBorder}" xfId="0" applyFont="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>`;
+                const centerStyleIdx     = existingXfs;
+                const centerBoldStyleIdx = existingXfs + 1;
+
+                const xfsCountRe = /(<cellXfs[^>]*count=")(\d+)(")/;
+                const xcm = xfsCountRe.exec(stylesXml);
+                if (xcm) stylesXml = stylesXml.replace(xfsCountRe, xcm[1]+(parseInt(xcm[2])+2)+xcm[3]);
+                stylesXml = stylesXml.replace('</cellXfs>', centerXf + centerBoldXf + '</cellXfs>');
+
+                // 4. 修改每个 sheet 的 xml，给前3行的合并起始单元格加居中样式
+                // row1=标题(加粗居中), row2=范围(居中), row3=时间(居中)
+                async function patchSheet(entry, extraMap) {
+                    let xml = await decode(entry);
+                    // 如果传了 extraMap，只用 extraMap；否则用默认（A1加粗居中、A2/A3居中）
+                    let styleMap;
+                    if (extraMap) {
+                        styleMap = {};
+                        Object.keys(extraMap).forEach(function(addr) {
+                            styleMap[addr] = extraMap[addr] === 'bold' ? centerBoldStyleIdx : centerStyleIdx;
+                        });
+                    } else {
+                        styleMap = { 'A1': centerBoldStyleIdx, 'A2': centerStyleIdx, 'A3': centerStyleIdx };
+                    }
+                    xml = xml.replace(/<c\b([^>]*)>/g, (match, attrs) => {
+                        const addrM = /\br="([A-Z]+\d+)"/.exec(attrs);
+                        if (!addrM) return match;
+                        const sidx = styleMap[addrM[1]];
+                        if (sidx === undefined) return match;
+                        if (/\bs="/.test(attrs)) return '<c' + attrs.replace(/\bs="[^"]*"/, `s="${sidx}"`) + '>';
+                        return '<c' + attrs + ` s="${sidx}">`;
+                    });
+                    return xml;
+                }
+
+                // 5. 重新压缩并重建 zip
+                async function repack(entry, newText) {
+                    const newBytes = new TextEncoder().encode(newText);
+                    const compressed = await _zlibDeflate(newBytes);
+                    return { entry, newData: compressed, newUsz: newBytes.length, newCrc: _crc32(newBytes) };
+                }
+
+                const repackMap = {};
+                repackMap['xl/styles.xml'] = await repack(stylesEntry, stylesXml);
+                for (let i = 0; i < sheetEntries.length; i++) {
+                    const se = sheetEntries[i];
+                    const extraMap = extraSheetMaps ? extraSheetMaps[i] : null;
+                    repackMap[se.fname] = await repack(se, await patchSheet(se, extraMap));
+                }
+
+                // 重建 zip
+                const parts = [], centralDir = [];
+                let offset = 0;
+                entries.forEach(entry => {
+                    const rep = repackMap[entry.fname];
+                    const data = rep ? rep.newData : entry.data;
+                    const usz  = rep ? rep.newUsz  : entry.usz;
+                    const csz  = data.length;
+                    const crc  = rep ? rep.newCrc  : entry.crc;
+                    const comp = rep ? 8 : entry.comp;
+                    const fnBytes = new TextEncoder().encode(entry.fname);
+                    const lh = new Uint8Array(30 + fnBytes.length + entry.extra.length);
+                    lh[0]=0x50;lh[1]=0x4B;lh[2]=0x03;lh[3]=0x04;
+                    w16(lh,4,20);w16(lh,6,0);w16(lh,8,comp);
+                    w16(lh,10,0);w16(lh,12,0);
+                    w32(lh,14,crc);w32(lh,18,csz);w32(lh,22,usz);
+                    w16(lh,26,fnBytes.length);w16(lh,28,entry.extra.length);
+                    lh.set(fnBytes,30);lh.set(entry.extra,30+fnBytes.length);
+                    parts.push(lh, data);
+                    const cd = new Uint8Array(46 + fnBytes.length);
+                    cd[0]=0x50;cd[1]=0x4B;cd[2]=0x01;cd[3]=0x02;
+                    w16(cd,4,20);w16(cd,6,20);w16(cd,8,0);w16(cd,10,comp);
+                    w16(cd,12,0);w16(cd,14,0);
+                    w32(cd,16,crc);w32(cd,20,csz);w32(cd,24,usz);
+                    w16(cd,28,fnBytes.length);w16(cd,30,0);w16(cd,32,0);
+                    w16(cd,34,0);w16(cd,36,0);w32(cd,38,0);w32(cd,42,offset);
+                    cd.set(fnBytes,46);
+                    centralDir.push(cd);
+                    offset += lh.length + data.length;
+                });
+                const cdBytes = centralDir.reduce((a,b)=>a+b.length,0);
+                const eocd = new Uint8Array(22);
+                eocd[0]=0x50;eocd[1]=0x4B;eocd[2]=0x05;eocd[3]=0x06;
+                w16(eocd,4,0);w16(eocd,6,0);
+                w16(eocd,8,entries.length);w16(eocd,10,entries.length);
+                w32(eocd,12,cdBytes);w32(eocd,16,offset);w16(eocd,20,0);
+                const allParts = [...parts, ...centralDir, eocd];
+                const total = allParts.reduce((a,b)=>a+b.length,0);
+                const out = new Uint8Array(total);
+                let p = 0;
+                allParts.forEach(b => { out.set(b,p); p+=b.length; });
+                _fallbackDownload(out.buffer, filename);
+            } catch(e) {
+                console.warn('样式注入失败，使用普通导出', e);
+                _fallbackDownload(xlsxBuf, filename);
+            }
+        }
+
+        function _fallbackDownload(buf, filename) {
+            const blob = new Blob([buf], { type: 'application/octet-stream' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = filename;
+            a.click();
+            setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+        }
+
+        // ── zip/zlib 工具函数（同 builder.html）──
+        async function _zlibInflate(data) {
+            var ds = new DecompressionStream('deflate-raw');
+            var w = ds.writable.getWriter(), r = ds.readable.getReader();
+            w.write(data); w.close();
+            var chunks = [], len = 0;
+            for (;;) { var res = await r.read(); if (res.done) break; chunks.push(res.value); len += res.value.length; }
+            var out = new Uint8Array(len), off = 0;
+            chunks.forEach(function(c){ out.set(c, off); off += c.length; });
+            return out;
+        }
+
+        async function _zlibDeflate(data) {
+            var cs = new CompressionStream('deflate-raw');
+            var w = cs.writable.getWriter(), r = cs.readable.getReader();
+            w.write(data); w.close();
+            var chunks = [], len = 0;
+            for (;;) { var res = await r.read(); if (res.done) break; chunks.push(res.value); len += res.value.length; }
+            var out = new Uint8Array(len), off = 0;
+            chunks.forEach(function(c){ out.set(c, off); off += c.length; });
+            return out;
+        }
+
+        var _crc32Table = (function(){
+            var t = new Uint32Array(256);
+            for (var i=0;i<256;i++){
+                var c=i;
+                for(var j=0;j<8;j++) c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);
+                t[i]=c;
+            }
+            return t;
+        })();
+
+        function _crc32(buf) {
+            var c = 0xFFFFFFFF;
+            for (var i=0;i<buf.length;i++) c = _crc32Table[(c^buf[i])&0xFF]^(c>>>8);
+            return (c^0xFFFFFFFF)>>>0;
         }
 
         // ---- 点名记录 导出/导入 ----
@@ -3168,31 +3848,209 @@
         function exportCallLog() {
             _loadXlsxLib(function () {
                 var allNames = getAllStudentNames();
+                var title = CLASS_CONFIG.title || '点名记录';
+                var now = new Date();
+                var exportTime = now.getFullYear() + '-' +
+                    String(now.getMonth()+1).padStart(2,'0') + '-' +
+                    String(now.getDate()).padStart(2,'0') + ' ' +
+                    String(now.getHours()).padStart(2,'0') + ':' +
+                    String(now.getMinutes()).padStart(2,'0') + ':' +
+                    String(now.getSeconds()).padStart(2,'0');
+
                 var logs = [...callLog]
                     .filter(r => allNames.includes(r.name))
                     .sort((a, b) => a.time < b.time ? 1 : -1);
 
-                var rows = [['序号', '姓名', '点名时间']];
-                logs.forEach(function (r, i) {
+                // ── Sheet1: 点名记录 ──
+                var logRows = [
+                    [title + '·点名记录'],
+                    ['导出时间：' + exportTime],
+                    [],
+                    ['序号', '姓名', '点名时间']
+                ];
+                logs.forEach(function(r, i) {
                     var d = new Date(r.time);
                     var fmt = d.getFullYear() + '-' +
-                        String(d.getMonth() + 1).padStart(2, '0') + '-' +
-                        String(d.getDate()).padStart(2, '0') + ' ' +
-                        String(d.getHours()).padStart(2, '0') + ':' +
-                        String(d.getMinutes()).padStart(2, '0') + ':' +
-                        String(d.getSeconds()).padStart(2, '0');
-                    rows.push([i + 1, r.name, fmt]);
+                        String(d.getMonth()+1).padStart(2,'0') + '-' +
+                        String(d.getDate()).padStart(2,'0') + ' ' +
+                        String(d.getHours()).padStart(2,'0') + ':' +
+                        String(d.getMinutes()).padStart(2,'0') + ':' +
+                        String(d.getSeconds()).padStart(2,'0');
+                    logRows.push([i+1, r.name, fmt]);
+                });
+                var ws1 = XLSX.utils.aoa_to_sheet(logRows);
+                ws1['!cols'] = [{ wch: 6 }, { wch: 14 }, { wch: 22 }];
+                ws1['!merges'] = [
+                    { s:{r:0,c:0}, e:{r:0,c:2} },
+                    { s:{r:1,c:0}, e:{r:1,c:2} }
+                ];
+
+                // ── Sheet2: 座位表 ──
+                var seats = CLASS_CONFIG.seats || [];
+                var numRows2 = seats.length;
+                var numCols = seats.reduce(function(m, r){ return Math.max(m, r ? r.length : 0); }, 0);
+
+                // 补齐每行列数
+                var rows2 = seats.map(function(row) {
+                    var r = (row || []).slice();
+                    while (r.length < numCols) r.push(null);
+                    return r;
                 });
 
-                var ws = XLSX.utils.aoa_to_sheet(rows);
-                ws['!cols'] = [{ wch: 6 }, { wch: 14 }, { wch: 22 }];
-                var wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, '点名记录');
+                // 整列过道检测
+                var aisleFullCols2 = [];
+                for (var c2 = 0; c2 < numCols; c2++) {
+                    var hasAisle2 = false, allOk2 = true;
+                    for (var ri2 = 0; ri2 < numRows2; ri2++) {
+                        var ct2 = rows2[ri2][c2];
+                        var ctStr = ct2 === 'aisle' || (ct2 && ct2.type === 'aisle') ? 'aisle'
+                                  : (!ct2 ? 'empty' : (ct2 === 'stage' || (ct2 && ct2.type === 'stage') ? 'stage' : 'student'));
+                        if (ctStr === 'aisle') hasAisle2 = true;
+                        else if (ctStr !== 'empty') { allOk2 = false; break; }
+                    }
+                    if (hasAisle2 && allOk2) aisleFullCols2.push(c2);
+                }
 
-                var title = CLASS_CONFIG.title || '点名记录';
-                var now = new Date();
-                var datePart = now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0');
-                XLSX.writeFile(wb, '点名记录-' + title + '-' + datePart + '.xlsx');
+                // 每行连续 stage 的 span
+                var stageSpan2 = rows2.map(function() { return new Array(numCols).fill(1); });
+                var stageSkip2 = rows2.map(function() { return new Array(numCols).fill(false); });
+                for (var ri2 = 0; ri2 < numRows2; ri2++) {
+                    var c2 = 0;
+                    while (c2 < numCols) {
+                        var cell2 = rows2[ri2][c2];
+                        if (cell2 === 'stage' || (cell2 && cell2.type === 'stage')) {
+                            var span2 = 1;
+                            while (c2 + span2 < numCols) {
+                                var nc = rows2[ri2][c2 + span2];
+                                if (nc === 'stage' || (nc && nc.type === 'stage')) span2++;
+                                else break;
+                            }
+                            stageSpan2[ri2][c2] = span2;
+                            for (var k2 = 1; k2 < span2; k2++) stageSkip2[ri2][c2 + k2] = true;
+                            c2 += span2;
+                        } else { c2++; }
+                    }
+                }
+
+                var seatData = [[title]];
+                for (var i = 1; i < numCols; i++) seatData[0].push('');
+                var seatMerges = [{ s:{r:0,c:0}, e:{r:0,c:numCols-1} }]; // 标题行合并
+                var aisleSkip2 = rows2.map(function() { return new Array(numCols).fill(false); });
+
+                for (var ri2 = 0; ri2 < numRows2; ri2++) {
+                    var row2 = [];
+                    for (var c2 = 0; c2 < numCols; c2++) {
+                        // 整列过道
+                        if (aisleFullCols2.indexOf(c2) >= 0) {
+                            if (ri2 === 0) {
+                                row2.push('过道');
+                                seatMerges.push({ s:{r:1,c:c2}, e:{r:numRows2,c:c2} });
+                            } else { row2.push(''); }
+                            continue;
+                        }
+                        if (stageSkip2[ri2][c2]) { row2.push(''); continue; }
+                        if (aisleSkip2[ri2][c2]) { row2.push(''); continue; }
+                        var cell2 = rows2[ri2][c2];
+                        if (!cell2) {
+                            row2.push('');
+                        } else if (cell2 === 'aisle' || (cell2 && cell2.type === 'aisle')) {
+                            // 非整列过道：向下合并
+                            var aisleEnd2 = ri2;
+                            while (aisleEnd2 + 1 < numRows2) {
+                                var nc2 = rows2[aisleEnd2 + 1][c2];
+                                if (nc2 === 'aisle' || (nc2 && nc2.type === 'aisle')) aisleEnd2++;
+                                else break;
+                            }
+                            row2.push('过道');
+                            if (aisleEnd2 > ri2) {
+                                seatMerges.push({ s:{r:ri2+1,c:c2}, e:{r:aisleEnd2+1,c:c2} });
+                                for (var ar2 = ri2 + 1; ar2 <= aisleEnd2; ar2++) aisleSkip2[ar2][c2] = true;
+                            }
+                        } else if (cell2 === 'stage' || (cell2 && cell2.type === 'stage')) {
+                            row2.push('讲台');
+                            if (stageSpan2[ri2][c2] > 1) {
+                                seatMerges.push({ s:{r:ri2+1,c:c2}, e:{r:ri2+1,c:c2+stageSpan2[ri2][c2]-1} });
+                            }
+                        } else {
+                            var name2 = (cell2.name || '').trim();
+                            if (cell2.role === 'monitor') name2 = name2 + '（班长）';
+                            else if (cell2.role === 'leader') name2 = name2 + '（组长）';
+                            row2.push(name2 || '');
+                        }
+                    }
+                    seatData.push(row2);
+                }
+
+                if (CLASS_CONFIG.slogan) {
+                    var sloganRow = [CLASS_CONFIG.slogan];
+                    for (var j = 1; j < numCols; j++) sloganRow.push('');
+                    seatData.push(sloganRow);
+                    seatMerges.push({ s:{r:numRows2+1,c:0}, e:{r:numRows2+1,c:numCols-1} });
+                }
+                var ws2 = XLSX.utils.aoa_to_sheet(seatData);
+                ws2['!merges'] = seatMerges;
+
+                // ── Sheet3: 学生介绍 ──
+                var intros = CLASS_CONFIG.intros || {};
+                var introData = [['姓名', '介绍/典故/备注信息']];
+                var introNames = new Set();
+                seats.forEach(function(row) {
+                    if (!row) return;
+                    row.forEach(function(cell) {
+                        if (cell && cell.name && cell.name.trim()) {
+                            var n = cell.name.trim();
+                            if (!introNames.has(n)) { introNames.add(n); introData.push([n, intros[n] || '']); }
+                        }
+                    });
+                });
+                Object.keys(intros).forEach(function(n) {
+                    if (!introNames.has(n)) introData.push([n, intros[n] || '']);
+                });
+                var ws3 = XLSX.utils.aoa_to_sheet(introData);
+                ws3['!cols'] = [{ wch: 12 }, { wch: 40 }];
+
+                var wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws1, '点名记录');
+                XLSX.utils.book_append_sheet(wb, ws2, '座位表');
+                XLSX.utils.book_append_sheet(wb, ws3, '学生介绍');
+
+                var datePart = now.getFullYear() + String(now.getMonth()+1).padStart(2,'0') + String(now.getDate()).padStart(2,'0');
+                var filename = '点名记录-' + title + '-' + datePart + '.xlsx';
+                var xlsxBuf = XLSX.write(wb, { type: 'array', bookType: 'xlsx' });
+
+                // 计算座位表（sheet2）需要居中的单元格地址
+                function colName2(ci) {
+                    var col = '', n = ci + 1;
+                    while (n > 0) { n--; col = String.fromCharCode(65 + (n % 26)) + col; n = Math.floor(n / 26); }
+                    return col;
+                }
+                var seatCenterAddrs = {};
+                // 标题行（row1）
+                for (var ci3 = 0; ci3 < numCols; ci3++) seatCenterAddrs[colName2(ci3) + '1'] = 'bold';
+                // 口号行
+                if (CLASS_CONFIG.slogan) {
+                    var sloganR3 = numRows2 + 2;
+                    for (var ci3 = 0; ci3 < numCols; ci3++) seatCenterAddrs[colName2(ci3) + sloganR3] = 'center';
+                }
+                // 讲台
+                for (var ri3 = 0; ri3 < numRows2; ri3++) {
+                    for (var ci3 = 0; ci3 < numCols; ci3++) {
+                        var c3 = rows2[ri3][ci3];
+                        if (c3 === 'stage' || (c3 && c3.type === 'stage')) {
+                            seatCenterAddrs[colName2(ci3) + (ri3 + 2)] = 'center';
+                        }
+                    }
+                }
+                // 整列过道
+                aisleFullCols2.forEach(function(c3) {
+                    for (var ri3 = 0; ri3 <= numRows2; ri3++) {
+                        seatCenterAddrs[colName2(c3) + (ri3 + 1)] = 'center';
+                    }
+                });
+
+                // sheet1=点名记录(index=0), sheet2=座位表(index=1), sheet3=学生介绍(index=2)
+                var introHeaderMap = { 'B1': 'center' };
+                _injectStatCenterStyle(xlsxBuf, filename, [null, seatCenterAddrs, introHeaderMap]);
             });
         }
 
@@ -3207,9 +4065,17 @@
                         var wb = XLSX.read(e.target.result, { type: 'array' });
                         var ws = wb.Sheets['点名记录'] || wb.Sheets[wb.SheetNames[0]];
                         var data = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
-                        // 跳过标题行，读取姓名和时间
+                        // 自动检测起始行：跳过标题行和列头行
+                        var dataStart = 1;
+                        if (data.length >= 2) {
+                            var r1 = data[1].map(function(v){ return String(v).trim(); });
+                            if (r1[0] === '序号' || r1[1] === '姓名') {
+                                dataStart = 2;
+                            }
+                        }
+                        // 读取姓名和时间
                         var imported = [];
-                        for (var i = 1; i < data.length; i++) {
+                        for (var i = dataStart; i < data.length; i++) {
                             var name = String(data[i][1] || '').trim();
                             var timeStr = String(data[i][2] || '').trim();
                             if (!name || !timeStr) continue;
@@ -3218,17 +4084,39 @@
                             imported.push({ name: name, time: t.toISOString() });
                         }
                         if (!imported.length) { showAlert('未读取到有效记录，请确认文件格式正确。'); return; }
-                        showConfirm('读取到 ' + imported.length + ' 条记录，追加到现有记录？', {
+
+                        // 区分：名字在当前学生列表 vs 不在
+                        var allNames = new Set(getAllStudentNames());
+                        var validImported   = imported.filter(r => allNames.has(r.name));
+                        var invalidImported = imported.filter(r => !allNames.has(r.name));
+                        var invalidNames    = [...new Set(invalidImported.map(r => r.name))];
+
+                        var confirmMsg = '读取到 ' + imported.length + ' 条记录';
+                        if (invalidImported.length > 0) {
+                            confirmMsg += '，其中 ' + invalidImported.length + ' 条姓名不在当前座位表中将被忽略';
+                            confirmMsg += '（' + invalidNames.slice(0, 5).join('、') + (invalidNames.length > 5 ? ' 等' : '') + '）';
+                        }
+                        confirmMsg += '。\n确认追加 ' + validImported.length + ' 条有效记录？';
+
+                        showConfirm(confirmMsg, {
                             confirmText: '追加', cancelText: '取消'
                         }).then(function (ok) {
                             if (!ok) return;
                             var existing = new Set(callLog.map(r => r.name + '|' + r.time));
-                            var added = imported.filter(r => !existing.has(r.name + '|' + r.time));
+                            var added = validImported.filter(r => !existing.has(r.name + '|' + r.time));
+                            var dupCount = validImported.length - added.length;
                             callLog = callLog.concat(added);
                             save();
                             restoreCountBadges();
                             renderStatModal(statCurrentTab);
-                            showAlert('导入成功，新增 ' + added.length + ' 条记录（跳过重复 ' + (imported.length - added.length) + ' 条）。');
+
+                            var resultMsg = '导入成功，新增 ' + added.length + ' 条记录';
+                            if (dupCount > 0) resultMsg += '，跳过重复 ' + dupCount + ' 条';
+                            if (invalidImported.length > 0) {
+                                resultMsg += '\n\n以下 ' + invalidNames.length + ' 个姓名不在当前座位表，共 ' + invalidImported.length + ' 条记录已忽略：\n';
+                                resultMsg += invalidNames.join('、');
+                            }
+                            showAlert(resultMsg);
                         });
                     } catch (err) {
                         showAlert('导入失败：' + err.message);
@@ -3248,30 +4136,291 @@
         // 排序状态
         let statSortCount = 'desc', statSortTime = 'desc', statCurrentTab = 'count';
 
+        // ---- 日历范围选择器 ----
+        let statCalYear = new Date().getFullYear();
+        let statCalMonth = new Date().getMonth();
+        // 选中的日期范围：null 表示未选，格式 'YYYY-MM-DD'
+        let statRangeStart = null, statRangeEnd = null;
+        // 鼠标悬停的日期（用于预览范围）
+        let statRangeHover = null;
+        // 选择阶段：0=未开始/已完成，1=已选start等待end
+        let statRangePhase = 0;
+
+        function statDateKey(y, m, d) {
+            return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        }
+
+        function statDateFromKey(key) {
+            const [y, m, d] = key.split('-').map(Number);
+            return new Date(y, m - 1, d);
+        }
+
+        function getStatFilteredLogs() {
+            const allNames = getAllStudentNames();
+            let logs = callLog.filter(r => allNames.includes(r.name));
+            if (statRangeStart && statRangeEnd) {
+                const s = statDateFromKey(statRangeStart);
+                const e = statDateFromKey(statRangeEnd);
+                // 确保 s <= e
+                const from = s <= e ? s : e;
+                const to = s <= e ? e : s;
+                // to 加一天（包含当天全天）
+                const toNext = new Date(to.getFullYear(), to.getMonth(), to.getDate() + 1);
+                logs = logs.filter(r => {
+                    const t = new Date(r.time);
+                    return t >= from && t < toNext;
+                });
+            } else if (statRangeStart && !statRangeEnd) {
+                // 只选了一天
+                const s = statDateFromKey(statRangeStart);
+                const toNext = new Date(s.getFullYear(), s.getMonth(), s.getDate() + 1);
+                logs = logs.filter(r => {
+                    const t = new Date(r.time);
+                    return t >= s && t < toNext;
+                });
+            }
+            return logs;
+        }
+
+        function getDailyCallCount() {
+            // 返回 { 'YYYY-MM-DD': count } 的映射
+            const allNames = getAllStudentNames();
+            const map = {};
+            callLog.filter(r => allNames.includes(r.name)).forEach(r => {
+                const d = new Date(r.time);
+                const key = statDateKey(d.getFullYear(), d.getMonth(), d.getDate());
+                map[key] = (map[key] || 0) + 1;
+            });
+            return map;
+        }
+
+        function renderStatCalendar() {
+            const titleEl = document.getElementById('stat-cal-month-title');
+            const gridEl = document.getElementById('stat-cal-grid');
+            if (!titleEl || !gridEl) return;
+
+            const y = statCalYear, m = statCalMonth;
+            titleEl.textContent = `${y} 年 ${m + 1} 月`;
+
+            const dailyCount = getDailyCallCount();
+            const today = new Date();
+            const todayKey = statDateKey(today.getFullYear(), today.getMonth(), today.getDate());
+
+            // 星期标题
+            const dows = ['日', '一', '二', '三', '四', '五', '六'];
+            let html = dows.map(d => `<div class="stat-cal-dow">${d}</div>`).join('');
+
+            // 本月第一天是星期几
+            const firstDay = new Date(y, m, 1).getDay();
+            const daysInMonth = new Date(y, m + 1, 0).getDate();
+            // 上月补位
+            const prevDays = new Date(y, m, 0).getDate();
+            for (let i = 0; i < firstDay; i++) {
+                const day = prevDays - firstDay + 1 + i;
+                const pm = m - 1 < 0 ? 11 : m - 1;
+                const py = m - 1 < 0 ? y - 1 : y;
+                const key = statDateKey(py, pm, day);
+                const cnt = dailyCount[key] || 0;
+                html += renderCalDay(day, key, cnt, todayKey, true);
+            }
+            // 本月
+            for (let d = 1; d <= daysInMonth; d++) {
+                const key = statDateKey(y, m, d);
+                const cnt = dailyCount[key] || 0;
+                html += renderCalDay(d, key, cnt, todayKey, false);
+            }
+            // 下月补位
+            const total = firstDay + daysInMonth;
+            const nextCells = total % 7 === 0 ? 0 : 7 - (total % 7);
+            for (let d = 1; d <= nextCells; d++) {
+                const nm = m + 1 > 11 ? 0 : m + 1;
+                const ny = m + 1 > 11 ? y + 1 : y;
+                const key = statDateKey(ny, nm, d);
+                const cnt = dailyCount[key] || 0;
+                html += renderCalDay(d, key, cnt, todayKey, true);
+            }
+
+            gridEl.innerHTML = html;
+
+            // 绑定事件：click 选日期，mouseenter/leave 只更新 hover 变量并刷新高亮
+            gridEl.querySelectorAll('.stat-cal-day:not(.stat-cal-day-empty)').forEach(el => {
+                const key = el.dataset.key;
+                el.addEventListener('click', () => statCalDayClick(key));
+                el.addEventListener('mouseenter', () => {
+                    if (statRangePhase === 1) {
+                        statRangeHover = key;
+                        updateStatCalRangeClasses();
+                    }
+                });
+                el.addEventListener('mouseleave', () => {
+                    if (statRangePhase === 1) {
+                        statRangeHover = null;
+                        updateStatCalRangeClasses();
+                    }
+                });
+            });
+
+            // 初始渲染时也应用一次高亮
+            updateStatCalRangeClasses();
+        }
+
+        // 只更新日历格子的 range 相关 class，不重建 DOM
+        function updateStatCalRangeClasses() {
+            const gridEl = document.getElementById('stat-cal-grid');
+            if (!gridEl) return;
+
+            let rangeFrom = null, rangeTo = null;
+            if (statRangeStart) {
+                const s = statDateFromKey(statRangeStart);
+                const eKey = statRangeEnd || statRangeHover;
+                if (eKey) {
+                    const e = statDateFromKey(eKey);
+                    rangeFrom = s <= e ? statRangeStart : eKey;
+                    rangeTo   = s <= e ? eKey : statRangeStart;
+                } else {
+                    rangeFrom = rangeTo = statRangeStart;
+                }
+            }
+
+            gridEl.querySelectorAll('.stat-cal-day[data-key]').forEach(el => {
+                const key = el.dataset.key;
+                el.classList.remove('in-range', 'range-start', 'range-end');
+                if (rangeFrom && rangeTo) {
+                    if (key >= rangeFrom && key <= rangeTo) el.classList.add('in-range');
+                    if (key === rangeFrom) el.classList.add('range-start');
+                    if (key === rangeTo)   el.classList.add('range-end');
+                } else if (rangeFrom && key === rangeFrom) {
+                    el.classList.add('range-start', 'range-end');
+                }
+            });
+        }
+
+        function renderCalDay(day, key, cnt, todayKey, otherMonth) {
+            let cls = 'stat-cal-day';
+            if (otherMonth) cls += ' other-month';
+            if (key === todayKey) cls += ' today';
+            if (cnt > 0) cls += ' has-data';
+            const countHtml = cnt > 0 ? `<span class="stat-cal-day-count">${cnt}</span>` : `<span class="stat-cal-day-count"></span>`;
+            return `<div class="${cls}" data-key="${key}"><span class="stat-cal-day-num">${day}</span>${countHtml}</div>`;
+        }
+
+        function toggleStatCalPopup(e) {
+            e.stopPropagation();
+            const popup = document.getElementById('stat-cal-popup');
+            const btn = document.getElementById('stat-date-btn');
+            const isOpen = popup.classList.contains('show');
+            popup.classList.toggle('show', !isOpen);
+            btn.classList.toggle('active', !isOpen);
+        }
+
+        function closeStatCalPopup() {
+            document.getElementById('stat-cal-popup').classList.remove('show');
+            document.getElementById('stat-date-btn').classList.remove('active');
+        }
+
+        function statCalDayClick(key) {
+            if (statRangePhase === 0) {
+                statRangeStart = key;
+                statRangeEnd = null;
+                statRangeHover = null;
+                statRangePhase = 1;
+                updateStatCalHint();
+            } else {
+                statRangeEnd = key;
+                statRangeHover = null;
+                statRangePhase = 0;
+                if (statRangeStart > statRangeEnd) {
+                    [statRangeStart, statRangeEnd] = [statRangeEnd, statRangeStart];
+                }
+                // 同一天点两次 = 只选单天
+                updateStatCalHint();
+                updateStatDateRangeDisplay();
+                updateStatCalRangeClasses();
+                renderStatModal(statCurrentTab);
+                // 选完自动关闭浮层
+                setTimeout(closeStatCalPopup, 180);
+                return;
+            }
+            updateStatCalRangeClasses();
+        }
+
+        function updateStatCalHint() {
+            const el = document.getElementById('stat-cal-hint');
+            if (!el) return;
+            if (statRangePhase === 1) {
+                el.textContent = '再点一个日期作为结束';
+                el.className = 'stat-cal-popup-hint selecting';
+            } else {
+                el.textContent = '点击选择开始日期';
+                el.className = 'stat-cal-popup-hint';
+            }
+        }
+
+        function updateStatDateRangeDisplay() {
+            const el = document.getElementById('stat-date-range-display');
+            const rangeText = document.getElementById('stat-range-text');
+            if (!el) return;
+            if (!statRangeStart) {
+                el.textContent = '选择时间范围';
+                if (rangeText) rangeText.textContent = '统计范围：全部记录';
+            } else if (!statRangeEnd || statRangeStart === statRangeEnd) {
+                el.textContent = statRangeStart;
+                if (rangeText) rangeText.textContent = `统计范围：${statRangeStart}`;
+            } else {
+                el.textContent = `${statRangeStart} 至 ${statRangeEnd}`;
+                if (rangeText) rangeText.textContent = `统计范围：${statRangeStart} 至 ${statRangeEnd}`;
+            }
+        }
+
+        function resetStatDateRange() {
+            statRangeStart = null;
+            statRangeEnd = null;
+            statRangeHover = null;
+            statRangePhase = 0;
+            updateStatCalHint();
+            updateStatDateRangeDisplay();
+            updateStatCalRangeClasses();
+            renderStatModal(statCurrentTab);
+            closeStatCalPopup();
+        }
+
+        function statCalPrevMonth() {
+            statCalMonth--;
+            if (statCalMonth < 0) { statCalMonth = 11; statCalYear--; }
+            renderStatCalendar();
+        }
+
+        function statCalNextMonth() {
+            statCalMonth++;
+            if (statCalMonth > 11) { statCalMonth = 0; statCalYear++; }
+            renderStatCalendar();
+        }
+
         function renderStatModal(tab) {
             const cnt = getCallCount();
             const allNames = getAllStudentNames(); // 当前座位表学生
             const totalStudents = allNames.length;
-            // 只统计当前学生的点名记录
-            const totalCalls = callLog.filter(r => allNames.includes(r.name)).length;
+            // 使用过滤后的日志
+            const filteredLogs = getStatFilteredLogs();
+            const totalCalls = filteredLogs.length;
             const avg = totalStudents ? (totalCalls / totalStudents).toFixed(1) : 0;
-            const vals = allNames.map(n => cnt[n] || 0);
+            // 被点次数基于过滤后的日志
+            const filteredCnt = {};
+            filteredLogs.forEach(r => { filteredCnt[r.name] = (filteredCnt[r.name] || 0) + 1; });
+            const vals = allNames.map(n => filteredCnt[n] || 0);
             const maxCalls = vals.length ? Math.max(...vals) : 0;
             const minCalls = vals.length ? Math.min(...vals) : 0;
 
-            // 记录开始时间
-            const validLogs = callLog.filter(r => allNames.includes(r.name));
+            // 记录开始时间（基于过滤后）
             let startTimeStr = '暂无记录';
-            if (validLogs.length) {
-                const earliest = validLogs.reduce((a, b) => a.time < b.time ? a : b);
+            if (filteredLogs.length) {
+                const earliest = filteredLogs.reduce((a, b) => a.time < b.time ? a : b);
                 const d = new Date(earliest.time);
                 startTimeStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`;
             }
 
-            // 更新标题
-            document.querySelector('.stat-modal-title').textContent = validLogs.length
-                ? `📊 点名数据统计（${startTimeStr} 至今）`
-                : `📊 点名数据统计（暂无记录）`;
+            // 标题固定，时间范围信息由按钮显示
+            document.querySelector('.stat-modal-title').textContent = '📊 点名数据统计';
 
             document.getElementById('stat-summary').innerHTML = `
                 <div class="stat-card"><div class="stat-card-val">${totalStudents}</div><div class="stat-card-lbl">学生人数</div></div>
@@ -3285,6 +4434,7 @@
         function renderStatBody(tab) {
             const body = document.getElementById('stat-body');
             const allNames = getAllStudentNames();
+            const filteredLogs = getStatFilteredLogs();
             // SVG 双箭头排序图标
             function sortArrows(field) {
                 const state = field === 'count' ? statSortCount : statSortTime;
@@ -3295,8 +4445,10 @@
                     `</span>`;
             }
             if (tab === 'count') {
-                const cnt = getCallCount();
-                let rows = allNames.map(n => ({ name: n, count: cnt[n] || 0, note: (CLASS_CONFIG.intros[n] || '').replace(/\n/g, ' ') }));
+                // 基于过滤后的日志计算次数
+                const filteredCnt = {};
+                filteredLogs.forEach(r => { filteredCnt[r.name] = (filteredCnt[r.name] || 0) + 1; });
+                let rows = allNames.map(n => ({ name: n, count: filteredCnt[n] || 0, note: (CLASS_CONFIG.intros[n] || '').replace(/\n/g, ' ') }));
                 rows.sort((a, b) => statSortCount === 'desc' ? b.count - a.count : a.count - b.count);
                 body.innerHTML = `<table class="stat-table">
                     <thead><tr>
@@ -3316,7 +4468,7 @@
                     </tr>`).join('')}</tbody>
                 </table>`;
             } else {
-                const logs = [...callLog].filter(r => allNames.includes(r.name));
+                const logs = [...filteredLogs];
                 logs.sort((a, b) => {
                     if (a.time < b.time) return statSortTime === 'desc' ? 1 : -1;
                     if (a.time > b.time) return statSortTime === 'desc' ? -1 : 1;
@@ -3351,6 +4503,11 @@
 
         document.getElementById('stat-modal').addEventListener('click', function (e) {
             if (e.target === this) closeStatModal();
+            // 点击浮层外部（但在弹窗内）时关闭日历浮层
+            const popup = document.getElementById('stat-cal-popup');
+            if (popup && popup.classList.contains('show') && !popup.contains(e.target) && e.target.id !== 'stat-date-btn' && !document.getElementById('stat-date-btn').contains(e.target)) {
+                closeStatCalPopup();
+            }
         });
 
         function closeIntroModal() {
@@ -3479,6 +4636,7 @@
             toggleViewBtn.addEventListener('click', toggleView);
             toggleDarkModeBtn.addEventListener('click', toggleDarkMode);
             toggleClassCommitteeBtn.addEventListener('click', toggleClassCommittee);
+            toggleGroupBgBtn.addEventListener('click', toggleGroupBg);
             document.getElementById('toggle-intro').addEventListener('click', toggleIntro);
             clearRecordBtn.addEventListener('click', resetRecord);
             exportLogBtn.addEventListener('click', function () { settingsPanel.classList.remove('show'); exportCallLog(); });
@@ -3492,7 +4650,7 @@
                     danger: true, confirmText: '确定清除'
                 }).then(ok => {
                     if (ok) {
-                        ['index_config', 'calledNames', 'callLog', 'viewMode', 'darkMode', 'hideRecord', 'showCount', 'showCommittee', 'showIntro', 'builder_apply'].forEach(function (k) {
+                        ['index_config', 'calledNames', 'callLog', 'viewMode', 'darkMode', 'hideRecord', 'showCount', 'showCommittee', 'showGroup', 'showIntro', 'builder_apply'].forEach(function (k) {
                             localStorage.removeItem(k);
                         });
                         location.reload();
@@ -3514,6 +4672,7 @@
             updateRecordVisibilityUI();
             updateDarkModeUI();
             updateClassCommitteeUI();
+            updateGroupBgUI(true); // 初始化只更新按钮文字，不重复渲染
             refreshUI();
             updateIntroUI();
 
@@ -3521,23 +4680,25 @@
             initSeatEvents();
 
             // 初始化粒子背景
-            particlesJS('particles-js', {
-                particles: {
-                    number: { value: 80, density: { enable: true, value_area: 800 } },
-                    color: { value: "#ffffff" },
-                    shape: { type: "circle" },
-                    opacity: { value: 0.5, random: true },
-                    size: { value: 3, random: true },
-                    line_linked: { enable: true, distance: 150, color: "#00fffc", opacity: 0.2, width: 1 },
-                    move: { enable: true, speed: 2, direction: "none", random: true, straight: false }
-                },
-                interactivity: {
-                    events: {
-                        onhover: { enable: true, mode: "grab" },
-                        onclick: { enable: true, mode: "push" }
+            if (typeof particlesJS === 'function') {
+                particlesJS('particles-js', {
+                    particles: {
+                        number: { value: 80, density: { enable: true, value_area: 800 } },
+                        color: { value: "#ffffff" },
+                        shape: { type: "circle" },
+                        opacity: { value: 0.5, random: true },
+                        size: { value: 3, random: true },
+                        line_linked: { enable: true, distance: 150, color: "#00fffc", opacity: 0.2, width: 1 },
+                        move: { enable: true, speed: 2, direction: "none", random: true, straight: false }
+                    },
+                    interactivity: {
+                        events: {
+                            onhover: { enable: true, mode: "grab" },
+                            onclick: { enable: true, mode: "push" }
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
 
@@ -3559,6 +4720,7 @@
                     CLASS_CONFIG.slogan = cfg.slogan || CLASS_CONFIG.slogan;
                     CLASS_CONFIG.seats = cfg.seats;
                     CLASS_CONFIG.intros = cfg.intros || {};
+                    CLASS_CONFIG.groups = cfg.groups || [];
                     // 应用网页标题
                     if (cfg.pageTitle) {
                         document.title = cfg.pageTitle;
@@ -3577,6 +4739,7 @@
                         slogan: CLASS_CONFIG.slogan,
                         seats: CLASS_CONFIG.seats,
                         intros: CLASS_CONFIG.intros,
+                        groups: CLASS_CONFIG.groups,
                         pageTitle: cfg.pageTitle || document.title,
                         favicon: cfg.favicon || ''
                     }));
