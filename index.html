@@ -4704,6 +4704,7 @@
 
         // 轮询检测 builder 写回的配置（file:// 协议下 storage 事件不可靠）
         setInterval(function () {
+            if (document.hidden) return; // 页面不可见时跳过
             var raw = localStorage.getItem('builder_apply');
             if (!raw) return;
             try {
@@ -4770,7 +4771,7 @@
                     refreshUI();
                 }
             } catch (e) { }
-        }, 1000);
+        }, 2000);
 
         // 启动初始化
         window.addEventListener('load', init);
