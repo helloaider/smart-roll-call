@@ -135,16 +135,13 @@
         #intro-display {
             position: fixed;
             width: 460px;
-            height: 130px;
             background: linear-gradient(135deg, rgba(30, 60, 114, 0.95) 0%, rgba(42, 82, 152, 0.95) 100%);
             border: 1px solid rgba(0, 255, 252, 0.5);
             border-radius: 10px;
-            padding: 0 16px;
+            padding: 0;
             font-size: 15px;
             font-weight: normal;
             color: rgba(255, 255, 255, 0.9);
-            text-align: justify;
-            line-height: 1.8;
             text-shadow: none;
             opacity: 0;
             pointer-events: none;
@@ -154,19 +151,166 @@
             z-index: 9000;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* 标题栏 */
+        #intro-display .intro-header {
+            padding: 10px 14px 8px;
+            border-bottom: 1px solid rgba(0, 255, 252, 0.2);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         #intro-display .intro-name {
             font-size: 1em;
             font-weight: bold;
             color: #00fffc;
-            margin-bottom: 6px;
-            padding-bottom: 6px;
-            border-bottom: 1px solid rgba(0, 255, 252, 0.2);
             letter-spacing: 1px;
+            flex: 1;
+        }
+
+        /* 放大按钮 */
+        #intro-display .intro-expand-btn {
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: rgba(0, 255, 252, 0.5);
+            font-size: 0.85em;
+            border-radius: 4px;
+            flex-shrink: 0;
+            transition: color 0.2s, background 0.2s;
+            line-height: 1;
+        }
+
+        #intro-display .intro-expand-btn:hover {
+            color: #00fffc;
+            background: rgba(0, 255, 252, 0.1);
+        }
+
+        body.dark-mode #intro-display .intro-expand-btn {
+            color: rgba(56, 189, 248, 0.5);
+        }
+
+        body.dark-mode #intro-display .intro-expand-btn:hover {
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        /* 放大模式 */
+        #intro-display.expanded {
+            width: 620px;
+            max-height: 80vh;
+            left: 50% !important;
+            top: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            transition: opacity 0.3s ease, width 0.25s ease, max-height 0.25s ease;
+            z-index: 9100;
+        }
+
+        #intro-display.expanded .intro-body {
+            height: 250px;
+            max-height: 250px;
+        }
+
+        #intro-display.expanded .intro-photo {
+            width: auto;
+            padding: 16px 0 16px 18px;
             flex-shrink: 0;
         }
 
+        #intro-display.expanded .intro-photo img {
+            max-width: none;
+            max-height: 218px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        #intro-display.expanded.photo-only .intro-photo img {
+            max-width: none;
+            max-height: 218px;
+            width: auto;
+            height: auto;
+        }
+
+        /* 纯图片放大模式：卡片宽度跟图片走 */
+        #intro-display.expanded.photo-only {
+            width: fit-content;
+            max-width: 90vw;
+        }
+
+        #intro-display.expanded.photo-only .intro-body {
+            height: 250px;
+            max-height: 250px;
+            justify-content: center;
+        }
+
+        #intro-display.expanded.photo-only .intro-photo {
+            width: auto;
+            padding: 16px;
+            align-self: auto;
+        }
+
+        #intro-display.expanded .intro-text {
+            font-size: 0.95em;
+            padding: 14px 16px 14px 12px;
+            max-height: 250px;
+        }
+
+        /* 内容区：左图右文，高度由图片撑起，文字超出滚动 */
+        #intro-display .intro-body {
+            display: flex;
+            flex-direction: row;
+            max-height: 95px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        /* 图片区 */
+        #intro-display .intro-photo {
+            width: 100px;
+            flex-shrink: 0;
+            padding: 8px 0 8px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            align-self: flex-start;
+        }
+
+        #intro-display .intro-photo img {
+            max-width: 75px;
+            max-height: 75px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 255, 252, 0.3);
+            display: block;
+        }
+
+        /* 纯图片模式：图片居中，尺寸放大 */
+        #intro-display.photo-only .intro-photo {
+            width: 100%;
+            padding: 10px 14px;
+            align-items: center;
+            align-self: auto;
+        }
+
+        #intro-display.photo-only .intro-photo img {
+            max-width: 100px;
+            max-height: 100px;
+            width: auto;
+            height: auto;
+        }
+
+        /* 文字区：独立滚动 */
         #intro-display .intro-text {
             font-size: 0.93em;
             color: rgba(255, 255, 255, 0.85);
@@ -174,10 +318,20 @@
             text-align: justify;
             flex: 1;
             overflow-y: auto;
+            padding: 10px 14px 10px 10px;
+            max-height: 95px;
+        }
+
+        /* 纯文字模式：无图时文字撑满 */
+        #intro-display.text-only .intro-text {
+            padding: 10px 14px;
         }
 
         body.dark-mode #intro-display .intro-name {
             color: #38bdf8;
+        }
+
+        body.dark-mode #intro-display .intro-header {
             border-bottom-color: rgba(56, 189, 248, 0.2);
         }
 
@@ -185,9 +339,12 @@
             color: #c8e6fa;
         }
 
+        body.dark-mode #intro-display .intro-photo img {
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+
         #intro-display.visible {
             opacity: 1;
-            padding: 14px 16px 16px;
             pointer-events: auto;
         }
 
@@ -1048,6 +1205,19 @@
             }
         }
 
+        /* 备注小红点 — 左上角 */
+        .td-note-dot {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgba(255, 80, 80, 0.85);
+            pointer-events: none;
+            z-index: 11;
+        }
+
         /* 座位格次数角标 — 右上角折角 */
         .td-count-badge {
             position: absolute;
@@ -1194,6 +1364,37 @@
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
+            gap: 12px;
+        }
+
+        /* 标题区：左侧文字 + 右侧照片 */
+        .intro-modal-header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .intro-modal-header-photo {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .intro-modal-header-photo img {
+            max-height: 48px;
+            max-width: 60px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 255, 252, 0.3);
+            display: block;
+        }
+
+        body.dark-mode .intro-modal-header-photo img {
+            border-color: rgba(56, 189, 248, 0.3);
         }
 
         .intro-modal-title {
@@ -1269,6 +1470,10 @@
             outline: none;
             line-height: 1.8;
             cursor: default;
+        }
+
+        .intro-modal-textarea::placeholder {
+            color: rgba(255, 255, 255, .25);
         }
 
         .intro-modal-textarea:not([readonly]) {
@@ -1360,6 +1565,10 @@
         body.dark-mode .intro-modal-textarea {
             color: rgba(224, 242, 254, .8);
             cursor: default;
+        }
+
+        body.dark-mode .intro-modal-textarea::placeholder {
+            color: rgba(224, 242, 254, .2);
         }
 
         body.dark-mode .intro-modal-textarea:not([readonly]) {
@@ -1894,6 +2103,107 @@
         body.dark-mode .custom-dialog-btn.primary:hover {
             background: rgba(56, 189, 248, 0.08);
         }
+
+        /* ===================== 显示偏好配置弹窗行样式 ===================== */
+        .dp-row {
+            display: grid;
+            grid-template-columns: 1fr 80px 80px;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,.06);
+        }
+        .dp-row:last-child { border-bottom: none; }
+
+        .dp-label {
+            font-size: 1em;
+            color: rgba(255,255,255,.85);
+            line-height: 1;
+        }
+
+        .dp-radio {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 5px;
+            font-size: 1em;
+            color: rgba(255,255,255,.65);
+            cursor: pointer;
+            white-space: nowrap;
+            line-height: 1;
+        }
+
+        .dp-radio input[type=radio] {
+            accent-color: #00fffc;
+            width: 13px;
+            height: 13px;
+            cursor: pointer;
+            margin: 0;
+            flex-shrink: 0;
+        }
+
+        body.dark-mode .dp-radio input[type=radio] {
+            accent-color: #38bdf8;
+        }
+
+        #displayPrefsOverlay .custom-dialog-box {
+            font-size: 1.1em;
+        }
+
+        #displayPrefsOverlay .custom-dialog-msg {
+            padding: 2px 20px 8px;
+            line-height: 1;
+            font-size: 1em;
+            white-space: normal;
+            max-height: none;
+        }
+
+        /* 暗黑模式下弹窗配色 */
+        #displayPrefsOverlay .custom-dialog-box.dp-dark {
+            background: rgba(15, 25, 55, 0.97);
+            border: 1px solid rgba(56, 189, 248, 0.08);
+        }
+
+        #displayPrefsOverlay .custom-dialog-box.dp-dark .custom-dialog-header-title {
+            color: #38bdf8;
+        }
+
+        #displayPrefsOverlay .custom-dialog-box.dp-dark .dp-label {
+            color: rgba(224, 242, 254, .85);
+        }
+
+        #displayPrefsOverlay .custom-dialog-box.dp-dark .dp-radio {
+            color: rgba(224, 242, 254, .6);
+        }
+
+        #displayPrefsOverlay .custom-dialog-box.dp-dark .dp-radio input[type=radio] {
+            accent-color: #38bdf8;
+        }
+
+        #displayPrefsOverlay .custom-dialog-box.dp-dark .dp-row {
+            border-bottom-color: rgba(56, 189, 248, .08);
+        }
+
+        #displayPrefsOverlay .custom-dialog-footer .custom-dialog-btn {
+            padding: 10px 0;
+        }
+
+        #displayPrefsOverlay .custom-dialog-box.dp-dark .custom-dialog-footer {
+            border-top: 1px solid rgba(56, 189, 248, .1);
+            background: rgba(15, 25, 55, 0.97);
+            border-radius: 0 0 16px 16px;
+        }
+
+        #displayPrefsOverlay .custom-dialog-box.dp-dark .custom-dialog-footer:not(.single) .custom-dialog-btn:first-child {
+            border-right: 1px solid rgba(56, 189, 248, .1);
+        }
+
+        #displayPrefsOverlay .custom-dialog-box.dp-dark .custom-dialog-btn.primary {
+            color: #38bdf8;
+        }
+
+        #displayPrefsOverlay .custom-dialog-box.dp-dark .custom-dialog-btn.primary:hover {
+            background: rgba(56, 189, 248, 0.08);
+        }
     </style>
     <script>
         // 在页面渲染前立即应用暗黑模式，避免闪烁
@@ -1913,12 +2223,7 @@
     <!-- 设置面板 -->
     <div class="settings-panel">
         <div class="settings-group-title">显示偏好</div>
-        <div class="settings-item" id="toggle-record-visibility"><span class="settings-item-icon">🔢</span>显示被点次数</div>
-        <div class="settings-item" id="toggle-class-committee"><span class="settings-item-icon">🏅</span>显示班委标记</div>
-        <div class="settings-item" id="toggle-group-bg"><span class="settings-item-icon">🎨</span>显示小组背景</div>
-        <div class="settings-item" id="toggle-intro"><span class="settings-item-icon">💬</span>显示学生介绍</div>
-        <div class="settings-item" id="toggle-view"><span class="settings-item-icon">🔄</span>切换座位视角</div>
-        <div class="settings-item" id="toggle-dark-mode"><span class="settings-item-icon">☀️</span>切换暗黑模式</div>
+        <div class="settings-item" id="open-display-prefs"><span class="settings-item-icon">🎛️</span>显示偏好配置</div>
         
         <div class="settings-group-title">点名管理</div>
         <div class="settings-item" id="clear-record"><span class="settings-item-icon">🗑️</span>清空点名记录</div>
@@ -1987,11 +2292,19 @@
     <div id="intro-modal" class="intro-modal">
         <div class="intro-modal-box">
             <div class="intro-modal-header">
-                <span id="intro-modal-title" class="intro-modal-title"></span>
+                <div class="intro-modal-header-left">
+                    <span id="intro-modal-title" class="intro-modal-title"></span>
+                </div>
+                <div id="intro-modal-photo" class="intro-modal-header-photo" style="display:none">
+                    <img id="intro-modal-photo-img" src="" alt="">
+                </div>
                 <span onclick="closeIntroModal()" class="intro-modal-close">✕</span>
             </div>
             <div class="intro-modal-body">
-                <textarea id="intro-modal-text" readonly class="intro-modal-textarea"></textarea>
+                <div style="font-size:.75em;color:rgba(255,255,255,.4);margin-bottom:4px;letter-spacing:.5px">📖 介绍</div>
+                <textarea id="intro-modal-text" readonly class="intro-modal-textarea" placeholder="暂无介绍"></textarea>
+                <div style="font-size:.75em;color:rgba(255,255,255,.4);margin-top:10px;margin-bottom:4px;letter-spacing:.5px">📝 备注</div>
+                <textarea id="intro-modal-note" readonly class="intro-modal-textarea" placeholder="暂无备注"></textarea>
             </div>
             <div class="intro-modal-footer">
                 <span id="intro-call-count"
@@ -2000,6 +2313,57 @@
                 <button id="intro-save-btn" onclick="saveIntroEdit()" class="intro-btn intro-btn-save"
                     style="display:none">💾 保存</button>
                 <button onclick="closeIntroModal()" class="intro-btn intro-btn-close">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 显示偏好配置弹窗 -->
+    <div class="custom-dialog-overlay" id="displayPrefsOverlay">
+        <div class="custom-dialog-box" style="max-width:440px">
+            <div class="custom-dialog-header">
+                <span class="custom-dialog-header-title">🎛️ 显示偏好配置</span>
+            </div>
+            <div class="custom-dialog-msg" style="text-align:left;padding:4px 20px 12px">
+                <!-- 右上角被点次数 -->
+                <div class="dp-row">
+                    <span class="dp-label">右上角被点次数</span>
+                    <label class="dp-radio"><input type="radio" name="dp-count" value="0"> 不显示</label>
+                    <label class="dp-radio"><input type="radio" name="dp-count" value="1"> 显示</label>
+                </div>
+                <!-- 班委名字打标记 -->
+                <div class="dp-row">
+                    <span class="dp-label">班委名字打标记</span>
+                    <label class="dp-radio"><input type="radio" name="dp-committee" value="0"> 不显示</label>
+                    <label class="dp-radio"><input type="radio" name="dp-committee" value="1"> 显示</label>
+                </div>
+                <!-- 小组成员背景色 -->
+                <div class="dp-row">
+                    <span class="dp-label">小组成员背景色</span>
+                    <label class="dp-radio"><input type="radio" name="dp-group" value="0"> 不显示</label>
+                    <label class="dp-radio"><input type="radio" name="dp-group" value="1"> 显示</label>
+                </div>
+                <!-- 点名时学生介绍 -->
+                <div class="dp-row">
+                    <span class="dp-label">点名时学生介绍</span>
+                    <label class="dp-radio"><input type="radio" name="dp-intro" value="0"> 不显示</label>
+                    <label class="dp-radio"><input type="radio" name="dp-intro" value="1"> 显示</label>
+                </div>
+                <!-- 座位图展示视角 -->
+                <div class="dp-row">
+                    <span class="dp-label">座位图展示视角</span>
+                    <label class="dp-radio"><input type="radio" name="dp-view" value="teacher"> 讲师</label>
+                    <label class="dp-radio"><input type="radio" name="dp-view" value="student"> 学生</label>
+                </div>
+                <!-- 应用界面主题色 -->
+                <div class="dp-row">
+                    <span class="dp-label">应用界面主题色</span>
+                    <label class="dp-radio"><input type="radio" name="dp-theme" value="0"> 深蓝</label>
+                    <label class="dp-radio"><input type="radio" name="dp-theme" value="1"> 暗黑</label>
+                </div>
+            </div>
+            <div class="custom-dialog-footer">
+                <button class="custom-dialog-btn" onclick="cancelDisplayPrefs()">取消</button>
+                <button class="custom-dialog-btn primary" onclick="saveDisplayPrefs()">保存</button>
             </div>
         </div>
     </div>
@@ -2057,7 +2421,7 @@
                         </div>
                         <div class="ins-row">
                             <span class="ins-key">🖱️ 右键座位</span>
-                            <span class="ins-val">弹出菜单，可查看或编辑该学生的介绍 / 备注</span>
+                            <span class="ins-val">弹出菜单，可查看或编辑该学生的介绍 / 备注；备注仅老师可见，有备注的座位左上角显示红点</span>
                         </div>
                     </div>
                 </div>
@@ -2067,8 +2431,12 @@
                     <div class="ins-card">
                         <div class="ins-card-title">🎨 显示偏好</div>
                         <div class="ins-row">
+                            <span class="ins-key">🎛️ 打开方式</span>
+                            <span class="ins-val">⚙️ → 显示偏好配置，在弹窗中统一管理所有显示选项，修改后实时生效并自动记住偏好</span>
+                        </div>
+                        <div class="ins-row">
                             <span class="ins-key">🔢 被点次数</span>
-                            <span class="ins-val">开启后座位右上角显示累计被点次数，再次点击可隐藏</span>
+                            <span class="ins-val">开启后座位右上角显示累计被点次数</span>
                         </div>
                         <div class="ins-row">
                             <span class="ins-key">🏅 班委标记</span>
@@ -2091,11 +2459,15 @@
                         <div class="ins-card-title">📖 学生介绍</div>
                         <div class="ins-row">
                             <span class="ins-key">🔛 开启方式</span>
-                            <span class="ins-val">⚙️ → 显示学生介绍，开启后每次点名自动弹出介绍卡片</span>
+                            <span class="ins-val">⚙️ → 显示偏好配置 → 学生介绍，开启后每次点名自动弹出介绍卡片</span>
                         </div>
                         <div class="ins-row">
                             <span class="ins-key">📍 显示位置</span>
-                            <span class="ins-val">卡片出现在姓名右侧，约 20 秒后自动消失</span>
+                            <span class="ins-val">卡片出现在姓名右侧，约 20 秒后自动消失；有图片时右上角出现放大按钮，点击可居中放大查看</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">🖼️ 学生照片</span>
+                            <span class="ins-val">将照片放入 <code style="font-size:.9em;opacity:.8">student_photos/</code> 目录，文件名与学生姓名一致（如 张三.jpg），支持 jpg/png/webp 等格式，点名时自动显示</span>
                         </div>
                         <div class="ins-row">
                             <span class="ins-key">✏️ 编辑内容</span>
@@ -2150,7 +2522,7 @@
                                 </div>
                                 <div class="ins-row">
                                     <span class="ins-key">📥 导入配置</span>
-                                    <span class="ins-val">支持从之前生成的点名器 HTML 文件导入，或从 Excel 导入（Sheet1 座位表 / Sheet2 学生介绍）</span>
+                                    <span class="ins-val">支持从之前生成的点名器 HTML 文件导入，或从 Excel 导入（网页配置 / 座位表 / 学生信息）</span>
                                 </div>
                                 <div class="ins-row">
                                     <span class="ins-key">👫 小组管理</span>
@@ -2223,7 +2595,7 @@
         </div>
         <div
             style="margin-top:56px;margin-bottom:48px;font-size:.72em;color:rgba(255,255,255,.25);text-align:center;letter-spacing:1px">
-            智能课堂点名器 v1.3 &nbsp;·&nbsp; © 2026 helloaider &nbsp;·&nbsp;
+            智能课堂点名器 v1.4 &nbsp;·&nbsp; © 2026 helloaider &nbsp;·&nbsp;
             <a href="https://github.com/helloaider/smart-roll-call" target="_blank"
                 style="color:rgba(255,255,255,.3);text-decoration:none"
                 onmouseover="this.style.color='rgba(255,255,255,.6)'"
@@ -2607,7 +2979,8 @@
                 "学生19": "示例：这里填写学生的姓名典故或个人介绍，点名后将在姓名右侧弹出展示，30秒后自动消失。",
                 "学生20": "示例：可以写学生的特长、兴趣爱好，或者名字的由来与含义，帮助老师快速了解每位同学。",
                 "学生21": "示例：也可以写一句激励的话，比如——志存高远，脚踏实地，每一步都算数。"
-            }
+            },
+            "notes": {}
         }
 
         // ===================== 座位渲染 =====================
@@ -2739,11 +3112,17 @@
                 var saved = localStorage.getItem('index_config');
                 if (saved) {
                     var cfg = JSON.parse(saved);
+                    if (cfg) {
+                        // intros/notes 无论是否有 seats 都恢复
+                        if (cfg.intros) CLASS_CONFIG.intros = cfg.intros;
+                        if (cfg.notes)  CLASS_CONFIG.notes  = cfg.notes;
+                    }
                     if (cfg && cfg.seats) {
                         CLASS_CONFIG.title = cfg.title || CLASS_CONFIG.title;
                         CLASS_CONFIG.slogan = cfg.slogan || CLASS_CONFIG.slogan;
                         CLASS_CONFIG.seats = cfg.seats;
                         CLASS_CONFIG.intros = cfg.intros || CLASS_CONFIG.intros;
+                        CLASS_CONFIG.notes = cfg.notes || CLASS_CONFIG.notes || {};
                         CLASS_CONFIG.groups = cfg.groups || CLASS_CONFIG.groups || [];
                         if (cfg.pageTitle) {
                             document.title = cfg.pageTitle;
@@ -2789,14 +3168,14 @@
         const teacherView = document.getElementById('seat-table');
         const settingsBtn = document.querySelector('.settings-btn');
         const settingsPanel = document.querySelector('.settings-panel');
-        const toggleViewBtn = document.getElementById('toggle-view');
-        const toggleDarkModeBtn = document.getElementById('toggle-dark-mode');
-        const toggleClassCommitteeBtn = document.getElementById('toggle-class-committee');
-        const toggleGroupBgBtn = document.getElementById('toggle-group-bg');
+        const toggleViewBtn = null;       // 已移入显示偏好配置弹窗
+        const toggleDarkModeBtn = null;   // 已移入显示偏好配置弹窗
+        const toggleClassCommitteeBtn = null; // 已移入显示偏好配置弹窗
+        const toggleGroupBgBtn = null;    // 已移入显示偏好配置弹窗
         const clearRecordBtn = document.getElementById('clear-record');
         const exportLogBtn = document.getElementById('export-log');
         const importLogBtn = document.getElementById('import-log');
-        const toggleRecordVisibilityBtn = document.getElementById('toggle-record-visibility');
+        const toggleRecordVisibilityBtn = null; // 已移入显示偏好配置弹窗
         const viewInstructionBtn = document.getElementById('view-instruction');
         const instructionModal = document.getElementById('instructionModal');
         const closeInstructionBtn = document.getElementById('closeInstructionBtn');
@@ -2912,9 +3291,12 @@
          */
         function updateRecordVisibilityUI() {
             seatingChart.classList.toggle('hide-record', false); // 不再灰显
-            toggleRecordVisibilityBtn.innerHTML = isShowCount
-                ? '<span class="settings-item-icon">🙈</span>隐藏被点次数'
-                : '<span class="settings-item-icon">🔢</span>显示被点次数';
+            // 同步弹窗单选状态
+            syncDisplayPrefsUI();
+            // 更新角标显示
+            document.querySelectorAll('.td-count-badge').forEach(el => {
+                el.style.display = isShowCount ? '' : 'none';
+            });
             // 控制所有座位角标的显示/隐藏
             document.querySelectorAll('.td-count-badge').forEach(el => {
                 el.style.display = isShowCount ? '' : 'none';
@@ -2927,9 +3309,7 @@
         function updateDarkModeUI() {
             document.body.classList.toggle('dark-mode', isDarkMode);
             document.documentElement.classList.toggle('dark-mode-pre', isDarkMode);
-            toggleDarkModeBtn.innerHTML = isDarkMode
-                ? '<span class="settings-item-icon">🌙</span>切换深蓝模式'
-                : '<span class="settings-item-icon">☀️</span>切换暗黑模式';
+            syncDisplayPrefsUI();
         }
 
         /**
@@ -2937,9 +3317,7 @@
          */
         function updateClassCommitteeUI() {
             document.body.classList.toggle('show-committee', isShowCommittee);
-            toggleClassCommitteeBtn.innerHTML = isShowCommittee
-                ? '<span class="settings-item-icon">🎖️</span>隐藏班委标记'
-                : '<span class="settings-item-icon">🏅</span>显示班委标记';
+            syncDisplayPrefsUI();
         }
 
         // ===================== 核心功能方法 =====================
@@ -3234,10 +3612,12 @@
                 renderSeats();
                 initSeatEvents(); // 重新绑定座位事件
                 restoreCountBadges(); // 恢复次数角标
+                restoreNoteDots();    // 恢复备注红点
             }
-            toggleGroupBgBtn.innerHTML = isShowGroup
+            if (toggleGroupBgBtn) toggleGroupBgBtn.innerHTML = isShowGroup
                 ? '<span class="settings-item-icon">🎨</span>隐藏小组背景'
                 : '<span class="settings-item-icon">🎨</span>显示小组背景';
+            syncDisplayPrefsUI();
         }
 
         function toggleGroupBg() {
@@ -3261,7 +3641,7 @@
                 : '<span class="settings-item-icon">💬</span>显示学生介绍';
             const el = document.getElementById('intro-display');
             if (el) {
-                if (isShowIntro && el.innerHTML) el.classList.add('visible');
+                if (isShowIntro && el.querySelector('.intro-header')) el.classList.add('visible');
                 else el.classList.remove('visible');
             }
         }
@@ -3272,30 +3652,117 @@
         function showIntro(name) {
             const el = document.getElementById('intro-display');
             if (!el) return;
-            el.classList.remove('visible');
+            el.classList.remove('visible', 'text-only', 'photo-only', 'expanded');
             if (introTimer) { clearTimeout(introTimer); introTimer = null; }
             if (introTypeTimer) { clearInterval(introTypeTimer); introTypeTimer = null; }
-            const text = CLASS_CONFIG.intros[name];
-            if (text) {
-                // 先渲染标题，正文容器留空等打字机填入
-                el.innerHTML = `<div class="intro-name">${name}</div><div class="intro-text"></div>`;
-                if (isShowIntro) {
-                    const nameBox = document.getElementById('name-display').getBoundingClientRect();
-                    const cardWidth = 460;
-                    const cardHeight = 130;
-                    const margin = 20;
-                    let left = nameBox.right + margin;
-                    if (left + cardWidth > window.innerWidth - 10) {
-                        left = Math.max(10, nameBox.left - cardWidth - margin);
-                    }
-                    // 卡片垂直居中对齐名字
-                    const top = nameBox.top + nameBox.height / 2 - cardHeight / 2;
-                    el.style.left = left + 'px';
-                    el.style.top = top + 'px';
-                    el.style.transform = '';
-                    el.classList.add('visible');
 
-                    // 打字机逐字输出
+            const text = CLASS_CONFIG.intros ? CLASS_CONFIG.intros[name] : '';
+            // 尝试常见图片扩展名，先找 student_photos/，找不到再找 student_photos/test_photos/
+            const exts = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+            const photoBases = ['./student_photos/', './student_photos/test_photos/'];
+
+            function buildCard(photoSrc) {                const hasText = !!(text && text.trim());
+                const hasPhoto = !!photoSrc;
+                if (!hasText && !hasPhoto) { el.innerHTML = ''; return; }
+
+                // 确定布局模式
+                if (hasPhoto && !hasText) el.classList.add('photo-only');
+                else if (!hasPhoto && hasText) el.classList.add('text-only');
+
+                // 构建 HTML
+                const photoHtml = hasPhoto
+                    ? `<div class="intro-photo"><img src="${photoSrc}" alt="${name}"></div>`
+                    : '';
+                const textHtml = hasText
+                    ? `<div class="intro-text"></div>`
+                    : '';
+
+                el.innerHTML = `
+                    <div class="intro-header"><span class="intro-name">${name}</span>${hasPhoto ? '<span class="intro-expand-btn" title="放大/还原">⛶</span>' : ''}</div>
+                    <div class="intro-body">${photoHtml}${textHtml}</div>`;
+
+                if (!isShowIntro) return;
+
+                // 有图片时，等图片加载后按实际高度设置 body 高度（最大 2寸=190px+padding）
+                const PHOTO_PADDING_V = 16; // 上下各8px
+                const MAX_BODY_H = 190 + PHOTO_PADDING_V; // 206px
+                const EXPAND_MAX_BODY_H = 190 + 32;       // 放大模式上下各16px
+
+                function applyBodyHeight() {
+                    const body = el.querySelector('.intro-body');
+                    const img = el.querySelector('.intro-photo img');
+                    if (!body) return;
+                    if (img && hasPhoto) {
+                        const imgH = img.naturalHeight && img.naturalWidth
+                            ? Math.min(img.offsetHeight, 75) + PHOTO_PADDING_V
+                            : MAX_BODY_H;
+                        const clampedH = Math.min(imgH, MAX_BODY_H);
+                        body.style.height = clampedH + 'px';
+                        body.style.maxHeight = MAX_BODY_H + 'px';
+                        // 文字区同步
+                        const textEl = body.querySelector('.intro-text');
+                        if (textEl) textEl.style.maxHeight = clampedH + 'px';
+                    }
+                }
+
+                // 定位卡片
+                const nameBox = document.getElementById('name-display').getBoundingClientRect();
+                const cardWidth = 460;
+                const cardHeight = 130;
+                const margin = 20;
+                let left = nameBox.right + margin;
+                if (left + cardWidth > window.innerWidth - 10) {
+                    left = Math.max(10, nameBox.left - cardWidth - margin);
+                }
+                const top = nameBox.top + nameBox.height / 2 - cardHeight / 2;
+                el.style.left = left + 'px';
+                el.style.top = top + 'px';
+                el.style.transform = '';
+                el.classList.add('visible');
+
+                // 图片加载完成后设置高度
+                if (hasPhoto) {
+                    const imgEl = el.querySelector('.intro-photo img');
+                    if (imgEl && imgEl.complete) {
+                        applyBodyHeight();
+                    } else if (imgEl) {
+                        imgEl.onload = applyBodyHeight;
+                    }
+                }
+
+                // 绑定放大按钮
+                const expandBtn = el.querySelector('.intro-expand-btn');
+                if (expandBtn) {
+                    expandBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        const isExpanded = el.classList.toggle('expanded');
+                        expandBtn.title = isExpanded ? '还原' : '放大/还原';
+                        expandBtn.textContent = isExpanded ? '⊠' : '⛶';
+                        if (isExpanded) {
+                            // 放大时固定body高度250px，图片按比例缩放到218px高
+                            const body = el.querySelector('.intro-body');
+                            if (body) {
+                                body.style.height = '250px';
+                                body.style.maxHeight = '250px';
+                                const textEl = body.querySelector('.intro-text');
+                                if (textEl) textEl.style.maxHeight = '250px';
+                            }
+                        } else {
+                            // 还原时重置高度并重新定位
+                            const body = el.querySelector('.intro-body');
+                            if (body) { body.style.height = ''; body.style.maxHeight = ''; }
+                            applyBodyHeight();
+                            const nb = document.getElementById('name-display').getBoundingClientRect();
+                            let l = nb.right + margin;
+                            if (l + cardWidth > window.innerWidth - 10) l = Math.max(10, nb.left - cardWidth - margin);
+                            el.style.left = l + 'px';
+                            el.style.top = (nb.top + nb.height / 2 - cardHeight / 2) + 'px';
+                        }
+                    };
+                }
+
+                // 打字机逐字输出文字
+                if (hasText) {
                     const textEl = el.querySelector('.intro-text');
                     let i = 0;
                     introTypeTimer = setInterval(() => {
@@ -3306,19 +3773,37 @@
                             introTypeTimer = null;
                         }
                     }, 40);
-
-                    introTimer = setTimeout(() => clearIntro(), 20000);
                 }
-            } else {
-                el.innerHTML = '';
+
+                introTimer = setTimeout(() => clearIntro(), 20000);
             }
+
+            // 依次尝试各目录和扩展名，找到第一个可用的图片
+            function tryNextExt(bi, ei) {
+                if (bi >= photoBases.length) {
+                    // 所有目录都找不到，只用文字
+                    buildCard(null);
+                    return;
+                }
+                if (ei >= exts.length) {
+                    tryNextExt(bi + 1, 0);
+                    return;
+                }
+                const src = photoBases[bi] + name + '.' + exts[ei];
+                const img = new Image();
+                img.onload = () => buildCard(src);
+                img.onerror = () => tryNextExt(bi, ei + 1);
+                img.src = src;
+            }
+
+            tryNextExt(0, 0);
         }
 
         function clearIntro() {
             const el = document.getElementById('intro-display');
             if (!el) return;
             el.innerHTML = '';
-            el.classList.remove('visible');
+            el.classList.remove('visible', 'expanded');
             if (introTimer) { clearTimeout(introTimer); introTimer = null; }
             if (introTypeTimer) { clearInterval(introTypeTimer); introTypeTimer = null; }
         }
@@ -3419,6 +3904,7 @@
                         return { type: 'empty', name: '', role: 'normal' };
                     })),
                     intros: CLASS_CONFIG.intros || {},
+                    notes: CLASS_CONFIG.notes || {},
                     groups: (CLASS_CONFIG.groups || []).map(g => ({
                         id: g.id,
                         name: g.name,
@@ -3435,6 +3921,98 @@
                 }
             });
         }
+
+        /**
+         * 显示偏好配置弹窗
+         */
+        // 打开时的状态快照，用于取消还原
+        let _dpSnapshot = null;
+
+        function syncDisplayPrefsUI() {
+            const overlay = document.getElementById('displayPrefsOverlay');
+            if (!overlay) return;
+            const setRadio = (name, val) => {
+                overlay.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+                    r.checked = (r.value === String(val));
+                });
+            };
+            setRadio('dp-count',     isShowCount     ? '1' : '0');
+            setRadio('dp-committee', isShowCommittee ? '1' : '0');
+            setRadio('dp-group',     isShowGroup     ? '1' : '0');
+            setRadio('dp-intro',     isShowIntro     ? '1' : '0');
+            setRadio('dp-view',      isTeacher ? 'teacher' : 'student');
+            setRadio('dp-theme',     isDarkMode ? '1' : '0');
+        }
+
+        function openDisplayPrefs() {
+            closeSettingsPanel();
+            // 记录快照
+            _dpSnapshot = {
+                isShowCount, isShowCommittee, isShowGroup,
+                isShowIntro, isTeacher, isDarkMode
+            };
+            syncDisplayPrefsUI();
+            const overlay = document.getElementById('displayPrefsOverlay');
+            // 跟随当前主题
+            const box = overlay.querySelector('.custom-dialog-box');
+            if (box) box.classList.toggle('dp-dark', isDarkMode);
+            overlay.classList.add('show');
+
+            // 单选变化立即生效（预览），但不持久化
+            overlay.querySelectorAll('input[type=radio]').forEach(r => {
+                r.onchange = function() {
+                    const name = this.name, val = this.value;
+                    if (name === 'dp-count') {
+                        const want = val === '1';
+                        if (want !== isShowCount) { isShowCount = want; restoreCountBadges(); updateRecordVisibilityUI(); }
+                    } else if (name === 'dp-committee') {
+                        const want = val === '1';
+                        if (want !== isShowCommittee) { isShowCommittee = want; updateClassCommitteeUI(); }
+                    } else if (name === 'dp-group') {
+                        const want = val === '1';
+                        if (want !== isShowGroup) { isShowGroup = want; updateGroupBgUI(); }
+                    } else if (name === 'dp-intro') {
+                        const want = val === '1';
+                        if (want !== isShowIntro) { isShowIntro = want; updateIntroUI(); }
+                    } else if (name === 'dp-view') {
+                        const wantTeacher = val === 'teacher';
+                        if (wantTeacher !== isTeacher) toggleView();
+                    } else if (name === 'dp-theme') {
+                        const wantDark = val === '1';
+                        if (wantDark !== isDarkMode) { isDarkMode = wantDark; updateDarkModeUI(); refreshUI(); }
+                    }
+                };
+            });
+        }
+
+        function saveDisplayPrefs() {
+            // 持久化当前状态
+            save();
+            _dpSnapshot = null;
+            document.getElementById('displayPrefsOverlay').classList.remove('show');
+        }
+
+        function cancelDisplayPrefs() {
+            if (!_dpSnapshot) {
+                document.getElementById('displayPrefsOverlay').classList.remove('show');
+                return;
+            }
+            // 还原快照
+            const s = _dpSnapshot;
+            if (isShowCount     !== s.isShowCount)     { isShowCount     = s.isShowCount;     restoreCountBadges(); updateRecordVisibilityUI(); }
+            if (isShowCommittee !== s.isShowCommittee) { isShowCommittee = s.isShowCommittee; updateClassCommitteeUI(); }
+            if (isShowGroup     !== s.isShowGroup)     { isShowGroup     = s.isShowGroup;     updateGroupBgUI(); }
+            if (isShowIntro     !== s.isShowIntro)     { isShowIntro     = s.isShowIntro;     updateIntroUI(); }
+            if (isTeacher       !== s.isTeacher)       toggleView();
+            if (isDarkMode      !== s.isDarkMode)      { isDarkMode      = s.isDarkMode;      updateDarkModeUI(); refreshUI(); }
+            _dpSnapshot = null;
+            document.getElementById('displayPrefsOverlay').classList.remove('show');
+        }
+
+        // 点击遮罩视为取消
+        document.getElementById('displayPrefsOverlay').addEventListener('click', function(e) {
+            if (e.target === this) cancelDisplayPrefs();
+        });
 
         /**
          * 打开使用说明
@@ -3481,6 +4059,20 @@
                 }
                 setBadgeCount(tdBadge, n);
                 tdBadge.style.display = isShowCount ? '' : 'none';
+            });
+        }
+
+        function restoreNoteDots() {
+            // 先清除所有旧红点
+            document.querySelectorAll('.td-note-dot').forEach(el => el.remove());
+            const notes = CLASS_CONFIG.notes || {};
+            Object.keys(notes).forEach(name => {
+                if (!notes[name]) return;
+                const td = document.getElementById(name);
+                if (!td) return;
+                const dot = document.createElement('span');
+                dot.className = 'td-note-dot';
+                td.appendChild(dot);
             });
         }
 
@@ -3574,14 +4166,13 @@
                 const filteredCnt = {};
                 filteredLogs.forEach(r => { filteredCnt[r.name] = (filteredCnt[r.name] || 0) + 1; });
                 const sortedRows = allNames
-                    .map(n => ({ name: n, count: filteredCnt[n] || 0, note: (CLASS_CONFIG.intros[n] || '').replace(/\n/g, ' ') }))
+                    .map(n => ({ name: n, count: filteredCnt[n] || 0, note: (CLASS_CONFIG.notes[n] || '').replace(/\n/g, ' ') }))
                     .sort((a, b) => b.count - a.count);
 
                 const countRows = [
                     [`${title}·点名统计`],
                     [`统计范围：${rangeDisplay}`],
                     [`导出时间：${exportTime}`],
-                    [],
                     ['序号', '姓名', '点名次数', '备注']
                 ];
                 sortedRows.forEach((r, i) => countRows.push([i + 1, r.name, r.count, r.note || '']));
@@ -3591,7 +4182,6 @@
                     [`${title}·点名记录`],
                     [`统计范围：${rangeDisplay}`],
                     [`导出时间：${exportTime}`],
-                    [],
                     ['序号', '姓名', '点名时间']
                 ];
                 [...filteredLogs]
@@ -3865,7 +4455,6 @@
                 var logRows = [
                     [title + '·点名记录'],
                     ['导出时间：' + exportTime],
-                    [],
                     ['序号', '姓名', '点名时间']
                 ];
                 logs.forEach(function(r, i) {
@@ -3885,7 +4474,34 @@
                     { s:{r:1,c:0}, e:{r:1,c:2} }
                 ];
 
-                // ── Sheet2: 座位表 ──
+                // ── Sheet2: 网页配置 ──
+                var savedPageTitle2 = '智能课堂点名器';
+                var savedFaviconLog = '';
+                try {
+                    var saved2 = localStorage.getItem('index_config');
+                    if (saved2) {
+                        var cfg2 = JSON.parse(saved2);
+                        if (cfg2.pageTitle) savedPageTitle2 = cfg2.pageTitle;
+                        if (cfg2.favicon) savedFaviconLog = cfg2.favicon;
+                    }
+                } catch(e2) {}
+                if (CLASS_CONFIG.pageTitle) savedPageTitle2 = CLASS_CONFIG.pageTitle;
+                // favicon 从当前页面 <link rel="icon"> 读取（仅 data: 内嵌格式）
+                if (!savedFaviconLog) {
+                    var iconLink2 = document.querySelector('link[rel="icon"]');
+                    if (iconLink2 && iconLink2.href && iconLink2.href.startsWith('data:')) {
+                        savedFaviconLog = iconLink2.href;
+                    }
+                }
+                var cfgSheetData = [
+                    ['页面配置'],
+                    ['网页标题（根据你的需求改）', savedPageTitle2],
+                    ['选项卡图标（把logo.png图片粘贴到这里，没有则空着）']
+                ];
+                var wsCfg = XLSX.utils.aoa_to_sheet(cfgSheetData);
+                wsCfg['!cols'] = [{ wch: 52 }, { wch: 30 }];
+
+                // ── Sheet3: 座位表 ──
                 var seats = CLASS_CONFIG.seats || [];
                 var numRows2 = seats.length;
                 var numCols = seats.reduce(function(m, r){ return Math.max(m, r ? r.length : 0); }, 0);
@@ -3992,66 +4608,355 @@
 
                 // ── Sheet3: 学生介绍 ──
                 var intros = CLASS_CONFIG.intros || {};
-                var introData = [['姓名', '介绍/典故/备注信息']];
+                var notes = CLASS_CONFIG.notes || {};
+                var introData = [['姓名', '备注', '学生介绍/姓名典故信息']];
                 var introNames = new Set();
                 seats.forEach(function(row) {
                     if (!row) return;
                     row.forEach(function(cell) {
                         if (cell && cell.name && cell.name.trim()) {
                             var n = cell.name.trim();
-                            if (!introNames.has(n)) { introNames.add(n); introData.push([n, intros[n] || '']); }
+                            if (!introNames.has(n)) { introNames.add(n); introData.push([n, notes[n] || '', intros[n] || '']); }
                         }
                     });
                 });
                 Object.keys(intros).forEach(function(n) {
-                    if (!introNames.has(n)) introData.push([n, intros[n] || '']);
+                    if (!introNames.has(n)) introData.push([n, notes[n] || '', intros[n] || '']);
                 });
                 var ws3 = XLSX.utils.aoa_to_sheet(introData);
-                ws3['!cols'] = [{ wch: 12 }, { wch: 40 }];
+                ws3['!cols'] = [{ wch: 12 }, { wch: 30 }, { wch: 40 }];
 
                 var wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws1, '点名记录');
+                XLSX.utils.book_append_sheet(wb, wsCfg, '网页配置');
                 XLSX.utils.book_append_sheet(wb, ws2, '座位表');
-                XLSX.utils.book_append_sheet(wb, ws3, '学生介绍');
+                XLSX.utils.book_append_sheet(wb, ws3, '学生信息(非必填)');
 
                 var datePart = now.getFullYear() + String(now.getMonth()+1).padStart(2,'0') + String(now.getDate()).padStart(2,'0');
                 var filename = '点名记录-' + title + '-' + datePart + '.xlsx';
                 var xlsxBuf = XLSX.write(wb, { type: 'array', bookType: 'xlsx' });
 
-                // 计算座位表（sheet2）需要居中的单元格地址
-                function colName2(ci) {
-                    var col = '', n = ci + 1;
-                    while (n > 0) { n--; col = String.fromCharCode(65 + (n % 26)) + col; n = Math.floor(n / 26); }
+                // ── 构建姓名→颜色hex映射（与 builder 一致）──
+                var LOG_GROUP_COLORS = [
+                    { key: 'blue',   light: 'rgba(140,221,250,0.20)', swatch: '#8CDDFA' },
+                    { key: 'green',  light: 'rgba(134,239,172,0.18)', swatch: '#86EFAC' },
+                    { key: 'orange', light: 'rgba(253,186,116,0.20)', swatch: '#FDBA74' },
+                    { key: 'pink',   light: 'rgba(249,168,212,0.20)', swatch: '#F9A8D4' },
+                    { key: 'purple', light: 'rgba(216,180,254,0.20)', swatch: '#D8B4FE' },
+                    { key: 'cyan',   light: 'rgba(251,191,36,0.20)',  swatch: '#F59E0B' },
+                    { key: 'yellow', light: 'rgba(254,240,138,0.20)', swatch: '#FEF08A' },
+                    { key: 'mint',   light: 'rgba(45,212,191,0.20)',  swatch: '#2DD4BF' },
+                    { key: 'red',    light: 'rgba(252,165,165,0.20)', swatch: '#FCA5A5' },
+                    { key: 'indigo', light: 'rgba(99,102,241,0.20)',  swatch: '#6366F1' },
+                ];
+                function _logGetSwatchHex(lightColor) {
+                    if (!lightColor) return '8CDDFA';
+                    // 已经是 key
+                    for (var _i = 0; _i < LOG_GROUP_COLORS.length; _i++) {
+                        if (LOG_GROUP_COLORS[_i].key === lightColor) return LOG_GROUP_COLORS[_i].swatch.replace('#','').toUpperCase();
+                    }
+                    // 是 rgba 字符串，找最接近的
+                    for (var _i = 0; _i < LOG_GROUP_COLORS.length; _i++) {
+                        if (LOG_GROUP_COLORS[_i].light === lightColor) return LOG_GROUP_COLORS[_i].swatch.replace('#','').toUpperCase();
+                    }
+                    // 兜底：取 rgba 里的 rgb 分量做近似匹配
+                    var bestKey = 'blue', bestDist = Infinity;
+                    var rm = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(lightColor);
+                    if (rm) {
+                        var tr = parseInt(rm[1]), tg = parseInt(rm[2]), tb = parseInt(rm[3]);
+                        LOG_GROUP_COLORS.forEach(function(c) {
+                            var h = c.swatch.replace('#','');
+                            var cr = parseInt(h.slice(0,2),16), cg = parseInt(h.slice(2,4),16), cb = parseInt(h.slice(4,6),16);
+                            var d = Math.abs(tr-cr)+Math.abs(tg-cg)+Math.abs(tb-cb);
+                            if (d < bestDist) { bestDist = d; bestKey = c.key; }
+                        });
+                    }
+                    for (var _i = 0; _i < LOG_GROUP_COLORS.length; _i++) {
+                        if (LOG_GROUP_COLORS[_i].key === bestKey) return LOG_GROUP_COLORS[_i].swatch.replace('#','').toUpperCase();
+                    }
+                    return '8CDDFA';
+                }
+                var nameToColorLog = {};
+                // index.html 里 groups.members 为空，成员关系存在 seats 的 cell.group（group id）里
+                var groupColorMap = {};
+                (CLASS_CONFIG.groups || []).forEach(function(g) {
+                    groupColorMap[g.id] = _logGetSwatchHex(g.lightColor || g.color || 'blue');
+                });
+                (CLASS_CONFIG.seats || []).forEach(function(row) {
+                    (row || []).forEach(function(cell) {
+                        if (cell && cell.name && cell.name.trim() && cell.group && groupColorMap[cell.group]) {
+                            nameToColorLog[cell.name.trim()] = groupColorMap[cell.group];
+                        }
+                    });
+                });
+
+                // ── 注入背景色+居中样式（与 builder._injectXlsxColors 一致）──
+                _injectCallLogColors(xlsxBuf, rows2, nameToColorLog, numCols, numRows2, CLASS_CONFIG.slogan, aisleFullCols2, title, filename, wb, savedFaviconLog);
+            });
+        }
+
+        // ── 点名记录导出：注入座位表背景色+居中样式（与 builder._injectXlsxColors 逻辑一致）──
+        async function _injectCallLogColors(xlsxBuf, rows2, nameToColor, numCols, numRows2, slogan, aisleFullCols2, title, filename, wb, faviconDataUrl) {
+            try {
+                var bytes = new Uint8Array(xlsxBuf);
+                function u16(b,o){ return b[o]|(b[o+1]<<8); }
+                function u32(b,o){ return (b[o]|(b[o+1]<<8)|(b[o+2]<<16)|(b[o+3]<<24))>>>0; }
+                function w16(b,o,v){ b[o]=v&0xff; b[o+1]=(v>>8)&0xff; }
+                function w32(b,o,v){ b[o]=v&0xff; b[o+1]=(v>>8)&0xff; b[o+2]=(v>>16)&0xff; b[o+3]=(v>>24)&0xff; }
+
+                // 1. 解析 zip entries
+                var entries = [];
+                var pos = 0;
+                while (pos < bytes.length - 30) {
+                    if (bytes[pos]===0x50&&bytes[pos+1]===0x4B&&bytes[pos+2]===0x03&&bytes[pos+3]===0x04) {
+                        var comp=u16(bytes,pos+8), crc=u32(bytes,pos+14), csz=u32(bytes,pos+18), usz=u32(bytes,pos+22);
+                        var fnLen=u16(bytes,pos+26), exLen=u16(bytes,pos+28);
+                        var fname=new TextDecoder().decode(bytes.slice(pos+30,pos+30+fnLen));
+                        var dstart=pos+30+fnLen+exLen;
+                        entries.push({ fname:fname, comp:comp, crc:crc, csz:csz, usz:usz,
+                            fnLen:fnLen, extra:bytes.slice(pos+30+fnLen,dstart),
+                            data:bytes.slice(dstart,dstart+csz), headerStart:pos });
+                        pos = dstart + (csz||1);
+                    } else { pos++; }
+                }
+
+                async function decode(entry) {
+                    if (entry.comp === 0) return new TextDecoder().decode(entry.data);
+                    return new TextDecoder().decode(await _zlibInflate(entry.data));
+                }
+
+                // 座位表是第3个 sheet（index=2，sheetNum=3）
+                // wb.SheetNames: [点名记录, 网页配置, 座位表, 学生信息]
+                var seatSheetNum = wb.SheetNames.indexOf('座位表') + 1;
+                if (seatSheetNum <= 0) seatSheetNum = 3;
+
+                var stylesEntry = entries.find(function(e){ return e.fname==='xl/styles.xml'; });
+                var seatSheetEntry = entries.find(function(e){ return e.fname==='xl/worksheets/sheet'+seatSheetNum+'.xml'; });
+                if (!stylesEntry || !seatSheetEntry) { _fallbackDownload(xlsxBuf, filename); return; }
+
+                var stylesXml = await decode(stylesEntry);
+                var seatSheetXml = await decode(seatSheetEntry);
+
+                // 2. 构建 styles：追加颜色 fill + xf
+                var colorSet = [];
+                Object.keys(nameToColor).forEach(function(n) {
+                    var c = nameToColor[n];
+                    if (colorSet.indexOf(c) < 0) colorSet.push(c);
+                });
+
+                var existingFills = (stylesXml.match(/<fill[\s\S]*?<\/fill>/g)||[]).length;
+                var newFillsXml = colorSet.map(function(hex) {
+                    return '<fill><patternFill patternType="solid"><fgColor rgb="FF'+hex+'"/><bgColor indexed="64"/></patternFill></fill>';
+                }).join('');
+                var fillsCountRe = /<fills count="(\d+)">/;
+                var fcm = fillsCountRe.exec(stylesXml);
+                if (fcm) stylesXml = stylesXml.replace(fillsCountRe, '<fills count="'+(existingFills+colorSet.length)+'">');
+                stylesXml = stylesXml.replace('</fills>', newFillsXml + '</fills>');
+
+                var cxfsM = /<cellXfs[^>]*>([\s\S]*?)<\/cellXfs>/.exec(stylesXml);
+                var existingXfs = cxfsM ? (cxfsM[1].match(/<xf\b/g)||[]).length : 0;
+                var baseXfM = cxfsM ? /(<xf\b[^>]*\/>|<xf\b[^>]*>[\s\S]*?<\/xf>)/.exec(cxfsM[1]) : null;
+                var baseNumFmt='0', baseFont='0', baseBorder='0';
+                if (baseXfM) {
+                    var bx=baseXfM[1];
+                    var nm=/numFmtId="(\d+)"/.exec(bx); if(nm) baseNumFmt=nm[1];
+                    var fm2=/fontId="(\d+)"/.exec(bx);  if(fm2) baseFont=fm2[1];
+                    var bm=/borderId="(\d+)"/.exec(bx); if(bm) baseBorder=bm[1];
+                }
+                var colorToStyleIdx = {};
+                colorSet.forEach(function(hex,i){ colorToStyleIdx[hex] = existingXfs+i; });
+                var newXfsXml = colorSet.map(function(hex,i) {
+                    return '<xf numFmtId="'+baseNumFmt+'" fontId="'+baseFont+'" fillId="'+(existingFills+i)+'" borderId="'+baseBorder+'" xfId="0" applyFill="1"/>';
+                }).join('');
+                // 居中样式（无背景）
+                var centerStyleIdx = existingXfs + colorSet.length;
+                newXfsXml += '<xf numFmtId="'+baseNumFmt+'" fontId="'+baseFont+'" fillId="0" borderId="'+baseBorder+'" xfId="0" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>';
+                var xfsCountRe = /(<cellXfs[^>]*count=")(\d+)(")/;
+                var xcm = xfsCountRe.exec(stylesXml);
+                if (xcm) stylesXml = stylesXml.replace(xfsCountRe, xcm[1]+(parseInt(xcm[2])+colorSet.length+1)+xcm[3]);
+                stylesXml = stylesXml.replace('</cellXfs>', newXfsXml + '</cellXfs>');
+
+                // 3. 构建 addr→styleIdx 映射
+                function colNameL(ci) {
+                    var col='', n=ci+1;
+                    while(n>0){ n--; col=String.fromCharCode(65+(n%26))+col; n=Math.floor(n/26); }
                     return col;
                 }
-                var seatCenterAddrs = {};
-                // 标题行（row1）
-                for (var ci3 = 0; ci3 < numCols; ci3++) seatCenterAddrs[colName2(ci3) + '1'] = 'bold';
-                // 口号行
-                if (CLASS_CONFIG.slogan) {
-                    var sloganR3 = numRows2 + 2;
-                    for (var ci3 = 0; ci3 < numCols; ci3++) seatCenterAddrs[colName2(ci3) + sloganR3] = 'center';
-                }
-                // 讲台
-                for (var ri3 = 0; ri3 < numRows2; ri3++) {
-                    for (var ci3 = 0; ci3 < numCols; ci3++) {
-                        var c3 = rows2[ri3][ci3];
-                        if (c3 === 'stage' || (c3 && c3.type === 'stage')) {
-                            seatCenterAddrs[colName2(ci3) + (ri3 + 2)] = 'center';
+                var addrStyle = {};
+                // 学生背景色
+                rows2.forEach(function(row, ri) {
+                    (row||[]).forEach(function(cell, ci) {
+                        if (!cell || cell === 'aisle' || cell === 'stage') return;
+                        var isStudent = cell.name !== undefined; // {name, role, group}
+                        if (isStudent && cell.name && cell.name.trim()) {
+                            var hex = nameToColor[cell.name.trim()];
+                            if (hex) addrStyle[colNameL(ci)+(ri+2)] = colorToStyleIdx[hex];
                         }
-                    }
+                    });
+                });
+                // 标题行居中
+                for (var ci2=0; ci2<numCols; ci2++) addrStyle[colNameL(ci2)+'1'] = centerStyleIdx;
+                // 口号行居中
+                if (slogan) {
+                    var sloganR = numRows2+2;
+                    for (var ci2=0; ci2<numCols; ci2++) addrStyle[colNameL(ci2)+sloganR] = centerStyleIdx;
                 }
-                // 整列过道
-                aisleFullCols2.forEach(function(c3) {
-                    for (var ri3 = 0; ri3 <= numRows2; ri3++) {
-                        seatCenterAddrs[colName2(c3) + (ri3 + 1)] = 'center';
+                // 讲台居中
+                rows2.forEach(function(row, ri) {
+                    (row||[]).forEach(function(cell, ci) {
+                        if (cell === 'stage' || (cell && cell.type === 'stage')) {
+                            var addr = colNameL(ci)+(ri+2);
+                            if (addrStyle[addr] === undefined) addrStyle[addr] = centerStyleIdx;
+                        }
+                    });
+                });
+                // 整列过道居中
+                aisleFullCols2.forEach(function(c) {
+                    for (var ri2=0; ri2<=numRows2; ri2++) {
+                        var addr = colNameL(c)+(ri2+1);
+                        if (addrStyle[addr] === undefined) addrStyle[addr] = centerStyleIdx;
                     }
                 });
 
-                // sheet1=点名记录(index=0), sheet2=座位表(index=1), sheet3=学生介绍(index=2)
-                var introHeaderMap = { 'B1': 'center' };
-                _injectStatCenterStyle(xlsxBuf, filename, [null, seatCenterAddrs, introHeaderMap]);
-            });
+                // 4. 给座位表 sheet xml 注入 s 属性
+                seatSheetXml = seatSheetXml.replace(/<c\b([^>]*)>/g, function(match, attrs) {
+                    var addrM = /\br="([A-Z]+\d+)"/.exec(attrs);
+                    if (!addrM) return match;
+                    var sidx = addrStyle[addrM[1]];
+                    if (sidx === undefined) return match;
+                    if (/\bs="/.test(attrs)) return '<c'+attrs.replace(/\bs="[^"]*"/,'s="'+sidx+'"')+'>';
+                    return '<c'+attrs+' s="'+sidx+'">';
+                });
+
+                // 5. 重新压缩并重建 zip
+                async function repackL(entry, newText) {
+                    var newBytes = new TextEncoder().encode(newText);
+                    var compressed = await _zlibDeflate(newBytes);
+                    return { entry:entry, newData:compressed, newUsz:newBytes.length, newCrc:_crc32(newBytes) };
+                }
+                var repackMap = {};
+                repackMap[stylesEntry.fname]    = await repackL(stylesEntry, stylesXml);
+                repackMap[seatSheetEntry.fname] = await repackL(seatSheetEntry, seatSheetXml);
+
+                // ── 注入 favicon 图片到网页配置 sheet（与 builder 一致）──
+                var extraEntries = [];
+                if (faviconDataUrl && faviconDataUrl.indexOf('base64,') >= 0) {
+                    try {
+                        var b64part = faviconDataUrl.split('base64,')[1];
+                        var imgBin = Uint8Array.from(atob(b64part), function(c){ return c.charCodeAt(0); });
+                        var imgCrc = _crc32(imgBin);
+                        var logoExt = 'png';
+                        if (faviconDataUrl.indexOf('image/jpeg') >= 0 || faviconDataUrl.indexOf('image/jpg') >= 0) logoExt = 'jpg';
+                        else if (faviconDataUrl.indexOf('image/gif') >= 0) logoExt = 'gif';
+                        else if (faviconDataUrl.indexOf('image/webp') >= 0) logoExt = 'webp';
+                        var logoFname = 'xl/media/logo.' + logoExt;
+
+                        var existingMediaCount = entries.filter(function(e){ return /^xl\/media\//i.test(e.fname); }).length;
+                        var newImgRid = 'rId' + (existingMediaCount + 10);
+
+                        // 网页配置是第2个 sheet（index=1，sheetNum=2）
+                        var cfgSheetIdx = wb.SheetNames.indexOf('网页配置');
+                        if (cfgSheetIdx < 0) cfgSheetIdx = 1;
+                        var cfgSheetNum = cfgSheetIdx + 1;
+                        var cfgSheetFname = 'xl/worksheets/sheet' + cfgSheetNum + '.xml';
+                        var cfgSheetRelsFname = 'xl/worksheets/_rels/sheet' + cfgSheetNum + '.xml.rels';
+
+                        var drawingNum = entries.filter(function(e){ return /^xl\/drawings\/drawing\d+\.xml$/.test(e.fname); }).length + 1;
+                        var drawingFname = 'xl/drawings/drawing' + drawingNum + '.xml';
+                        var drawingRelsFname = 'xl/drawings/_rels/drawing' + drawingNum + '.xml.rels';
+
+                        var drawingXml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+                            + '<xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"'
+                            + ' xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"'
+                            + ' xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">'
+                            + '<xdr:twoCellAnchor editAs="oneCell">'
+                            + '<xdr:from><xdr:col>1</xdr:col><xdr:colOff>57150</xdr:colOff><xdr:row>2</xdr:row><xdr:rowOff>57150</xdr:rowOff></xdr:from>'
+                            + '<xdr:to><xdr:col>2</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>6</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:to>'
+                            + '<xdr:pic><xdr:nvPicPr><xdr:cNvPr id="2" name="logo" descr="logo"/>'
+                            + '<xdr:cNvPicPr><a:picLocks noChangeAspect="1"/></xdr:cNvPicPr></xdr:nvPicPr>'
+                            + '<xdr:blipFill><a:blip r:embed="' + newImgRid + '"/><a:stretch><a:fillRect/></a:stretch></xdr:blipFill>'
+                            + '<xdr:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="914400" cy="914400"/></a:xfrm>'
+                            + '<a:prstGeom prst="rect"><a:avLst/></a:prstGeom></xdr:spPr></xdr:pic>'
+                            + '<xdr:clientData/></xdr:twoCellAnchor></xdr:wsDr>';
+
+                        var drawingRelsXml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+                            + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+                            + '<Relationship Id="' + newImgRid + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image"'
+                            + ' Target="../media/logo.' + logoExt + '"/></Relationships>';
+
+                        var cfgSheetRelsXml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+                            + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+                            + '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing"'
+                            + ' Target="../drawings/drawing' + drawingNum + '.xml"/></Relationships>';
+
+                        // 给网页配置 sheet xml 加 <drawing r:id="rId1"/> 引用
+                        var cfgSheetEntry = entries.find(function(e){ return e.fname === cfgSheetFname; });
+                        if (cfgSheetEntry) {
+                            var cfgSheetXml = await decode(cfgSheetEntry);
+                            if (cfgSheetXml.indexOf('<drawing') < 0) {
+                                cfgSheetXml = cfgSheetXml.replace('</worksheet>', '<drawing r:id="rId1"/></worksheet>');
+                                repackMap[cfgSheetFname] = await repackL(cfgSheetEntry, cfgSheetXml);
+                            }
+                        }
+
+                        function makeRawEntryL(fname, textOrBytes) {
+                            var data = typeof textOrBytes === 'string' ? new TextEncoder().encode(textOrBytes) : textOrBytes;
+                            return { fname:fname, comp:0, crc:_crc32(data), csz:data.length, usz:data.length,
+                                     fnLen:fname.length, extra:new Uint8Array(0), data:data, headerStart:-1 };
+                        }
+                        extraEntries.push(makeRawEntryL(logoFname, imgBin));
+                        extraEntries.push(makeRawEntryL(drawingFname, drawingXml));
+                        extraEntries.push(makeRawEntryL(drawingRelsFname, drawingRelsXml));
+                        var relsExists = entries.some(function(e){ return e.fname === cfgSheetRelsFname; });
+                        if (!relsExists) {
+                            extraEntries.push(makeRawEntryL(cfgSheetRelsFname, cfgSheetRelsXml));
+                        } else {
+                            var relsBytes = new TextEncoder().encode(cfgSheetRelsXml);
+                            repackMap[cfgSheetRelsFname] = { newData:relsBytes, newUsz:relsBytes.length, newCrc:_crc32(relsBytes) };
+                        }
+                    } catch(faviconErr) { console.warn('favicon 注入失败：', faviconErr); }
+                }
+
+                // 重建 zip
+                var parts=[], centralDir=[], offset=0;
+                var allEntries = entries.concat(extraEntries);
+                allEntries.forEach(function(entry) {
+                    var rep=repackMap[entry.fname];
+                    var data=rep?rep.newData:entry.data, usz=rep?rep.newUsz:entry.usz;
+                    var csz=data.length, crc=rep?rep.newCrc:entry.crc, comp=rep?8:entry.comp;
+                    var fnBytes=new TextEncoder().encode(entry.fname);
+                    var lh=new Uint8Array(30+fnBytes.length+entry.extra.length);
+                    lh[0]=0x50;lh[1]=0x4B;lh[2]=0x03;lh[3]=0x04;
+                    w16(lh,4,20);w16(lh,6,0);w16(lh,8,comp);w16(lh,10,0);w16(lh,12,0);
+                    w32(lh,14,crc);w32(lh,18,csz);w32(lh,22,usz);
+                    w16(lh,26,fnBytes.length);w16(lh,28,entry.extra.length);
+                    lh.set(fnBytes,30);lh.set(entry.extra,30+fnBytes.length);
+                    var cd=new Uint8Array(46+fnBytes.length);
+                    cd[0]=0x50;cd[1]=0x4B;cd[2]=0x01;cd[3]=0x02;
+                    w16(cd,4,20);w16(cd,6,20);w16(cd,8,0);w16(cd,10,comp);
+                    w16(cd,12,0);w16(cd,14,0);
+                    w32(cd,16,crc);w32(cd,20,csz);w32(cd,24,usz);
+                    w16(cd,28,fnBytes.length);w16(cd,30,0);w16(cd,32,0);
+                    w16(cd,34,0);w16(cd,36,0);w32(cd,38,0);w32(cd,42,offset);
+                    cd.set(fnBytes,46);
+                    parts.push(lh,data); centralDir.push(cd);
+                    offset += lh.length+data.length;
+                });
+                var cdBytes=centralDir.reduce(function(a,b){return a+b.length;},0);
+                var eocd=new Uint8Array(22);
+                eocd[0]=0x50;eocd[1]=0x4B;eocd[2]=0x05;eocd[3]=0x06;
+                w16(eocd,4,0);w16(eocd,6,0);
+                w16(eocd,8,allEntries.length);w16(eocd,10,allEntries.length);
+                w32(eocd,12,cdBytes);w32(eocd,16,offset);w16(eocd,20,0);
+                var allParts=parts.concat(centralDir).concat([eocd]);
+                var total=allParts.reduce(function(a,b){return a+b.length;},0);
+                var out=new Uint8Array(total), p=0;
+                allParts.forEach(function(b){out.set(b,p);p+=b.length;});
+                _fallbackDownload(out.buffer, filename);
+            } catch(e) {
+                console.warn('颜色注入失败，降级导出：', e);
+                _fallbackDownload(xlsxBuf, filename);
+            }
         }
 
         function importCallLog(event) {
@@ -4448,7 +5353,7 @@
                 // 基于过滤后的日志计算次数
                 const filteredCnt = {};
                 filteredLogs.forEach(r => { filteredCnt[r.name] = (filteredCnt[r.name] || 0) + 1; });
-                let rows = allNames.map(n => ({ name: n, count: filteredCnt[n] || 0, note: (CLASS_CONFIG.intros[n] || '').replace(/\n/g, ' ') }));
+                let rows = allNames.map(n => ({ name: n, count: filteredCnt[n] || 0, note: (CLASS_CONFIG.notes[n] || '').replace(/\n/g, ' ') }));
                 rows.sort((a, b) => statSortCount === 'desc' ? b.count - a.count : a.count - b.count);
                 body.innerHTML = `<table class="stat-table">
                     <thead><tr>
@@ -4536,12 +5441,35 @@
             const ta = document.getElementById('intro-modal-text');
             ta.value = CLASS_CONFIG.intros[name] || '';
             ta.readOnly = true;
+            const noteEl = document.getElementById('intro-modal-note');
+            noteEl.value = CLASS_CONFIG.notes[name] || '';
+            noteEl.readOnly = true;
             document.getElementById('intro-edit-btn').style.display = '';
             document.getElementById('intro-save-btn').style.display = 'none';
             document.getElementById('intro-modal')._currentName = name;
             // 显示点名次数
             const cnt = getCallCount();
             document.getElementById('intro-call-count').textContent = `已被点名：${cnt[name] || 0} 次`;
+
+            // 查找学生照片
+            const photoBox = document.getElementById('intro-modal-photo');
+            const photoImg = document.getElementById('intro-modal-photo-img');
+            photoBox.style.display = 'none';
+            const exts = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+            const bases = ['./student_photos/', './student_photos/test_photos/'];
+            (function tryPhoto(bi, ei) {
+                if (bi >= bases.length) return;
+                if (ei >= exts.length) { tryPhoto(bi + 1, 0); return; }
+                const img = new Image();
+                img.onload = () => {
+                    photoImg.src = img.src;
+                    photoImg.alt = name;
+                    photoBox.style.display = 'flex';
+                };
+                img.onerror = () => tryPhoto(bi, ei + 1);
+                img.src = bases[bi] + name + '.' + exts[ei];
+            })(0, 0);
+
             document.getElementById('intro-modal').style.display = 'flex';
         });
 
@@ -4560,6 +5488,7 @@
             const ta = document.getElementById('intro-modal-text');
             ta.readOnly = false;
             ta.focus();
+            document.getElementById('intro-modal-note').readOnly = false;
             document.getElementById('intro-edit-btn').style.display = 'none';
             document.getElementById('intro-save-btn').style.display = '';
         }
@@ -4567,19 +5496,29 @@
         function saveIntroEdit() {
             const modal = document.getElementById('intro-modal');
             const name = modal._currentName;
-            const val = document.getElementById('intro-modal-text').value;
-            CLASS_CONFIG.intros[name] = val;
+            const introVal = document.getElementById('intro-modal-text').value;
+            const noteVal = document.getElementById('intro-modal-note').value;
+            CLASS_CONFIG.intros[name] = introVal;
+            if (noteVal.trim()) {
+                CLASS_CONFIG.notes[name] = noteVal;
+            } else {
+                delete CLASS_CONFIG.notes[name];
+            }
             // 持久化
             try {
                 const saved = localStorage.getItem('index_config');
                 const cfg = saved ? JSON.parse(saved) : {};
                 cfg.intros = CLASS_CONFIG.intros;
+                cfg.notes = CLASS_CONFIG.notes;
                 localStorage.setItem('index_config', JSON.stringify(cfg));
             } catch (e) { }
             const ta = document.getElementById('intro-modal-text');
             ta.readOnly = true;
+            document.getElementById('intro-modal-note').readOnly = true;
             document.getElementById('intro-edit-btn').style.display = '';
             document.getElementById('intro-save-btn').style.display = 'none';
+            // 刷新备注红点
+            restoreNoteDots();
         }
 
         // 点击介绍弹窗遮罩关闭
@@ -4627,21 +5566,18 @@
 
             // 恢复座位次数角标
             restoreCountBadges();
+            restoreNoteDots();
 
             // 初始化按钮事件
             startBtn.addEventListener('click', () => startRoll(true));
             manualBtn.addEventListener('click', () => startRoll(false));
             settingsBtn.addEventListener('click', () => settingsPanel.classList.toggle('show'));
             document.getElementById('edit-config').addEventListener('click', openBuilder);
-            toggleViewBtn.addEventListener('click', toggleView);
-            toggleDarkModeBtn.addEventListener('click', toggleDarkMode);
-            toggleClassCommitteeBtn.addEventListener('click', toggleClassCommittee);
-            toggleGroupBgBtn.addEventListener('click', toggleGroupBg);
-            document.getElementById('toggle-intro').addEventListener('click', toggleIntro);
+            document.getElementById('open-display-prefs').addEventListener('click', openDisplayPrefs);
             clearRecordBtn.addEventListener('click', resetRecord);
             exportLogBtn.addEventListener('click', function () { settingsPanel.classList.remove('show'); exportCallLog(); });
             importLogBtn.addEventListener('click', function () { settingsPanel.classList.remove('show'); document.getElementById('import-log-input').click(); });
-            toggleRecordVisibilityBtn.addEventListener('click', toggleRecordVisibility);
+            toggleRecordVisibilityBtn; // 已移入显示偏好配置弹窗，无需绑定
             document.getElementById('show-stat').addEventListener('click', openStatModal);
             viewInstructionBtn.addEventListener('click', openInstruction);
             document.getElementById('reset-config').addEventListener('click', function () {
@@ -4721,6 +5657,7 @@
                     CLASS_CONFIG.slogan = cfg.slogan || CLASS_CONFIG.slogan;
                     CLASS_CONFIG.seats = cfg.seats;
                     CLASS_CONFIG.intros = cfg.intros || {};
+                    CLASS_CONFIG.notes = cfg.notes || {};
                     CLASS_CONFIG.groups = cfg.groups || [];
                     // 应用网页标题
                     if (cfg.pageTitle) {
@@ -4740,6 +5677,7 @@
                         slogan: CLASS_CONFIG.slogan,
                         seats: CLASS_CONFIG.seats,
                         intros: CLASS_CONFIG.intros,
+                        notes: CLASS_CONFIG.notes,
                         groups: CLASS_CONFIG.groups,
                         pageTitle: cfg.pageTitle || document.title,
                         favicon: cfg.favicon || ''
@@ -4767,6 +5705,7 @@
                     }
 
                     restoreCountBadges();
+                    restoreNoteDots();
                     initSeatEvents();
                     refreshUI();
                 }
