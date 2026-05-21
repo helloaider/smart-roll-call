@@ -2,11 +2,11 @@
 
 一个开箱即用的课堂点名工具，纯原生 HTML 单文件，无需安装任何依赖，双击即可使用。
 
-![预览截图1](./images/preview1.png)
-![预览截图2](./images/preview2.png)
-![预览截图3](./images/preview3.png)
-![预览截图4](./images/preview4.png)
-![预览截图5](./images/preview5.png)
+![预览截图1](./readme_images/preview1.png)
+![预览截图2](./readme_images/preview2.png)
+![预览截图3](./readme_images/preview3.png)
+![预览截图4](./readme_images/preview4.png)
+![预览截图5](./readme_images/preview5.png)
 
 
 ## ✨ 功能特性
