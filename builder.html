@@ -1401,9 +1401,10 @@
 
         // 根据 Excel 背景色自动建组
         // 颜色数 ≤ 1 时不做分组（全无色或全同色视为无分组信息）
+        // 无论如何都先清空旧的分组，避免上次导入的小组残留
+        groups = [];
+        _groupIdCounter = 0;
         if (Object.keys(colorToGroup).length > 1) {
-          groups = [];
-          _groupIdCounter = 0;
           var colorKeys2 = Object.keys(colorToGroup);
 
           // 已使用的预设颜色 key（避免重复分配）
@@ -1451,10 +1452,8 @@
           // 按 id 排序
           groups.sort(function(a,b){ return a.id - b.id; });
           syncCellsToGroups();
-          renderGroupList();
         }
-
-        var noteCount = Object.keys(getNotes()).length;
+        renderGroupList();
         var importMsg = '导入成功！共 ' + numRows + ' 行 ' + numCols + ' 列，介绍 ' + introCount + ' 条'
           + (noteCount ? '，备注 ' + noteCount + ' 条' : '')
           + (groups.length ? '，自动识别 ' + groups.length + ' 个小组' : '') + '\n\n';
