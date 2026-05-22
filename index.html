@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 
 <head>
@@ -136,7 +136,7 @@
             position: fixed;
             width: 460px;
             background: linear-gradient(135deg, rgba(30, 60, 114, 0.95) 0%, rgba(42, 82, 152, 0.95) 100%);
-            border: 1px solid rgba(0, 255, 252, 0.5);
+            border: 1px solid rgba(0, 255, 252, 0.3);
             border-radius: 10px;
             padding: 0;
             font-size: 15px;
@@ -202,6 +202,36 @@
             background: rgba(56, 189, 248, 0.1);
         }
 
+        /* 关闭按钮 */
+        #intro-display .intro-close-btn {
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: rgba(0, 255, 252, 0.4);
+            font-size: 0.8em;
+            border-radius: 4px;
+            flex-shrink: 0;
+            transition: color 0.2s, background 0.2s;
+            line-height: 1;
+        }
+
+        #intro-display .intro-close-btn:hover {
+            color: #00fffc;
+            background: rgba(0, 255, 252, 0.1);
+        }
+
+        body.dark-mode #intro-display .intro-close-btn {
+            color: rgba(56, 189, 248, 0.4);
+        }
+
+        body.dark-mode #intro-display .intro-close-btn:hover {
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+        }
+
         /* 放大模式 */
         #intro-display.expanded {
             width: 620px;
@@ -214,8 +244,8 @@
         }
 
         #intro-display.expanded .intro-body {
-            height: 250px;
-            max-height: 250px;
+            height: 235px;
+            max-height: 235px;
         }
 
         #intro-display.expanded .intro-photo {
@@ -226,7 +256,7 @@
 
         #intro-display.expanded .intro-photo img {
             max-width: none;
-            max-height: 218px;
+            max-height: 203px;
             width: auto;
             height: auto;
             object-fit: contain;
@@ -235,7 +265,7 @@
 
         #intro-display.expanded.photo-only .intro-photo img {
             max-width: none;
-            max-height: 218px;
+            max-height: 203px;
             width: auto;
             height: auto;
         }
@@ -247,8 +277,8 @@
         }
 
         #intro-display.expanded.photo-only .intro-body {
-            height: 250px;
-            max-height: 250px;
+            height: 235px;
+            max-height: 235px;
             justify-content: center;
         }
 
@@ -349,8 +379,8 @@
         }
 
         body.dark-mode #intro-display {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.97) 0%, rgba(30, 41, 59, 0.97) 100%);
-            border: 1px solid rgba(56, 189, 248, 0.4);
+            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
+            border: 1px solid rgba(56, 189, 248, 0.3);
             color: #e0f2fe;
         }
 
@@ -362,6 +392,7 @@
             align-items: center;
             justify-content: center;
             flex-wrap: wrap;
+            position: relative;
         }
 
         button {
@@ -400,29 +431,29 @@
             font-size: 1.15em;
         }
 
-        /* ===================== 右上角设置按钮样式 ===================== */
+        /* ===================== 右上角菜单按钮样式 ===================== */
         .settings-btn {
             position: fixed;
             top: 38px;
             right: 20px;
             width: 50px;
             height: 50px;
-            border-radius: 50%;
+            border-radius: 12px;
             background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(0, 255, 252, 0.5);
+            border: none;
             color: #fff;
-            font-size: 1.4em;
+            font-size: 1.5em;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            z-index: 999;
-            transition: all 0.3s ease;
+            z-index: 1000;
+            transition: background 0.2s ease;
+            user-select: none;
         }
 
         .settings-btn:hover {
-            background: rgba(0, 255, 252, 0.2);
-            transform: rotate(60deg);
+            background: rgba(255, 255, 255, 0.1);
         }
 
         /* ===================== 设置面板样式 ===================== */
@@ -431,36 +462,43 @@
             top: 100px;
             right: 20px;
             width: fit-content;
-            background: rgba(50, 90, 160, 0.55);
+            min-width: 180px;
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.95) 0%, rgba(42, 82, 152, 0.95) 100%);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 255, 252, 0.35);
+            border: 1px solid rgba(0, 255, 252, 0.3);
             border-radius: 16px;
-            padding: 16px 14px;
-            z-index: 998;
-            display: none;
+            padding: 10px 10px;
+            z-index: 1000;
             flex-direction: column;
             gap: 2px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
-            transition: all 0.3s ease;
+            /* 用 opacity + pointer-events 实现淡入淡出 */
+            opacity: 0;
+            pointer-events: none;
+            display: flex;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            transform: translateY(-6px);
         }
 
         .settings-panel.show {
-            display: flex;
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
         }
 
         .settings-group-title {
-            font-size: 0.78em;
+            font-size: 0.72em;
             color: rgba(0, 255, 252, 0.5);
-            padding: 10px 10px 4px;
+            padding: 8px 10px 4px;
             letter-spacing: 0.12em;
             text-transform: uppercase;
         }
 
         .settings-group-title:not(:first-child) {
-            margin-top: 6px;
+            margin-top: 4px;
             border-top: 1px solid rgba(255, 255, 255, 0.07);
-            padding-top: 12px;
+            padding-top: 10px;
         }
 
         .settings-item {
@@ -475,6 +513,7 @@
             align-items: center;
             gap: 6px;
             color: rgba(255, 255, 255, 0.8);
+            white-space: nowrap;
         }
 
         .settings-item:hover {
@@ -501,52 +540,6 @@
         .settings-item-danger:hover {
             background: rgba(255, 80, 60, 0.15) !important;
             color: rgba(255, 140, 120, 1) !important;
-        }
-
-        .arrow-icon {
-            font-size: 0.9em;
-            transition: transform 0.3s ease;
-        }
-
-        .settings-item.expanded .arrow-icon {
-            transform: rotate(0deg);
-        }
-
-        .settings-item.collapsed .arrow-icon {
-            transform: rotate(180deg);
-        }
-
-        .submenu-container {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            padding-left: 40px;
-            margin-top: 4px;
-            margin-bottom: 4px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease;
-        }
-
-        .submenu-container.show {
-            max-height: 100px;
-            padding-top: 4px;
-            padding-bottom: 4px;
-        }
-
-        .submenu-item {
-            padding: 8px 10px;
-            border-radius: 6px;
-            background: rgba(255, 255, 255, 0.03);
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.95em;
-            text-align: left;
-        }
-
-        .submenu-item:hover {
-            background: rgba(0, 255, 252, 0.15);
-            color: #00fffc;
         }
 
         /* 学生视角：整体翻转表格，单元格内文字反向 */
@@ -760,10 +753,10 @@
             top: calc(100% + 6px);
             left: 0;
             z-index: 10010;
-            background: rgba(42, 82, 152, 0.72);
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.95) 0%, rgba(42, 82, 152, 0.95) 100%);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(0,255,252,.2);
+            border: 1px solid rgba(0, 255, 252, 0.3);
             border-radius: 12px;
             padding: 12px 14px 14px;
             box-shadow: 0 8px 32px rgba(0,0,0,.3);
@@ -904,10 +897,10 @@
 
         /* 暗黑模式 */
         body.dark-mode .stat-cal-popup {
-            background: rgba(15, 30, 65, 0.75);
+            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border-color: rgba(56,189,248,.2);
+            border-color: rgba(56,189,248,.3);
         }
 
         body.dark-mode .stat-date-btn {
@@ -936,7 +929,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(10, 25, 60, 0.82);
+            background: rgba(0, 0, 0, 0.6);
             z-index: 9997;
             align-items: center;
             justify-content: center;
@@ -944,8 +937,8 @@
         }
 
         .stat-modal-box {
-            background: rgba(42, 82, 152, 0.92);
-            border: 1px solid rgba(255, 255, 255, .18);
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.95) 0%, rgba(42, 82, 152, 0.95) 100%);
+            border: 1px solid rgba(0, 255, 252, 0.3);
             border-radius: 16px;
             width: 92%;
             max-width: 860px;
@@ -1094,7 +1087,7 @@
             color: rgba(255, 255, 255, .6);
             border-bottom: 1px solid rgba(255, 255, 255, .1);
             font-weight: normal;
-            background: rgba(42, 82, 152, 0.75);
+            background: rgba(30, 60, 114, 0.85);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             white-space: nowrap;
@@ -1267,12 +1260,12 @@
 
         /* 暗黑模式 */
         body.dark-mode .stat-modal {
-            background: rgba(5, 10, 25, 0.88);
+            background: rgba(0, 0, 0, 0.85);
         }
 
         body.dark-mode .stat-modal-box {
-            background: rgba(15, 25, 55, 0.95);
-            border-color: rgba(56, 189, 248, 0.2);
+            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
+            border-color: rgba(56, 189, 248, 0.3);
         }
 
         body.dark-mode .stat-modal-header {
@@ -1297,7 +1290,7 @@
         }
 
         body.dark-mode .stat-table th {
-            background: rgba(15, 25, 55, 0.75);
+            background: linear-gradient(135deg, rgba(10, 18, 38, 0.9) 0%, rgba(20, 32, 60, 0.9) 100%);
             border-bottom-color: rgba(56, 189, 248, .12);
         }
 
@@ -1311,26 +1304,47 @@
             display: none;
             position: fixed;
             z-index: 9999;
-            background: rgba(60, 100, 180, 0.55);
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.97) 0%, rgba(42, 82, 152, 0.97) 100%);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(0, 255, 252, 0.4);
-            border-radius: 8px;
-            padding: 4px 0;
-            min-width: 150px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 255, 252, 0.3);
+            border-radius: 10px;
+            padding: 5px;
+            min-width: 168px;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
         }
 
         .ctx-menu-item {
-            padding: 9px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 13px;
             cursor: pointer;
-            font-size: .95em;
-            color: #fff;
-            transition: background .15s;
+            font-size: .93em;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            border-radius: 6px;
+            transition: background .12s;
+            user-select: none;
+        }
+
+        .ctx-menu-item svg {
+            flex-shrink: 0;
+            opacity: 0.7;
+            transition: opacity .12s;
         }
 
         .ctx-menu-item:hover {
-            background: rgba(0, 255, 252, .15);
+            background: rgba(0, 255, 252, 0.12);
+            color: #fff;
+        }
+
+        .ctx-menu-item:hover svg {
+            opacity: 1;
+        }
+
+        .ctx-menu-item:active {
+            background: rgba(0, 255, 252, 0.2);
         }
 
         .intro-modal {
@@ -1340,7 +1354,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, .75);
+            background: rgba(0, 0, 0, 0.6);
             z-index: 9998;
             align-items: center;
             justify-content: center;
@@ -1348,8 +1362,8 @@
         }
 
         .intro-modal-box {
-            background: linear-gradient(135deg, rgba(50, 90, 160, 0.97), rgba(60, 100, 175, 0.97));
-            border: 1px solid rgba(0, 255, 252, .4);
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.95) 0%, rgba(42, 82, 152, 0.95) 100%);
+            border: 1px solid rgba(0, 255, 252, 0.3);
             border-radius: 12px;
             width: 90%;
             max-width: 480px;
@@ -1537,8 +1551,8 @@
 
         /* 暗黑模式 */
         body.dark-mode .ctx-menu {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.98));
-            border-color: rgba(56, 189, 248, 0.4);
+            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
+            border-color: rgba(56, 189, 248, 0.3);
         }
 
         body.dark-mode .ctx-menu-item:hover {
@@ -1546,12 +1560,12 @@
         }
 
         body.dark-mode .intro-modal {
-            background: rgba(0, 0, 0, .88);
+            background: rgba(0, 0, 0, 0.85);
         }
 
         body.dark-mode .intro-modal-box {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.98));
-            border-color: rgba(56, 189, 248, 0.35);
+            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
+            border-color: rgba(56, 189, 248, 0.3);
         }
 
         body.dark-mode .intro-modal-header {
@@ -1608,7 +1622,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.45);
+            background: rgba(0, 0, 0, 0.6);
             z-index: 9999;
             display: none;
             align-items: center;
@@ -1621,8 +1635,8 @@
         }
 
         .instruction-content {
-            background: linear-gradient(160deg, rgba(30, 60, 114, 0.88) 0%, rgba(42, 82, 152, 0.88) 100%);
-            border: 1px solid rgba(0, 255, 252, 0.25);
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.95) 0%, rgba(42, 82, 152, 0.95) 100%);
+            border: 1px solid rgba(0, 255, 252, 0.3);
             border-radius: 20px;
             width: 92%;
             max-width: 900px;
@@ -1681,6 +1695,10 @@
 
         .ins-section.full {
             grid-template-columns: 1fr;
+        }
+
+        .ins-section.three {
+            grid-template-columns: 1.4fr 1fr 1fr;
         }
 
         .ins-card {
@@ -1773,12 +1791,12 @@
 
         /* 暗黑模式 */
         body.dark-mode .instruction-modal {
-            background: rgba(0, 0, 0, 0.88);
+            background: rgba(0, 0, 0, 0.85);
         }
 
         body.dark-mode .instruction-content {
-            background: linear-gradient(160deg, rgba(10, 18, 38, 0.99) 0%, rgba(20, 32, 60, 0.99) 100%);
-            border-color: rgba(56, 189, 248, 0.22);
+            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
+            border-color: rgba(56, 189, 248, 0.3);
         }
 
         body.dark-mode .instruction-header {
@@ -1823,8 +1841,6 @@
         html.dark-mode-pre body {
             background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
         }
-
-        body.dark-mode .container {}
 
         body.dark-mode h1 {
             text-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
@@ -1887,13 +1903,12 @@
         }
 
         body.dark-mode .settings-btn:hover {
-            background: rgba(56, 189, 248, 0.2);
-            transform: rotate(60deg);
+            background: rgba(15, 23, 42, 0.4);
         }
 
         body.dark-mode .settings-panel {
-            background: rgba(15, 30, 60, 0.6);
-            border: 1px solid rgba(56, 189, 248, 0.25);
+            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
+            border: 1px solid rgba(56, 189, 248, 0.3);
         }
 
         body.dark-mode .settings-item {
@@ -1908,30 +1923,6 @@
         body.dark-mode .settings-item:hover {
             background: rgba(255, 255, 255, 0.08);
             color: #e0f2fe;
-        }
-
-        body.dark-mode .submenu-item {
-            background: rgba(56, 189, 248, 0.03);
-            color: #e0f2fe;
-        }
-
-        body.dark-mode .submenu-item:hover {
-            background: rgba(56, 189, 248, 0.15);
-            color: #38bdf8;
-        }
-
-        body.dark-mode td.called {
-            background: rgba(15, 23, 42, 0.6) !important;
-            color: rgba(224, 242, 254, 0.6) !important;
-            border: 1px solid rgba(56, 189, 248, 0.45) !important;
-        }
-
-        body.dark-mode .hide-record td.called {
-            background: rgba(15, 23, 42, 0.4) !important;
-            color: #e0f2fe !important;
-            border: 1px solid rgba(56, 189, 248, 0.2) !important;
-            opacity: 1 !important;
-            filter: none !important;
         }
 
         body.dark-mode .seating-chart {
@@ -1951,7 +1942,6 @@
         /* 隐藏小组背景时（inline style 为空），data-group 格子也用暗黑背景 */
         body.dark-mode .seating-chart td[data-group]:not([style*="background"]) {
             background: rgba(15, 23, 42, 0.4) !important;
-        }
             border: 1px solid rgba(56, 189, 248, 0.2) !important;
         }
         /* 深色模式下小组背景色由 JS 动态注入，无需硬编码 */
@@ -1971,7 +1961,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
             z-index: 99999;
             display: flex;
             align-items: center;
@@ -1989,8 +1979,8 @@
         .custom-dialog-box {
             width: 92%;
             max-width: 400px;
-            background: rgba(42, 82, 152, 0.85);
-            border: 1px solid rgba(0, 255, 252, 0.25);
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.95) 0%, rgba(42, 82, 152, 0.95) 100%);
+            border: 1px solid rgba(0, 255, 252, 0.3);
             border-radius: 16px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
             overflow: hidden;
@@ -2104,10 +2094,121 @@
             background: rgba(56, 189, 248, 0.08);
         }
 
+        body.dark-mode .custom-dialog-box {
+            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        body.dark-mode .custom-dialog-header-title {
+            color: #38bdf8;
+        }
+
+        body.dark-mode .custom-dialog-msg {
+            color: rgba(224, 242, 254, 0.75);
+        }
+
+        body.dark-mode .custom-dialog-footer {
+            border-top-color: rgba(56, 189, 248, 0.12);
+        }
+
+        body.dark-mode .custom-dialog-footer:not(.single) .custom-dialog-btn:first-child {
+            border-right-color: rgba(56, 189, 248, 0.12);
+        }
+
+        /* 暗黑模式 — 更多抽取菜单 */
+        body.dark-mode #more-pick-menu {
+            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        body.dark-mode .more-pick-item:hover:not(.disabled) {
+            background: rgba(56, 189, 248, 0.12);
+        }
+
+        /* 暗黑模式 — 指定名单弹窗 */
+        body.dark-mode #custom-list-overlay {
+            background: rgba(0, 0, 0, 0.85);
+        }
+
+        body.dark-mode #custom-list-box {
+            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        body.dark-mode #custom-list-box .cl-header {
+            color: #38bdf8;
+        }
+
+        body.dark-mode #custom-list-box textarea {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(56, 189, 248, 0.2);
+            color: #e0f2fe;
+        }
+
+        body.dark-mode #custom-list-box textarea:focus {
+            border-color: rgba(56, 189, 248, 0.5);
+        }
+
+        body.dark-mode #custom-list-box textarea::placeholder {
+            color: rgba(224, 242, 254, 0.25);
+        }
+
+        body.dark-mode #custom-list-box .cl-footer {
+            border-top-color: rgba(56, 189, 248, 0.15);
+        }
+
+        body.dark-mode #custom-list-box .cl-btn.primary {
+            color: #38bdf8;
+            border-left-color: rgba(56, 189, 248, 0.15);
+        }
+
+        body.dark-mode #custom-list-box .cl-btn.primary:hover {
+            background: rgba(56, 189, 248, 0.08);
+        }
+
+        /* 暗黑模式 — 小组选择弹窗 */
+        body.dark-mode #group-pick-overlay {
+            background: rgba(0, 0, 0, 0.85);
+        }
+
+        body.dark-mode #group-pick-box {
+            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        body.dark-mode #group-pick-box .gp-header {
+            color: #38bdf8;
+            border-bottom-color: rgba(56, 189, 248, 0.15);
+        }
+
+        body.dark-mode .gp-item:hover {
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        body.dark-mode .gp-done-tag {
+            color: rgba(56, 189, 248, 0.7);
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+        }
+
+        body.dark-mode #group-pick-box .gp-footer {
+            border-top-color: rgba(56, 189, 248, 0.15);
+        }
+
+        body.dark-mode #group-pick-box .gp-cancel {
+            border-color: rgba(56, 189, 248, 0.25);
+            color: rgba(224, 242, 254, 0.5);
+        }
+
+        body.dark-mode #group-pick-box .gp-cancel:hover {
+            border-color: rgba(56, 189, 248, 0.5);
+            color: #e0f2fe;
+        }
+
         /* ===================== 显示偏好配置弹窗行样式 ===================== */
         .dp-row {
             display: grid;
-            grid-template-columns: 1fr 80px 80px;
+            grid-template-columns: 1fr 100px 60px;
             align-items: center;
             padding: 20px 0;
             border-bottom: 1px solid rgba(255,255,255,.06);
@@ -2159,8 +2260,8 @@
 
         /* 暗黑模式下弹窗配色 */
         #displayPrefsOverlay .custom-dialog-box.dp-dark {
-            background: rgba(15, 25, 55, 0.97);
-            border: 1px solid rgba(56, 189, 248, 0.08);
+            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
+            border: 1px solid rgba(56, 189, 248, 0.3);
         }
 
         #displayPrefsOverlay .custom-dialog-box.dp-dark .custom-dialog-header-title {
@@ -2188,13 +2289,13 @@
         }
 
         #displayPrefsOverlay .custom-dialog-box.dp-dark .custom-dialog-footer {
-            border-top: 1px solid rgba(56, 189, 248, .1);
-            background: rgba(15, 25, 55, 0.97);
+            border-top: 1px solid rgba(56, 189, 248, .3);
+            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
             border-radius: 0 0 16px 16px;
         }
 
         #displayPrefsOverlay .custom-dialog-box.dp-dark .custom-dialog-footer:not(.single) .custom-dialog-btn:first-child {
-            border-right: 1px solid rgba(56, 189, 248, .1);
+            border-right: 1px solid rgba(56, 189, 248, .3);
         }
 
         #displayPrefsOverlay .custom-dialog-box.dp-dark .custom-dialog-btn.primary {
@@ -2203,6 +2304,346 @@
 
         #displayPrefsOverlay .custom-dialog-box.dp-dark .custom-dialog-btn.primary:hover {
             background: rgba(56, 189, 248, 0.08);
+        }
+
+        /* ===================== 更多抽取菜单样式 ===================== */
+        /* controls-wrapper 作为定位容器，主按钮居中，更多按钮绝对定位在右侧 */
+        .controls-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #more-pick-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        /* 左侧占位块，与 #more-pick-wrapper 等宽，让主按钮视觉居中 */
+        .more-pick-placeholder {
+            width: 32px;
+            flex-shrink: 0;
+        }
+
+        #more-pick-btn {
+            min-width: unset;
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            font-size: 1em;
+            border-radius: 50%;
+            flex-shrink: 0;
+            /* 弱化视觉 */
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.45);
+            transition: all 0.2s;
+        }
+
+        #more-pick-btn:hover {
+            background: rgba(0, 255, 252, 0.12);
+            border-color: rgba(0, 255, 252, 0.4);
+            color: rgba(255, 255, 255, 0.8);
+            transform: none;
+        }
+
+        #more-pick-menu {
+            position: absolute;
+            top: 50%;
+            left: calc(100% + 10px);
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.95) 0%, rgba(42, 82, 152, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 255, 252, 0.3);
+            border-radius: 12px;
+            padding: 6px;
+            min-width: 160px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+            z-index: 1000;
+            display: none;
+        }
+
+        #more-pick-menu.show {
+            display: block;
+            animation: menuFadeIn 0.15s ease;
+        }
+
+        @keyframes menuFadeIn {
+            from { opacity: 0; transform: translateY(-50%) translateX(-6px); }
+            to   { opacity: 1; transform: translateY(-50%) translateX(0); }
+        }
+
+        .more-pick-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            color: rgba(255, 255, 255, 0.85);
+            transition: background 0.15s;
+            white-space: nowrap;
+        }
+
+        .more-pick-item:hover:not(.disabled) {
+            background: rgba(0, 255, 252, 0.12);
+            color: #fff;
+        }
+
+        .more-pick-item.disabled {
+            opacity: 0.38;
+            cursor: not-allowed;
+        }
+
+        .more-pick-item .item-icon {
+            font-size: 1.1em;
+            width: 22px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .more-pick-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.12);
+            margin: 4px 6px;
+        }
+
+        /* 指定名单弹窗 */
+        #custom-list-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 9998;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        #custom-list-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #custom-list-box {
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.95) 0%, rgba(42, 82, 152, 0.95) 100%);
+            border: 1px solid rgba(0, 255, 252, 0.3);
+            border-radius: 16px;
+            width: 92%;
+            max-width: 420px;
+            overflow: hidden;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+            transform: scale(0.92);
+            opacity: 0;
+            transition: transform 0.22s cubic-bezier(0.34,1.4,0.64,1), opacity 0.18s;
+        }
+
+        #custom-list-overlay.show #custom-list-box {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        #custom-list-box .cl-header {
+            padding: 18px 20px 10px;
+            font-size: 1em;
+            font-weight: bold;
+            color: #00fffc;
+            letter-spacing: 1px;
+        }
+
+        #custom-list-box .cl-tip {
+            padding: 0 20px 10px;
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.45);
+            line-height: 1.6;
+        }
+
+        #custom-list-box textarea {
+            width: calc(100% - 40px);
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.95em;
+            font-family: inherit;
+            padding: 12px 14px;
+            resize: none;
+            height: 160px;
+            outline: none;
+            margin: 0 20px 14px;
+            display: block;
+            transition: border-color 0.15s;
+        }
+
+        #custom-list-box textarea:focus {
+            border-color: rgba(0, 255, 252, 0.4);
+        }
+
+        #custom-list-box textarea::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        #custom-list-box .cl-footer {
+            display: flex;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        #custom-list-box .cl-btn {
+            flex: 1;
+            padding: 14px 0;
+            border: none;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+            min-width: auto;
+            border-radius: 0;
+        }
+
+        #custom-list-box .cl-btn:hover {
+            background: rgba(255, 255, 255, 0.07);
+            color: #fff;
+        }
+
+        #custom-list-box .cl-btn.primary {
+            color: #00fffc;
+            font-weight: bold;
+            border-left: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        #custom-list-box .cl-btn.primary:hover {
+            background: rgba(0, 255, 252, 0.08);
+        }
+
+        /* 小组选择弹窗 */
+        #group-pick-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 9998;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        #group-pick-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #group-pick-box {
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.95) 0%, rgba(42, 82, 152, 0.95) 100%);
+            border: 1px solid rgba(0, 255, 252, 0.3);
+            border-radius: 16px;
+            width: 92%;
+            max-width: 460px;
+            overflow: hidden;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+            transform: scale(0.92);
+            opacity: 0;
+            transition: transform 0.22s cubic-bezier(0.34,1.4,0.64,1), opacity 0.18s;
+        }
+
+        #group-pick-overlay.show #group-pick-box {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        #group-pick-box .gp-header {
+            padding: 18px 20px 14px;
+            font-size: 1em;
+            font-weight: bold;
+            color: #00fffc;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        #group-pick-list {
+            padding: 8px 10px;
+            max-height: 320px;
+            overflow-y: auto;
+        }
+
+        .gp-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .gp-item:hover {
+            background: rgba(0, 255, 252, 0.1);
+        }
+
+        .gp-color-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            flex-shrink: 0;
+            box-shadow: 0 0 8px rgba(0,0,0,0.4), 0 0 4px currentColor;
+        }
+
+        .gp-name {
+            font-size: 0.95em;
+            color: rgba(255, 255, 255, 1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .gp-count {
+            flex: 1;
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.65);
+            text-align: right;
+        }
+
+        .gp-done-tag {
+            font-size: 0.68em;
+            color: rgba(0, 255, 252, 0.6);
+            background: rgba(0, 255, 252, 0.1);
+            border: 1px solid rgba(0, 255, 252, 0.25);
+            border-radius: 10px;
+            padding: 1px 7px;
+            white-space: nowrap;
+        }
+
+        #group-pick-box .gp-footer {
+            padding: 10px 14px 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            text-align: right;
+        }
+
+        #group-pick-box .gp-cancel {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.5);
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.88em;
+            min-width: auto;
+            transition: all 0.15s;
+        }
+
+        #group-pick-box .gp-cancel:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            color: #fff;
         }
     </style>
     <script>
@@ -2217,26 +2658,30 @@
     <!-- 粒子背景容器 -->
     <div id="particles-js"></div>
 
-    <!-- 右上角设置按钮 -->
-    <div class="settings-btn">⚙️</div>
+    <!-- 右上角菜单按钮 -->
+    <div class="settings-btn" title="菜单">☰</div>
 
-    <!-- 设置面板 -->
+    <!-- 菜单面板 -->
     <div class="settings-panel">
-        <div class="settings-group-title">显示偏好</div>
-        <div class="settings-item" id="open-display-prefs"><span class="settings-item-icon">🎛️</span>显示偏好配置</div>
-        
-        <div class="settings-group-title">点名管理</div>
-        <div class="settings-item" id="clear-record"><span class="settings-item-icon">🗑️</span>清空点名记录</div>
+        <div class="settings-group-title">配置</div>
+        <div class="settings-item" id="open-display-prefs"><span class="settings-item-icon">⚙️</span>显示偏好配置</div>
+        <div class="settings-item" id="edit-config"><span class="settings-item-icon">✏️</span>编辑座位信息</div>
+
+        <div class="settings-group-title">数据</div>
+        <div class="settings-item" id="show-stat"><span class="settings-item-icon">📊</span>点名数据统计</div>
         <div class="settings-item" id="export-log"><span class="settings-item-icon">📤</span>导出点名记录</div>
         <div class="settings-item" id="import-log"><span class="settings-item-icon">📥</span>导入点名记录</div>
-        <input type="file" id="import-log-input" accept=".xlsx" style="display:none" onchange="importCallLog(event)">
-        <div class="settings-item" id="show-stat"><span class="settings-item-icon">📊</span>点名数据统计</div>
+        <div class="settings-item" id="clear-record"><span class="settings-item-icon">🗑️</span>清空点名记录</div>
 
-        <div class="settings-group-title">其他</div>
-        <div class="settings-item" id="edit-config"><span class="settings-item-icon">✏️</span>编辑座位信息</div>
+        <div class="settings-group-title">帮助</div>
         <div class="settings-item" id="view-instruction"><span class="settings-item-icon">📋</span>查看使用说明</div>
+
+        <div class="settings-group-title">危险区</div>
         <div class="settings-item settings-item-danger" id="reset-config"><span class="settings-item-icon">⚠️</span>恢复默认配置</div>
     </div>
+
+    <!-- 导入点名记录文件选择器（置于面板外） -->
+    <input type="file" id="import-log-input" accept=".xlsx" style="display:none" onchange="importCallLog(event)">
 
     <!-- 点名统计弹窗 -->
     <div id="stat-modal" class="stat-modal">
@@ -2285,7 +2730,14 @@
 
     <!-- 右键菜单 -->
     <div id="ctx-menu" class="ctx-menu">
-        <div id="ctx-view-intro" class="ctx-menu-item">📖 查看介绍/备注</div>
+        <div id="ctx-view-intro" class="ctx-menu-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            查看介绍/备注
+        </div>
     </div>
 
     <!-- 介绍弹窗 -->
@@ -2321,42 +2773,42 @@
     <div class="custom-dialog-overlay" id="displayPrefsOverlay">
         <div class="custom-dialog-box" style="max-width:440px">
             <div class="custom-dialog-header">
-                <span class="custom-dialog-header-title">🎛️ 显示偏好配置</span>
+                <span class="custom-dialog-header-title">⚙️ 显示偏好配置</span>
             </div>
             <div class="custom-dialog-msg" style="text-align:left;padding:4px 20px 12px">
                 <!-- 右上角被点次数 -->
                 <div class="dp-row">
-                    <span class="dp-label">右上角被点次数</span>
+                    <span class="dp-label">🔢 右上角被点次数</span>
                     <label class="dp-radio"><input type="radio" name="dp-count" value="0"> 不显示</label>
                     <label class="dp-radio"><input type="radio" name="dp-count" value="1"> 显示</label>
                 </div>
                 <!-- 班委名字打标记 -->
                 <div class="dp-row">
-                    <span class="dp-label">班委名字打标记</span>
+                    <span class="dp-label">🏅 班委名字打标记</span>
                     <label class="dp-radio"><input type="radio" name="dp-committee" value="0"> 不显示</label>
                     <label class="dp-radio"><input type="radio" name="dp-committee" value="1"> 显示</label>
                 </div>
                 <!-- 小组成员背景色 -->
                 <div class="dp-row">
-                    <span class="dp-label">小组成员背景色</span>
+                    <span class="dp-label">🎨 小组成员背景色</span>
                     <label class="dp-radio"><input type="radio" name="dp-group" value="0"> 不显示</label>
                     <label class="dp-radio"><input type="radio" name="dp-group" value="1"> 显示</label>
                 </div>
                 <!-- 点名时学生介绍 -->
                 <div class="dp-row">
-                    <span class="dp-label">点名时学生介绍</span>
+                    <span class="dp-label">📖 点名时学生介绍</span>
                     <label class="dp-radio"><input type="radio" name="dp-intro" value="0"> 不显示</label>
                     <label class="dp-radio"><input type="radio" name="dp-intro" value="1"> 显示</label>
                 </div>
                 <!-- 座位图展示视角 -->
                 <div class="dp-row">
-                    <span class="dp-label">座位图展示视角</span>
-                    <label class="dp-radio"><input type="radio" name="dp-view" value="teacher"> 讲师</label>
+                    <span class="dp-label">🔄 座位图展示视角</span>
+                    <label class="dp-radio"><input type="radio" name="dp-view" value="teacher"> 教师</label>
                     <label class="dp-radio"><input type="radio" name="dp-view" value="student"> 学生</label>
                 </div>
                 <!-- 应用界面主题色 -->
                 <div class="dp-row">
-                    <span class="dp-label">应用界面主题色</span>
+                    <span class="dp-label">☀️ 应用界面主题色</span>
                     <label class="dp-radio"><input type="radio" name="dp-theme" value="0"> 深蓝</label>
                     <label class="dp-radio"><input type="radio" name="dp-theme" value="1"> 暗黑</label>
                 </div>
@@ -2394,26 +2846,26 @@
                         <div class="ins-card-title">🎲 随机点名</div>
                         <div class="ins-row">
                             <span class="ins-tag">⚖️ 均衡抽取</span>
-                            <span class="ins-val">优先从被点次数最少的同学中随机抽取，保证机会均等；本轮全部点完后自动进入下一轮并弹出提示</span>
+                            <span class="ins-val">优先从被点次数最少的同学中随机抽取，保证机会均等；姓名滚动定格后座位高亮，<strong>若已开启学生介绍则自动弹出介绍卡片</strong>；本轮所有人都被点过后自动进入下一轮，并在屏幕上方弹出「第 N 轮完成」提示</span>
                         </div>
                         <div class="ins-row">
                             <span class="ins-tag">🌐 全员随机</span>
-                            <span class="ins-val">不考虑被点次数，每次从全班完全随机抽取，适合需要重复点名的场景</span>
+                            <span class="ins-val">不考虑被点次数，每次从全班完全随机抽取；定格后同样高亮座位并<strong>自动弹出介绍卡片</strong>（需已开启），无轮次概念，适合需要重复点名的场景</span>
                         </div>
                         <div class="ins-row">
-                            <span class="ins-key">🌀</span>
-                            <span class="ins-val">姓名滚动约 1 秒后定格，对应座位同步高亮闪烁</span>
+                            <span class="ins-key">🔢 轮次计数</span>
+                            <span class="ins-val">顶部「第 N 轮 · 还剩 X 人」实时显示当前轮进度，仅均衡抽取模式下有意义；全员随机不影响轮次</span>
                         </div>
                         <div class="ins-row">
                             <span class="ins-key">⏳</span>
-                            <span class="ins-val">滚动期间按钮禁用，等待定格后即可继续点名</span>
+                            <span class="ins-val">滚动期间按钮禁用，定格后即可继续；再次点击任意抽取按钮时，上一次的介绍卡片和结果提示会立即关闭</span>
                         </div>
                     </div>
                     <div class="ins-card">
                         <div class="ins-card-title">✋ 手动点名</div>
                         <div class="ins-row">
                             <span class="ins-key">👆 双击座位</span>
-                            <span class="ins-val">直接标记该学生为已点名，座位高亮显示，姓名同步更新到顶部</span>
+                            <span class="ins-val">直接标记该学生为已点名，座位高亮，姓名更新到顶部，<strong>若已开启学生介绍则自动弹出介绍卡片</strong></span>
                         </div>
                         <div class="ins-row">
                             <span class="ins-key">↩️ 再次双击</span>
@@ -2421,49 +2873,41 @@
                         </div>
                         <div class="ins-row">
                             <span class="ins-key">🖱️ 右键座位</span>
-                            <span class="ins-val">弹出菜单，可查看或编辑该学生的介绍 / 备注；备注仅老师可见，有备注的座位左上角显示红点</span>
+                            <span class="ins-val">弹出菜单，可查看或编辑该学生的介绍 / 备注；备注仅教师可见，有备注的座位左上角显示红点</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- 第二行：显示偏好 + 学生介绍 -->
+                <!-- 第二行：更多抽取 + 学生介绍 -->
                 <div class="ins-section">
                     <div class="ins-card">
-                        <div class="ins-card-title">🎨 显示偏好</div>
+                        <div class="ins-card-title">🎯 更多抽取（···）</div>
                         <div class="ins-row">
-                            <span class="ins-key">🎛️ 打开方式</span>
-                            <span class="ins-val">⚙️ → 显示偏好配置，在弹窗中统一管理所有显示选项，修改后实时生效并自动记住偏好</span>
+                            <span class="ins-tag">🎲 随机抽小组</span>
+                            <span class="ins-val">从所有小组中随机抽出一组，滚动定格后在屏幕上方弹出「抽到：第 X 组」及成员名单的提示卡片；<strong>不触发学生介绍</strong>，仅展示小组信息</span>
                         </div>
                         <div class="ins-row">
-                            <span class="ins-key">🔢 被点次数</span>
-                            <span class="ins-val">开启后座位右上角显示累计被点次数</span>
+                            <span class="ins-tag">👥 随机抽组员</span>
+                            <span class="ins-val">先选择目标小组，再从该组成员中随机抽出一人；定格后座位高亮，<strong>若已开启学生介绍则自动弹出介绍卡片</strong>，点名记录同步计入统计</span>
                         </div>
                         <div class="ins-row">
-                            <span class="ins-key">🏅 班委标记</span>
-                            <span class="ins-val">开启后姓名下方显示彩色下划线：<span style="color:#ff8888">红色</span> = 班长，<span style="color:#88dd88">绿色</span> = 组长</span>
+                            <span class="ins-tag">📝 指定名单随机抽</span>
+                            <span class="ins-val">手动输入任意姓名（每行一个）后抽取；若抽中的姓名在座位表中存在，则高亮对应座位并<strong>弹出介绍卡片</strong>（需已开启）；若不在座位表中，则仅显示姓名，不高亮也不显示介绍</span>
                         </div>
                         <div class="ins-row">
-                            <span class="ins-key">🎨 小组背景</span>
-                            <span class="ins-val">开启后同组学生座位显示相同背景色，关闭后恢复统一配色</span>
-                        </div>
-                        <div class="ins-row">
-                            <span class="ins-key">🔄 座位视角</span>
-                            <span class="ins-val">教师视角 / 学生视角切换，学生视角下座位表整体左右翻转</span>
-                        </div>
-                        <div class="ins-row">
-                            <span class="ins-key">☀️ 主题切换</span>
-                            <span class="ins-val">深蓝 / 暗黑两种主题，切换后自动记住偏好</span>
+                            <span class="ins-key">🚪 打开菜单时</span>
+                            <span class="ins-val">点击「···」或任意抽取入口时，上一次的介绍卡片和结果提示会立即关闭</span>
                         </div>
                     </div>
                     <div class="ins-card">
                         <div class="ins-card-title">📖 学生介绍</div>
                         <div class="ins-row">
                             <span class="ins-key">🔛 开启方式</span>
-                            <span class="ins-val">⚙️ → 显示偏好配置 → 学生介绍，开启后每次点名自动弹出介绍卡片</span>
+                            <span class="ins-val">☰ → 显示偏好配置 → 学生介绍；<strong>关闭时所有抽取场景均不弹出介绍卡片</strong></span>
                         </div>
                         <div class="ins-row">
                             <span class="ins-key">📍 显示位置</span>
-                            <span class="ins-val">卡片出现在姓名右侧，约 20 秒后自动消失；有图片时右上角出现放大按钮，点击可居中放大查看</span>
+                            <span class="ins-val">卡片出现在姓名右侧，约 25 秒后自动消失；有图片时右上角出现放大按钮，点击可居中放大查看</span>
                         </div>
                         <div class="ins-row">
                             <span class="ins-key">🖼️ 学生照片</span>
@@ -2476,13 +2920,44 @@
                     </div>
                 </div>
 
-                <!-- 第三行：点名管理 + 数据统计 -->
+                <!-- 第三行：显示偏好 + 点名管理&数据统计 -->
                 <div class="ins-section">
+                    <div class="ins-card">
+                        <div class="ins-card-title">🎨 显示偏好</div>
+                        <div class="ins-row">
+                            <span class="ins-key">🎛️ 打开方式</span>
+                            <span class="ins-val">☰ → 显示偏好配置，在弹窗中统一管理所有显示选项，点「保存」后实时生效并自动记住偏好；点「取消」放弃本次修改</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">🔢 被点次数</span>
+                            <span class="ins-val">开启后每个座位右上角显示该学生累计被点次数角标，方便快速判断点名均衡度</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">🏅 班委标记</span>
+                            <span class="ins-val">开启后姓名下方显示彩色下划线：<span style="color:#ff8888">红色</span> = 班长，<span style="color:#88dd88">绿色</span> = 组长；需在编辑器中为学生设置班委角色后生效</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">🎨 小组背景</span>
+                            <span class="ins-val">开启后同组学生座位显示相同背景色以便区分；关闭后所有座位恢复统一配色；需先在编辑器中配置小组</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">📖 学生介绍</span>
+                            <span class="ins-val">开启后每次点名定格时自动弹出该学生的介绍卡片；关闭时所有抽取场景均不弹出</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">🔄 座位视角</span>
+                            <span class="ins-val">教师视角 / 学生视角切换；学生视角下座位表整体左右翻转，适合投影给学生看时使用</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">☀️ 主题</span>
+                            <span class="ins-val">深蓝 / 暗黑两种主题，切换后自动记住偏好</span>
+                        </div>
+                    </div>
                     <div class="ins-card">
                         <div class="ins-card-title">⚙️ 点名管理</div>
                         <div class="ins-row">
                             <span class="ins-key">🗑️ 清空记录</span>
-                            <span class="ins-val">一键清除本轮所有点名记录，⚠️ 操作不可撤销</span>
+                            <span class="ins-val">一键清除本轮所有点名记录及轮次计数，⚠️ 操作不可撤销</span>
                         </div>
                         <div class="ins-row">
                             <span class="ins-key">📤 导出记录</span>
@@ -2492,16 +2967,18 @@
                             <span class="ins-key">📥 导入记录</span>
                             <span class="ins-val">从之前导出的 Excel 文件恢复数据，支持跨设备迁移历史记录</span>
                         </div>
-                    </div>
-                    <div class="ins-card">
-                        <div class="ins-card-title">📊 数据统计</div>
+                        <div class="ins-card-title" style="margin-top:14px">📊 数据统计</div>
                         <div class="ins-row">
                             <span class="ins-key">📋 点名统计</span>
-                            <span class="ins-val">查看每位学生的累计被点次数，支持按表头次数排序</span>
+                            <span class="ins-val">查看每位学生的累计被点次数，支持按次数升序 / 降序排列，可按时间范围筛选</span>
                         </div>
                         <div class="ins-row">
                             <span class="ins-key">🕐 点名记录</span>
-                            <span class="ins-val">按时间顺序查看每次点名详情，同样支持按表头时间排序</span>
+                            <span class="ins-val">按时间顺序查看每次点名详情，支持按时间排序，可按时间范围筛选</span>
+                        </div>
+                        <div class="ins-row">
+                            <span class="ins-key">📤 导出统计</span>
+                            <span class="ins-val">将点名统计和记录导出为 Excel，含备注列，方便存档</span>
                         </div>
                         <div class="ins-row">
                             <span class="ins-key">💾</span>
@@ -2518,7 +2995,7 @@
                             <div>
                                 <div class="ins-row">
                                     <span class="ins-key">🖥️ 打开编辑器</span>
-                                    <span class="ins-val">⚙️ → 编辑座位信息，在 builder.html 中编辑座位表、班级信息、小组、学生介绍等所有配置</span>
+                                    <span class="ins-val">☰ → 编辑座位信息，在 builder.html 中编辑座位表、班级信息、小组、学生介绍等所有配置</span>
                                 </div>
                                 <div class="ins-row">
                                     <span class="ins-key">📥 导入配置</span>
@@ -2528,6 +3005,10 @@
                                     <span class="ins-key">👫 小组管理</span>
                                     <span class="ins-val">为学生分配小组后，同组座位显示相同背景色；导入 Excel 时若有背景色会自动建组</span>
                                 </div>
+                                <div class="ins-row">
+                                    <span class="ins-key">📝 备注</span>
+                                    <span class="ins-val">右键座位 → 查看介绍/备注 → 编辑，可为每位学生添加私密备注（如请假、座位调整等）；备注仅在点名器本地显示，有备注的座位左上角显示红点；导出点名统计 Excel 时备注会一并带出</span>
+                                </div>
                             </div>
                             <div>
                                 <div class="ins-row">
@@ -2536,7 +3017,7 @@
                                 </div>
                                 <div class="ins-row">
                                     <span class="ins-key">📊 下载 XLSX</span>
-                                    <span class="ins-val">导出包含座位表和学生介绍的 Excel 文件，方便备份或二次编辑后重新导入</span>
+                                    <span class="ins-val">导出包含座位表、学生介绍及备注的 Excel 文件，方便备份或二次编辑后重新导入</span>
                                 </div>
                                 <div class="ins-row">
                                     <span class="ins-key">↩️ 立即应用</span>
@@ -2544,7 +3025,7 @@
                                 </div>
                                 <div class="ins-row">
                                     <span class="ins-key">🔁 恢复默认</span>
-                                    <span class="ins-val">⚙️ → 恢复默认配置，将清除全部本地数据，⚠️ 操作不可逆，请提前导出备份</span>
+                                    <span class="ins-val">☰ → 恢复默认配置，将清除全部本地数据（含座位配置、备注、点名记录及所有偏好设置），⚠️ 操作不可逆，请提前导出备份</span>
                                 </div>
                             </div>
                         </div>
@@ -2574,15 +3055,59 @@
         <div id="intro-display"></div>
 
         <!-- 控制按钮区域 -->
-        <div class="controls">
-            <button id="start-btn" title="优先抽取被点次数少的同学，保证机会均等，被点次数最少的同学被点完后自动进入下一轮">均衡抽取</button>
-            <div id="round-status" style="text-align:center;line-height:1.6;pointer-events:none;">
-                <div id="round-label"
-                    style="font-size:0.95em;color:#00fffc;font-weight:bold;letter-spacing:1px;text-shadow:0 0 8px rgba(0,255,252,0.5)">
+        <div class="controls-wrapper">
+            <div class="controls">
+                <!-- 左侧占位，与右侧更多按钮等宽，保持主按钮视觉居中 -->
+                <div class="more-pick-placeholder"></div>
+                <button id="start-btn" title="优先抽取被点次数少的同学，保证机会均等，被点次数最少的同学被点完后自动进入下一轮">均衡抽取</button>
+                <div id="round-status" style="text-align:center;line-height:1.6;pointer-events:none;">
+                    <div id="round-label"
+                        style="font-size:0.95em;color:#00fffc;font-weight:bold;letter-spacing:1px;text-shadow:0 0 8px rgba(0,255,252,0.5)">
+                    </div>
+                    <div id="round-remain" style="font-size:0.72em;color:rgba(255,255,255,0.45);margin-top:1px"></div>
                 </div>
-                <div id="round-remain" style="font-size:0.72em;color:rgba(255,255,255,0.45);margin-top:1px"></div>
+                <button id="manual-btn" title="忽略被点次数，从全班随机抽取">全员随机</button>
+                <!-- 更多抽取入口（弱化，紧跟全员随机右侧） -->
+                <div id="more-pick-wrapper">
+                    <button id="more-pick-btn" title="更多抽取方式">⋯</button>
+                    <div id="more-pick-menu">
+                        <div class="more-pick-item" id="pick-custom-list" onclick="showCustomListPick()">
+                            <span class="item-icon">📋</span>指定名单抽人
+                        </div>
+                        <div class="more-pick-divider"></div>
+                        <div class="more-pick-item" id="pick-random-group" onclick="if(!this.classList.contains('disabled'))startGroupRoll()">
+                            <span class="item-icon">🎲</span>随机抽小组
+                        </div>
+                        <div class="more-pick-item" id="pick-group" onclick="if(!this.classList.contains('disabled'))showGroupPickMenu()">
+                            <span class="item-icon">🎯</span>组内随机抽
+                        </div>
+                    </div>
+                </div>
             </div>
-            <button id="manual-btn" title="忽略被点次数，从全班随机抽取">全员随机</button>
+        </div>
+
+        <!-- 指定名单弹窗 -->
+        <div id="custom-list-overlay">
+            <div id="custom-list-box">
+                <div class="cl-header">📋 指定名单抽人</div>
+                <div class="cl-tip">每行或用逗号分隔一个姓名，也可从座位表直接复制</div>
+                <textarea id="custom-list-input" placeholder="例：&#10;张三&#10;李四, 王五&#10;赵六"></textarea>
+                <div class="cl-footer">
+                    <button class="cl-btn" onclick="closeCustomListPick()">取消</button>
+                    <button class="cl-btn primary" onclick="confirmCustomListPick()">开始抽取</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 小组选择弹窗 -->
+        <div id="group-pick-overlay">
+            <div id="group-pick-box">
+                <div class="gp-header">🎲 选择小组</div>
+                <div id="group-pick-list"></div>
+                <div class="gp-footer">
+                    <button class="gp-cancel" onclick="closeGroupPickMenu()">取消</button>
+                </div>
+            </div>
         </div>
 
         <!-- 座位表区域 -->
@@ -2595,7 +3120,7 @@
         </div>
         <div
             style="margin-top:56px;margin-bottom:48px;font-size:.72em;color:rgba(255,255,255,.25);text-align:center;letter-spacing:1px">
-            智能课堂点名器 v1.4 &nbsp;·&nbsp; © 2026 helloaider &nbsp;·&nbsp;
+            智能课堂点名器 v1.5 &nbsp;·&nbsp; © 2026 helloaider &nbsp;·&nbsp;
             <a href="https://github.com/helloaider/smart-roll-call" target="_blank"
                 style="color:rgba(255,255,255,.3);text-decoration:none"
                 onmouseover="this.style.color='rgba(255,255,255,.6)'"
@@ -3263,16 +3788,16 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                                     const isDark = document.body.classList.contains('dark-mode');
                                     // 内置颜色表（兜底，兼容只有 color key 的旧配置）
                                     const COLOR_TABLE = {
-                                        blue:   { light: 'rgba(140,221,250,0.22)', dark: 'rgba(140,221,250,0.30)' },
-                                        green:  { light: 'rgba(134,239,172,0.20)', dark: 'rgba(134,239,172,0.28)' },
-                                        orange: { light: 'rgba(253,186,116,0.22)', dark: 'rgba(253,186,116,0.30)' },
-                                        pink:   { light: 'rgba(249,168,212,0.22)', dark: 'rgba(249,168,212,0.30)' },
-                                        purple: { light: 'rgba(216,180,254,0.22)', dark: 'rgba(216,180,254,0.30)' },
-                                        cyan:   { light: 'rgba(251,191,36,0.22)',  dark: 'rgba(251,191,36,0.30)'  },
-                                        yellow: { light: 'rgba(254,240,138,0.22)', dark: 'rgba(254,240,138,0.30)' },
+                                        blue:   { light: 'rgba(140,221,250,0.20)', dark: 'rgba(140,221,250,0.30)' },
+                                        orange: { light: 'rgba(253,186,116,0.20)', dark: 'rgba(253,186,116,0.30)' },
+                                        green:  { light: 'rgba(134,239,172,0.18)', dark: 'rgba(134,239,172,0.28)' },
+                                        pink:   { light: 'rgba(249,168,212,0.20)', dark: 'rgba(249,168,212,0.30)' },
+                                        purple: { light: 'rgba(216,180,254,0.20)', dark: 'rgba(216,180,254,0.30)' },
+                                        yellow: { light: 'rgba(254,240,138,0.20)', dark: 'rgba(254,240,138,0.30)' },
                                         mint:   { light: 'rgba(45,212,191,0.20)',  dark: 'rgba(45,212,191,0.30)'  },
-                                        red:    { light: 'rgba(252,165,165,0.22)', dark: 'rgba(252,165,165,0.30)' },
+                                        red:    { light: 'rgba(252,165,165,0.20)', dark: 'rgba(252,165,165,0.30)' },
                                         indigo: { light: 'rgba(99,102,241,0.20)',  dark: 'rgba(99,102,241,0.30)'  },
+                                        lime:   { light: 'rgba(190,242,100,0.20)', dark: 'rgba(190,242,100,0.30)' },
                                     };
                                     const fallback = COLOR_TABLE[gDef.color] || COLOR_TABLE.blue;
                                     const lightColor = gDef.lightColor || fallback.light;
@@ -3341,26 +3866,22 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                 }
             } catch (e) { }
         })();
-        const name_intro = CLASS_CONFIG.intros;
-        // 兼容旧版：如果有人直接改这里也能用
-        // 本地化存储相关
-
         // 点名日志：[{name, time}]，用于统计
-        let callLog = JSON.parse(localStorage.getItem('callLog') || '[]');
+        let callLog = (() => { try { const v = JSON.parse(localStorage.getItem('callLog') || '[]'); return Array.isArray(v) ? v : []; } catch(e) { return []; } })();
 
         // 从 callLog 派生，避免维护两份数据
         function hasBeenCalledSet() { return new Set(callLog.map(r => r.name)); }
         let isRunning = false;
         let last = '';
+        let lastRollBalanced = true; // 记录最后一次点名是否为均衡模式，用于轮次状态显示
         let isTeacher = localStorage.getItem('viewMode') === 'student' ? false : true;
         let isDarkMode = localStorage.getItem('darkMode') === 'true';
-        let isHideRecord = false; // 已废弃，保留变量避免其他引用报错
         let isShowCount = localStorage.getItem('showCount') !== null ? localStorage.getItem('showCount') === 'true' : false;
         let isShowCommittee = localStorage.getItem('showCommittee') === 'true';
         let isShowGroup = localStorage.getItem('showGroup') !== null ? localStorage.getItem('showGroup') === 'true' : false;
         let isShowIntro = localStorage.getItem('showIntro') === 'true';
 
-        // 缓存所有学生姓名，避免重复查询 DOM
+        // 获取所有学生姓名（从 DOM 实时读取，aisle/stage 格无 id 故自动排除）
         const getAllStudentNames = () =>
             Array.from(document.querySelectorAll('#seat-table td[id]')).map(td => td.id);
 
@@ -3371,14 +3892,9 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
         const teacherView = document.getElementById('seat-table');
         const settingsBtn = document.querySelector('.settings-btn');
         const settingsPanel = document.querySelector('.settings-panel');
-        const toggleViewBtn = null;       // 已移入显示偏好配置弹窗
-        const toggleDarkModeBtn = null;   // 已移入显示偏好配置弹窗
-        const toggleClassCommitteeBtn = null; // 已移入显示偏好配置弹窗
-        const toggleGroupBgBtn = null;    // 已移入显示偏好配置弹窗
         const clearRecordBtn = document.getElementById('clear-record');
         const exportLogBtn = document.getElementById('export-log');
         const importLogBtn = document.getElementById('import-log');
-        const toggleRecordVisibilityBtn = null; // 已移入显示偏好配置弹窗
         const viewInstructionBtn = document.getElementById('view-instruction');
         const instructionModal = document.getElementById('instructionModal');
         const closeInstructionBtn = document.getElementById('closeInstructionBtn');
@@ -3447,13 +3963,17 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
          * 保存数据到本地存储
          */
         function save() {
-            localStorage.setItem('callLog', JSON.stringify(callLog));
-            localStorage.setItem('viewMode', isTeacher ? 'teacher' : 'student');
-            localStorage.setItem('darkMode', isDarkMode);
-            localStorage.setItem('showCount', isShowCount);
-            localStorage.setItem('showCommittee', isShowCommittee);
-            localStorage.setItem('showGroup', isShowGroup);
-            localStorage.setItem('showIntro', isShowIntro);
+            try {
+                localStorage.setItem('callLog', JSON.stringify(callLog));
+                localStorage.setItem('viewMode', isTeacher ? 'teacher' : 'student');
+                localStorage.setItem('darkMode', isDarkMode);
+                localStorage.setItem('showCount', isShowCount);
+                localStorage.setItem('showCommittee', isShowCommittee);
+                localStorage.setItem('showGroup', isShowGroup);
+                localStorage.setItem('showIntro', isShowIntro);
+            } catch (e) {
+                console.warn('localStorage 写入失败（可能已满）：', e);
+            }
         }
 
         /**
@@ -3481,9 +4001,9 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                 if (td.classList.contains('aisle') || td.classList.contains('stage') || !td.id) return;
                 const name = td.id;
                 if (hasBeenCalledSet().has(name)) {
-                    td.title = `鼠标双击 ${name} 可取消本次点名`;
+                    td.title = `鼠标双击 ${name} 可取消本次点名；鼠标右键可修改备注/介绍`;
                 } else {
-                    td.title = `鼠标双击 ${name} 可对其手动点名`;
+                    td.title = `鼠标双击 ${name} 可对其手动点名；鼠标右键可修改备注/介绍`;
                 }
             });
         }
@@ -3492,13 +4012,8 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
          * 更新次数角标显示状态UI
          */
         function updateRecordVisibilityUI() {
-            seatingChart.classList.toggle('hide-record', false); // 不再灰显
             // 同步弹窗单选状态
             syncDisplayPrefsUI();
-            // 更新角标显示
-            document.querySelectorAll('.td-count-badge').forEach(el => {
-                el.style.display = isShowCount ? '' : 'none';
-            });
             // 控制所有座位角标的显示/隐藏
             document.querySelectorAll('.td-count-badge').forEach(el => {
                 el.style.display = isShowCount ? '' : 'none';
@@ -3511,7 +4026,6 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
         function updateDarkModeUI() {
             document.body.classList.toggle('dark-mode', isDarkMode);
             document.documentElement.classList.toggle('dark-mode-pre', isDarkMode);
-            syncDisplayPrefsUI();
         }
 
         /**
@@ -3542,7 +4056,7 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                 el.style.setProperty('color', '#1a1a1a', 'important');
                 el.style.setProperty('text-shadow', 'none', 'important');
                 el.classList.add('highlight');
-                el.title = `鼠标双击 ${name} 可取消本次点名`;
+                el.title = `鼠标双击 ${name} 可取消本次点名；鼠标右键可修改备注/介绍`;
             }
         }
 
@@ -3557,18 +4071,20 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                 x.style.removeProperty('color');
                 x.style.removeProperty('text-shadow');
                 if (x.dataset.savedBg) x.style.background = x.dataset.savedBg;
+                if (x.dataset.savedColor) x.style.color = x.dataset.savedColor;
+                if (x.dataset.savedTextShadow) x.style.textShadow = x.dataset.savedTextShadow;
                 delete x.dataset.savedBg;
                 delete x.dataset.savedColor;
                 delete x.dataset.savedTextShadow;
                 const name = x.id;
-                x.title = `鼠标双击 ${name} 可对其手动点名`;
+                x.title = `鼠标双击 ${name} 可对其手动点名；鼠标右键可修改备注/介绍`;
             });
         }
 
         /**
          * 随机抽取姓名
          * @param {boolean} balanced - 是否均衡抽取（从被点次数最少的人中抽）
-         * @returns {string|null|'roundDone'} 姓名 / null / 'roundDone'（本轮最少次数已全部点完）
+         * @returns {string|null} 姓名 / null（无学生时）
          */
         function randomName(balanced = true) {
             const allNames = getAllStudentNames();
@@ -3579,18 +4095,11 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                 return allNames[Math.floor(Math.random() * allNames.length)];
             }
 
-            // 均衡抽取：找出被点次数最少的人作为候选池
+            // 均衡抽取：找出被点次数最少的人作为候选池，随机抽一个
             const cnt = getCallCount();
             const minCount = Math.min(...allNames.map(n => cnt[n] || 0));
             const candidates = allNames.filter(n => (cnt[n] || 0) === minCount);
-
-            // 从候选池中排除本轮已点过（次数 > minCount）的人
-            // 实际上候选池已经是次数 = minCount 的人，直接抽即可
             if (candidates.length === 0) return null;
-
-            // 检查候选池是否已在本轮全部被点完
-            // 判断依据：候选池里所有人的次数都已经 > minCount（即本轮都被点过了）
-            // 但由于候选池本身就是 minCount 的人，这里直接返回候选池中随机一个
             return candidates[Math.floor(Math.random() * candidates.length)];
         }
 
@@ -3613,7 +4122,8 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             const remain = document.getElementById('round-remain');
             if (!label || !remain) return;
             const allNames = getAllStudentNames();
-            if (!allNames.length) { label.textContent = ''; remain.textContent = ''; return; }
+            // 全员随机模式下不显示轮次，避免误导
+            if (!allNames.length || !lastRollBalanced) { label.textContent = ''; remain.textContent = ''; return; }
             const { minCount, candidates } = getBalancedStatus();
             label.textContent = `第 ${minCount + 1} 轮`;
             remain.textContent = `还剩 ${candidates.length} 人`;
@@ -3625,15 +4135,21 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
          */
         function startRoll(balanced = true) {
             if (isRunning) return;
+            clearAllToasts();
+            clearIntro();
+            lastRollBalanced = balanced;
+
+            const allNames = getAllStudentNames();
+            if (!allNames.length) { showAlert('当前座位表没有学生，请先配置座位信息。'); return; }
 
             isRunning = true;
             startBtn.disabled = true;
             manualBtn.disabled = true;
+            document.getElementById('more-pick-btn').disabled = true;
 
             // 均衡抽取前记录本次抽取前的最小次数，用于判断是否完成一轮
             const preStatus = balanced ? getBalancedStatus() : null;
 
-            const allNames = getAllStudentNames();
             let counter = 0;
             const maxCounter = 30;
             const interval = setInterval(() => {
@@ -3668,22 +4184,35 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                     isRunning = false;
                     startBtn.disabled = false;
                     manualBtn.disabled = false;
+                    document.getElementById('more-pick-btn').disabled = false;
                     refreshUI();
                 }
             }, 30);
         }
 
         /**
-         * 均衡抽取完成一轮时的提示
+         * 均衡抽取完成一轮时的提示 toast
          */
+
+        // 追踪所有活跃的 toast，方便主动清除
+        const activeToasts = [];
+
+        /**
+         * 清除所有活跃的 toast 提示
+         */
+        function clearAllToasts() {
+            activeToasts.forEach(el => { try { el.remove(); } catch(e) {} });
+            activeToasts.length = 0;
+        }
+
         function showRoundDoneToast(completedMinCount) {
             const newMin = completedMinCount + 1;
             const el = document.createElement('div');
             el.style.cssText = `
-                position: fixed; top: 50%; left: 50%;
+                position: fixed; top: 30%; left: 50%;
                 transform: translate(-50%, -50%);
-                background: linear-gradient(135deg, rgba(30,60,114,0.97), rgba(42,82,152,0.97));
-                border: 1px solid rgba(0,255,252,0.5);
+                background: linear-gradient(135deg, rgba(30,60,114,0.95), rgba(42,82,152,0.95));
+                border: 1px solid rgba(0,255,252,0.3);
                 border-radius: 12px; padding: 18px 28px;
                 color: #fff; font-size: 1em; text-align: center;
                 z-index: 9999; pointer-events: none;
@@ -3694,12 +4223,289 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                 <div style="color:#00fffc;font-weight:bold;margin-bottom:4px">第 ${completedMinCount + 1} 轮点名完成</div>
                 <div style="color:rgba(255,255,255,.65);font-size:.85em">每人已至少被点 ${newMin} 次，下次均衡抽取将开始新一轮</div>`;
             document.body.appendChild(el);
-            setTimeout(() => el.remove(), 8000);
+            activeToasts.push(el);
+            setTimeout(() => { el.remove(); const i = activeToasts.indexOf(el); if (i > -1) activeToasts.splice(i, 1); }, 8000);
         }
 
         /**
          * 全部点完后的确认弹窗
          */
+
+        // ===================== 更多抽取功能 =====================
+
+        // 小组颜色表（与座位渲染保持一致）
+        const GROUP_COLOR_TABLE = {
+            blue:   '#8cddfaaa', green:  '#86efacaa', orange: '#fdb474aa',
+            pink:   '#f9a8d4aa', purple: '#d8b4feaa', cyan:   '#fbbf24aa',
+            yellow: '#fef08aaa', mint:   '#2dd4bfaa',  red:    '#fca5a5aa',
+            indigo: '#6366f1aa',
+        };
+        // 小组颜色表（不透明版，用于 UI 标识）
+        const GROUP_COLOR_SOLID = {
+            blue:   '#8cddfa', green:  '#86efac', orange: '#fdb474',
+            pink:   '#f9a8d4', purple: '#d8b4fe', cyan:   '#fbbf24',
+            yellow: '#fef08a', mint:   '#2dd4bf',  red:    '#fca5a5',
+            indigo: '#818cf8',
+        };
+
+        /** 获取小组的成员列表（从座位表 data-group 属性读取） */
+        function getGroupMembers(groupId) {
+            return Array.from(document.querySelectorAll(`#seat-table td[data-group="${groupId}"]`))
+                .map(td => td.id).filter(Boolean);
+        }
+
+        /** 高亮一个小组的所有座位 */
+        function highGroup(groupId) {
+            clearHigh();
+            const members = getGroupMembers(groupId);
+            members.forEach(name => {
+                const el = document.getElementById(name);
+                if (!el) return;
+                el.dataset.savedBg = el.style.background || '';
+                el.dataset.savedColor = el.style.color || '';
+                el.style.setProperty('color', '#1a1a1a', 'important');
+                el.style.setProperty('text-shadow', 'none', 'important');
+                el.classList.add('highlight');
+            });
+        }
+
+        /** ── 更多菜单开关 ── */
+        function toggleMorePickMenu() {
+            clearAllToasts();
+            clearIntro();
+            const menu = document.getElementById('more-pick-menu');
+            const hasGroups = (CLASS_CONFIG.groups || []).length > 0;
+            document.getElementById('pick-group').classList.toggle('disabled', !hasGroups);
+            document.getElementById('pick-random-group').classList.toggle('disabled', !hasGroups);
+            menu.classList.toggle('show');
+        }
+
+        function closeMorePickMenu() {
+            document.getElementById('more-pick-menu').classList.remove('show');
+        }
+
+        /** ── 场景一：随机抽小组 ── */
+        function startGroupRoll() {
+            closeMorePickMenu();
+            const groups = CLASS_CONFIG.groups || [];
+            if (!groups.length) { showAlert('当前没有小组数据，请先在编辑页面配置小组。'); return; }
+            if (isRunning) return;
+            clearAllToasts();
+
+            isRunning = true;
+            startBtn.disabled = true;
+            manualBtn.disabled = true;
+            document.getElementById('more-pick-btn').disabled = true;
+
+            const groupNames = groups.map(g => g.name || `第${g.id}组`);
+            let counter = 0;
+            const maxCounter = 30;
+            const interval = setInterval(() => {
+                nameDisplay.innerText = groupNames[Math.floor(Math.random() * groupNames.length)];
+                counter++;
+                if (counter >= maxCounter) {
+                    clearInterval(interval);
+                    const picked = groups[Math.floor(Math.random() * groups.length)];
+                    const pickedName = picked.name || `第${picked.id}组`;
+                    nameDisplay.innerText = pickedName;
+                    highGroup(picked.id);
+                    clearIntro();
+                    // 显示小组成员提示
+                    const members = getGroupMembers(picked.id);
+                    showGroupResultToast(pickedName, members);
+                    isRunning = false;
+                    startBtn.disabled = false;
+                    manualBtn.disabled = false;
+                    document.getElementById('more-pick-btn').disabled = false;
+                    refreshUI();
+                }
+            }, 30);
+        }
+
+        /**
+         * 显示抽到小组后的结果 toast
+         * @param {string} groupName - 小组名称
+         * @param {string[]} members - 小组成员姓名列表
+         */
+        function showGroupResultToast(groupName, members) {
+            const el = document.createElement('div');
+            const dark = document.body.classList.contains('dark-mode');
+            el.style.cssText = `
+                position: fixed; top: 30%; left: 50%;
+                transform: translate(-50%, -50%);
+                background: ${dark
+                    ? 'linear-gradient(135deg, rgba(10,18,38,0.97), rgba(20,32,60,0.97))'
+                    : 'linear-gradient(135deg, rgba(30,60,114,0.95), rgba(42,82,152,0.95))'};
+                border: 1px solid ${dark ? 'rgba(56,189,248,0.3)' : 'rgba(0,255,252,0.3)'};
+                border-radius: 12px; padding: 18px 28px;
+                color: #fff; font-size: 1em; text-align: center;
+                z-index: 9999; pointer-events: none;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+                animation: roundDoneFade 5s ease forwards;
+                max-width: 320px;
+            `;
+            const accentColor = dark ? '#38bdf8' : '#00fffc';
+            el.innerHTML = `<div style="font-size:1.4em;margin-bottom:6px">🎲</div>
+                <div style="color:${accentColor};font-weight:bold;margin-bottom:6px">抽到：${groupName}</div>
+                <div style="color:rgba(255,255,255,.6);font-size:.82em;line-height:1.8">${members.join('　')}</div>`;
+            document.body.appendChild(el);
+            activeToasts.push(el);
+            setTimeout(() => { el.remove(); const i = activeToasts.indexOf(el); if (i > -1) activeToasts.splice(i, 1); }, 6000);
+        }
+
+        /** ── 场景二：组内抽人 ── */
+        function showGroupPickMenu() {
+            closeMorePickMenu();
+            clearAllToasts();
+            clearIntro();
+            const groups = CLASS_CONFIG.groups || [];
+            if (!groups.length) { showAlert('当前没有小组数据，请先在编辑页面配置小组。'); return; }
+
+            const calledSet = hasBeenCalledSet();
+            const list = document.getElementById('group-pick-list');
+            list.innerHTML = '';
+
+            groups.forEach(g => {
+                const members = getGroupMembers(g.id);
+                if (!members.length) return;
+                // lightColor 是 rgba(...) 字符串，直接提取 rgb 部分作为不透明色
+                const rawColor = g.lightColor || '';
+                const rgbMatch = rawColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+                const dotColor = rgbMatch
+                    ? `rgb(${rgbMatch[1]},${rgbMatch[2]},${rgbMatch[3]})`
+                    : (GROUP_COLOR_SOLID[g.color || 'blue'] || '#8cddfa');
+                const gName = g.name || `第${g.id}组`;
+
+                // 计算已被点过的人数
+                const calledCount = members.filter(n => calledSet.has(n)).length;
+                const remainCount = members.length - calledCount;
+
+                // 构建摘要：取前2个成员名展示，格式「包括xx、xx等N人，其中M人未点过」
+                const showNames = members.slice(0, 2).join('、');
+                const etcSuffix = members.length > 2 ? '等' : '';
+                const summary = `包括${showNames}${etcSuffix}${members.length}人，其中<span style="color:#00fffc">${remainCount}</span>人未点过`;
+
+                const item = document.createElement('div');
+                item.className = 'gp-item';
+                item.innerHTML = `
+                    <span class="gp-color-dot" style="background:${dotColor}"></span>
+                    <span class="gp-name">${gName}</span>
+                    <span class="gp-count" style="font-size:.85em;color:rgba(255,255,255,0.6)">${summary}</span>
+                `;
+                item.onclick = () => { closeGroupPickMenu(); startGroupMemberRoll(g.id, gName, members); };
+                list.appendChild(item);
+            });
+
+            document.getElementById('group-pick-overlay').classList.add('show');
+        }
+
+        /**
+         * 关闭小组选择弹窗
+         */
+        function closeGroupPickMenu() {
+            document.getElementById('group-pick-overlay').classList.remove('show');
+        }
+
+        /**
+         * 开始组内随机抽人滚动
+         * @param {string|number} groupId - 小组 ID
+         * @param {string} groupName - 小组名称
+         * @param {string[]} members - 小组成员姓名列表
+         */
+        function startGroupMemberRoll(groupId, groupName, members) {
+            if (isRunning) return;
+            if (!members.length) { showAlert(`${groupName} 没有成员。`); return; }
+            clearAllToasts();
+
+            isRunning = true;
+            startBtn.disabled = true;
+            manualBtn.disabled = true;
+            document.getElementById('more-pick-btn').disabled = true;
+
+            let counter = 0;
+            const maxCounter = 30;
+            const interval = setInterval(() => {
+                nameDisplay.innerText = members[Math.floor(Math.random() * members.length)];
+                counter++;
+                if (counter >= maxCounter) {
+                    clearInterval(interval);
+                    const selected = members[Math.floor(Math.random() * members.length)];
+                    nameDisplay.innerText = selected;
+                    high(selected);
+                    callLog.push({ name: selected, time: new Date().toISOString() });
+                    showCountToast(selected);
+                    showIntro(selected);
+                    save();
+                    isRunning = false;
+                    startBtn.disabled = false;
+                    manualBtn.disabled = false;
+                    document.getElementById('more-pick-btn').disabled = false;
+                    refreshUI();
+                }
+            }, 30);
+        }
+
+        /** ── 场景三：指定名单抽人 ── */
+        function showCustomListPick() {
+            closeMorePickMenu();
+            clearAllToasts();
+            clearIntro();
+            document.getElementById('custom-list-overlay').classList.add('show');
+            setTimeout(() => document.getElementById('custom-list-input').focus(), 100);
+        }
+
+        function closeCustomListPick() {
+            document.getElementById('custom-list-overlay').classList.remove('show');
+            document.getElementById('custom-list-input').value = '';
+        }
+
+        function confirmCustomListPick() {
+            const raw = document.getElementById('custom-list-input').value;
+            const names = raw.split(/[\n,，、\s]+/).map(s => s.trim()).filter(Boolean);
+            if (!names.length) { showAlert('请输入至少一个姓名。'); return; }
+            closeCustomListPick();
+            startCustomListRoll(names);
+        }
+
+        function startCustomListRoll(names) {
+            if (isRunning) return;
+            clearAllToasts();
+
+            isRunning = true;
+            startBtn.disabled = true;
+            manualBtn.disabled = true;
+            document.getElementById('more-pick-btn').disabled = true;
+
+            let counter = 0;
+            const maxCounter = 30;
+            const interval = setInterval(() => {
+                nameDisplay.innerText = names[Math.floor(Math.random() * names.length)];
+                counter++;
+                if (counter >= maxCounter) {
+                    clearInterval(interval);
+                    const selected = names[Math.floor(Math.random() * names.length)];
+                    nameDisplay.innerText = selected;
+                    // 如果姓名在座位表中存在则高亮，否则只显示名字
+                    const el = document.getElementById(selected);
+                    if (el) {
+                        high(selected);
+                        showIntro(selected);
+                    } else {
+                        clearHigh();
+                        clearIntro();
+                    }
+                    callLog.push({ name: selected, time: new Date().toISOString() });
+                    showCountToast(selected);
+                    save();
+                    isRunning = false;
+                    startBtn.disabled = false;
+                    manualBtn.disabled = false;
+                    document.getElementById('more-pick-btn').disabled = false;
+                    refreshUI();
+                }
+            }, 30);
+        }
+
         /**
          * 处理座位双击事件 - 手动点名/取消点名
          * @param {Event} event - 双击事件对象
@@ -3712,59 +4518,55 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             const td = event.target;
             if (!td.id || td.classList.contains('aisle') || td.classList.contains('stage')) return;
 
-            const realName = td.id;
-            const displayName = td.id;
-            // 核心修改：判断是否高亮（而非hasBeenCalled）
+            const name = td.id;
             const isHighlighted = td.classList.contains('highlight');
 
             // 已高亮 - 取消点名/取消高亮
             if (isHighlighted) {
-                showConfirm(`确定要取消对【${displayName}】的本次点名吗？`, {}).then(ok => {
-                    if (ok) {
-                        // 删除最近一条该学生的日志
-                        for (let i = callLog.length - 1; i >= 0; i--) {
-                            if (callLog[i].name === realName) { callLog.splice(i, 1); break; }
-                        }
-                        save();
-                        showCancelToast(realName);
-                        clearHigh(); // 清除高亮
-                        nameDisplay.innerText = '点击开始';
-                        clearIntro();
-                        last = '';
-                        refreshUI();
-                        // 触发mouseenter更新提示（修复this指向问题）
-                        td.dispatchEvent(new MouseEvent('mouseenter'));
+                showConfirm(`确定要取消对【${name}】的本次点名吗？`, {}).then(ok => {
+                    if (!ok) return;
+                    if (isRunning) return; // 确认期间可能已开始新一轮，放弃操作
+                    // 删除最近一条该学生的日志
+                    for (let i = callLog.length - 1; i >= 0; i--) {
+                        if (callLog[i].name === name) { callLog.splice(i, 1); break; }
                     }
+                    save();
+                    showCancelToast(name);
+                    clearHigh();
+                    nameDisplay.innerText = '点击开始';
+                    clearIntro();
+                    last = '';
+                    refreshUI();
+                    td.dispatchEvent(new MouseEvent('mouseenter'));
                 });
             }
             // 未高亮 - 手动点名/设置高亮
             else {
-                high(realName); // 设置高亮
-                nameDisplay.innerText = realName;
-                showIntro(realName);
-                callLog.push({ name: realName, time: new Date().toISOString() });
-                showCountToast(realName);
+                high(name);
+                nameDisplay.innerText = name;
+                showIntro(name);
+                callLog.push({ name: name, time: new Date().toISOString() });
+                showCountToast(name);
                 save();
                 refreshUI();
-                // 触发mouseenter更新提示（修复this指向问题）
                 td.dispatchEvent(new MouseEvent('mouseenter'));
             }
         }
 
-        // 关闭设置面板的通用函数
+        // 关闭设置面板
         function closeSettingsPanel() {
             settingsPanel.classList.remove('show');
         }
 
-        // 点击空白处面板消失
+        // 点击设置面板和按钮以外的区域时关闭面板
         document.addEventListener('click', function (e) {
             if (!settingsPanel.contains(e.target) && !settingsBtn.contains(e.target)) {
-                settingsPanel.classList.remove('show');
+                closeSettingsPanel();
             }
         });
 
         /**
-         * 切换座位视角
+         * 切换座位视角（教师 ↔ 学生）
          */
         function toggleView() {
             isTeacher = !isTeacher;
@@ -3782,33 +4584,13 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             if (last) high(last);
             save();
             refreshUI();
-            // 新增：关闭设置面板
             closeSettingsPanel();
         }
 
         /**
-         * 切换暗黑模式
+         * 更新小组背景色 UI
+         * @param {boolean} [skipRender] - true 时跳过重新渲染座位表（仅同步弹窗状态）
          */
-        function toggleDarkMode() {
-            isDarkMode = !isDarkMode;
-            updateDarkModeUI();
-            save();
-            refreshUI();
-            // 新增：关闭设置面板
-            closeSettingsPanel();
-        }
-
-        /**
-         * 切换班委标记显示
-         */
-        function toggleClassCommittee() {
-            isShowCommittee = !isShowCommittee;
-            updateClassCommitteeUI();
-            save();
-            // 新增：关闭设置面板
-            closeSettingsPanel();
-        }
-
         function updateGroupBgUI(skipRender) {
             if (!skipRender) {
                 renderSeats();
@@ -3816,31 +4598,13 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                 restoreCountBadges(); // 恢复次数角标
                 restoreNoteDots();    // 恢复备注红点
             }
-            if (toggleGroupBgBtn) toggleGroupBgBtn.innerHTML = isShowGroup
-                ? '<span class="settings-item-icon">🎨</span>隐藏小组背景'
-                : '<span class="settings-item-icon">🎨</span>显示小组背景';
             syncDisplayPrefsUI();
         }
 
-        function toggleGroupBg() {
-            isShowGroup = !isShowGroup;
-            updateGroupBgUI();
-            save();
-            closeSettingsPanel();
-        }
-
-        function toggleIntro() {
-            isShowIntro = !isShowIntro;
-            updateIntroUI();
-            save();
-            closeSettingsPanel();
-        }
-
+        /**
+         * 更新学生介绍卡片的显示/隐藏状态
+         */
         function updateIntroUI() {
-            const btn = document.getElementById('toggle-intro');
-            if (btn) btn.innerHTML = isShowIntro
-                ? '<span class="settings-item-icon">📖</span>隐藏学生介绍'
-                : '<span class="settings-item-icon">💬</span>显示学生介绍';
             const el = document.getElementById('intro-display');
             if (el) {
                 if (isShowIntro && el.querySelector('.intro-header')) el.classList.add('visible');
@@ -3880,7 +4644,7 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                     : '';
 
                 el.innerHTML = `
-                    <div class="intro-header"><span class="intro-name">${name}</span>${hasPhoto ? '<span class="intro-expand-btn" title="放大/还原">⛶</span>' : ''}</div>
+                    <div class="intro-header"><span class="intro-name">${name}</span>${hasPhoto ? '<span class="intro-expand-btn" title="放大/还原">⛶</span>' : ''}<span class="intro-close-btn" title="关闭" onclick="clearIntro()">✕</span></div>
                     <div class="intro-body">${photoHtml}${textHtml}</div>`;
 
                 if (!isShowIntro) return;
@@ -3977,7 +4741,7 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                     }, 40);
                 }
 
-                introTimer = setTimeout(() => clearIntro(), 20000);
+                introTimer = setTimeout(() => clearIntro(), 25000);
             }
 
             // 依次尝试各目录和扩展名，找到第一个可用的图片
@@ -4001,6 +4765,9 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             tryNextExt(0, 0);
         }
 
+        /**
+         * 清除学生介绍卡片
+         */
         function clearIntro() {
             const el = document.getElementById('intro-display');
             if (!el) return;
@@ -4008,17 +4775,6 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             el.classList.remove('visible', 'expanded');
             if (introTimer) { clearTimeout(introTimer); introTimer = null; }
             if (introTypeTimer) { clearInterval(introTypeTimer); introTypeTimer = null; }
-        }
-
-        /**
-         * 切换次数角标显示/隐藏
-         */
-        function toggleRecordVisibility() {
-            isShowCount = !isShowCount;
-            restoreCountBadges(); // 先确保所有角标都已创建
-            updateRecordVisibilityUI();
-            save();
-            closeSettingsPanel();
         }
 
         /**
@@ -4038,7 +4794,6 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                     refreshUI();
                 }
             });
-            // 新增：关闭设置面板
             closeSettingsPanel();
         }
 
@@ -4103,15 +4858,15 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                 // 需要反查回 key；同时兼容已经是 key 的情况
                 const GROUP_COLOR_MAP = [
                     { key: 'blue',   light: 'rgba(140,221,250,0.20)' },
-                    { key: 'green',  light: 'rgba(134,239,172,0.18)' },
                     { key: 'orange', light: 'rgba(253,186,116,0.20)' },
+                    { key: 'green',  light: 'rgba(134,239,172,0.18)' },
                     { key: 'pink',   light: 'rgba(249,168,212,0.20)' },
                     { key: 'purple', light: 'rgba(216,180,254,0.20)' },
-                    { key: 'cyan',   light: 'rgba(251,191,36,0.20)'  },
                     { key: 'yellow', light: 'rgba(254,240,138,0.20)' },
-                    { key: 'mint',   light: 'rgba(167,243,208,0.18)' },
+                    { key: 'mint',   light: 'rgba(45,212,191,0.20)'  },
                     { key: 'red',    light: 'rgba(252,165,165,0.20)' },
-                    { key: 'indigo', light: 'rgba(165,180,252,0.20)' },
+                    { key: 'indigo', light: 'rgba(99,102,241,0.20)'  },
+                    { key: 'lime',   light: 'rgba(190,242,100,0.20)' },
                 ];
                 const COLOR_KEYS_SET = new Set(GROUP_COLOR_MAP.map(c => c.key));
                 function rgbaToKey(rgba) {
@@ -4159,9 +4914,12 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
         /**
          * 显示偏好配置弹窗
          */
-        // 打开时的状态快照，用于取消还原
+        // 打开时的状态快照，用于取消时还原
         let _dpSnapshot = null;
 
+        /**
+         * 同步显示偏好配置弹窗中的单选按钮状态
+         */
         function syncDisplayPrefsUI() {
             const overlay = document.getElementById('displayPrefsOverlay');
             if (!overlay) return;
@@ -4178,6 +4936,9 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             setRadio('dp-theme',     isDarkMode ? '1' : '0');
         }
 
+        /**
+         * 打开显示偏好配置弹窗，记录快照以支持取消还原
+         */
         function openDisplayPrefs() {
             closeSettingsPanel();
             // 记录快照
@@ -4219,6 +4980,9 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             });
         }
 
+        /**
+         * 保存显示偏好配置并关闭弹窗
+         */
         function saveDisplayPrefs() {
             // 持久化当前状态
             save();
@@ -4226,6 +4990,9 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             document.getElementById('displayPrefsOverlay').classList.remove('show');
         }
 
+        /**
+         * 取消显示偏好配置，还原快照状态并关闭弹窗
+         */
         function cancelDisplayPrefs() {
             if (!_dpSnapshot) {
                 document.getElementById('displayPrefsOverlay').classList.remove('show');
@@ -4252,10 +5019,9 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
          * 打开使用说明
          */
         function openInstruction() {
+            closeSettingsPanel();
             instructionModal.classList.add('show');
             document.body.style.overflow = 'hidden';
-            // 新增：关闭设置面板
-            closeSettingsPanel();
         }
 
         /**
@@ -4267,12 +5033,22 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
         }
 
         // ===================== 点名统计 =====================
+
+        /**
+         * 统计每个学生的被点次数
+         * @returns {{ [name: string]: number }}
+         */
         function getCallCount() {
             const cnt = {};
             callLog.forEach(r => { cnt[r.name] = (cnt[r.name] || 0) + 1; });
             return cnt;
         }
 
+        /**
+         * 设置座位角标的次数和颜色深度
+         * @param {HTMLElement} badge - 角标元素
+         * @param {number} n - 被点次数
+         */
         function setBadgeCount(badge, n) {
             badge.setAttribute('data-n', n);
             // 青色系，透明度随次数加深：1次很浅，5次及以上明显
@@ -4280,6 +5056,9 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             badge.style.setProperty('--badge-color', `rgba(0,255,252,${alpha})`);
         }
 
+        /**
+         * 根据 callLog 恢复所有座位的次数角标
+         */
         function restoreCountBadges() {
             const cnt = getCallCount();
             Object.entries(cnt).forEach(([name, n]) => {
@@ -4296,6 +5075,9 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             });
         }
 
+        /**
+         * 根据 CLASS_CONFIG.notes 恢复所有座位的备注红点
+         */
         function restoreNoteDots() {
             // 先清除所有旧红点
             document.querySelectorAll('.td-note-dot').forEach(el => el.remove());
@@ -4310,6 +5092,10 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             });
         }
 
+        /**
+         * 点名后更新对应座位的次数角标
+         * @param {string} name - 被点学生姓名
+         */
         function showCountToast(name) {
             const cnt = getCallCount();
             const n = cnt[name] || 1;
@@ -4328,6 +5114,10 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             }
         }
 
+        /**
+         * 取消点名后更新对应座位的次数角标
+         * @param {string} name - 被取消点名的学生姓名
+         */
         function showCancelToast(name) {
             const cnt = getCallCount(); // 已在调用前删除了日志，所以这里是减后的值
             const n = cnt[name] || 0;
@@ -4347,8 +5137,11 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             }
         }
 
+        /**
+         * 打开点名数据统计弹窗
+         */
         function openStatModal() {
-            settingsPanel.classList.remove('show');
+            closeSettingsPanel();
             statSortCount = 'desc'; statSortTime = 'desc'; statCurrentTab = 'count';
             statRangeStart = null; statRangeEnd = null; statRangeHover = null; statRangePhase = 0;
             // 初始化日历到当前月，若有记录则跳到最早记录所在月
@@ -4369,11 +5162,17 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             document.getElementById('stat-modal').style.display = 'flex';
         }
 
+        /**
+         * 关闭点名数据统计弹窗
+         */
         function closeStatModal() {
             closeStatCalPopup();
             document.getElementById('stat-modal').style.display = 'none';
         }
 
+        /**
+         * 导出当前统计数据为 Excel
+         */
         function exportStatData() {
             _loadXlsxLib(function () {
                 const allNames = getAllStudentNames();
@@ -4612,6 +5411,11 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             }
         }
 
+        /**
+         * 触发文件下载
+         * @param {ArrayBuffer} buf - 文件内容
+         * @param {string} filename - 文件名
+         */
         function _fallbackDownload(buf, filename) {
             const blob = new Blob([buf], { type: 'application/octet-stream' });
             const a = document.createElement('a');
@@ -4660,7 +5464,10 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             return (c^0xFFFFFFFF)>>>0;
         }
 
-        // ---- 点名记录 导出/导入 ----
+        /**
+         * 按需加载 SheetJS 库，加载完成后执行回调
+         * @param {Function} cb - 加载完成后的回调
+         */
         function _loadXlsxLib(cb) {
             if (typeof XLSX !== 'undefined') { cb(); return; }
             var s = document.createElement('script');
@@ -4669,6 +5476,9 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             document.head.appendChild(s);
         }
 
+        /**
+         * 导出点名记录为 Excel（含座位表、学生信息、网页配置）
+         */
         function exportCallLog() {
             _loadXlsxLib(function () {
                 var allNames = getAllStudentNames();
@@ -4873,15 +5683,15 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                 // ── 构建姓名→颜色hex映射（与 builder 一致）──
                 var LOG_GROUP_COLORS = [
                     { key: 'blue',   light: 'rgba(140,221,250,0.20)', swatch: '#8CDDFA' },
-                    { key: 'green',  light: 'rgba(134,239,172,0.18)', swatch: '#86EFAC' },
                     { key: 'orange', light: 'rgba(253,186,116,0.20)', swatch: '#FDBA74' },
+                    { key: 'green',  light: 'rgba(134,239,172,0.18)', swatch: '#86EFAC' },
                     { key: 'pink',   light: 'rgba(249,168,212,0.20)', swatch: '#F9A8D4' },
                     { key: 'purple', light: 'rgba(216,180,254,0.20)', swatch: '#D8B4FE' },
-                    { key: 'cyan',   light: 'rgba(251,191,36,0.20)',  swatch: '#F59E0B' },
                     { key: 'yellow', light: 'rgba(254,240,138,0.20)', swatch: '#FEF08A' },
                     { key: 'mint',   light: 'rgba(45,212,191,0.20)',  swatch: '#2DD4BF' },
                     { key: 'red',    light: 'rgba(252,165,165,0.20)', swatch: '#FCA5A5' },
                     { key: 'indigo', light: 'rgba(99,102,241,0.20)',  swatch: '#6366F1' },
+                    { key: 'lime',   light: 'rgba(190,242,100,0.20)', swatch: '#BEF264' },
                 ];
                 function _logGetSwatchHex(lightColor) {
                     if (!lightColor) return '8CDDFA';
@@ -5193,6 +6003,10 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             }
         }
 
+        /**
+         * 导入点名记录 Excel 文件，追加到当前记录
+         * @param {Event} event - input[type=file] 的 change 事件
+         */
         function importCallLog(event) {
             var file = event.target.files[0];
             event.target.value = '';
@@ -5265,6 +6079,10 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             });
         }
 
+        /**
+         * 切换统计弹窗的 tab（点名统计 / 点名记录）
+         * @param {string} tab - 'count' 或 'log'
+         */
         function switchStatTab(tab) {
             statCurrentTab = tab;
             document.getElementById('stat-tab-count').classList.toggle('active', tab === 'count');
@@ -5285,15 +6103,25 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
         // 选择阶段：0=未开始/已完成，1=已选start等待end
         let statRangePhase = 0;
 
+        /**
+         * 将日期转为 'YYYY-MM-DD' 格式的 key
+         */
         function statDateKey(y, m, d) {
             return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
         }
 
+        /**
+         * 将 'YYYY-MM-DD' 格式的 key 转为 Date 对象
+         */
         function statDateFromKey(key) {
             const [y, m, d] = key.split('-').map(Number);
             return new Date(y, m - 1, d);
         }
 
+        /**
+         * 根据当前选中的日期范围过滤点名日志
+         * @returns {Array} 过滤后的日志数组
+         */
         function getStatFilteredLogs() {
             const allNames = getAllStudentNames();
             let logs = callLog.filter(r => allNames.includes(r.name));
@@ -5321,8 +6149,11 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             return logs;
         }
 
+        /**
+         * 统计每天的点名次数，用于日历热力图
+         * @returns {{ [dateKey: string]: number }}
+         */
         function getDailyCallCount() {
-            // 返回 { 'YYYY-MM-DD': count } 的映射
             const allNames = getAllStudentNames();
             const map = {};
             callLog.filter(r => allNames.includes(r.name)).forEach(r => {
@@ -5333,6 +6164,9 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             return map;
         }
 
+        /**
+         * 渲染统计日历（含日期格子、热力图、范围高亮）
+         */
         function renderStatCalendar() {
             const titleEl = document.getElementById('stat-cal-month-title');
             const gridEl = document.getElementById('stat-cal-grid');
@@ -5403,7 +6237,9 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             updateStatCalRangeClasses();
         }
 
-        // 只更新日历格子的 range 相关 class，不重建 DOM
+        /**
+         * 仅更新日历格子的范围高亮 class，不重建 DOM
+         */
         function updateStatCalRangeClasses() {
             const gridEl = document.getElementById('stat-cal-grid');
             if (!gridEl) return;
@@ -5434,6 +6270,9 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             });
         }
 
+        /**
+         * 渲染单个日历格子的 HTML
+         */
         function renderCalDay(day, key, cnt, todayKey, otherMonth) {
             let cls = 'stat-cal-day';
             if (otherMonth) cls += ' other-month';
@@ -5443,6 +6282,9 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             return `<div class="${cls}" data-key="${key}"><span class="stat-cal-day-num">${day}</span>${countHtml}</div>`;
         }
 
+        /**
+         * 切换日历浮层的显示/隐藏
+         */
         function toggleStatCalPopup(e) {
             e.stopPropagation();
             const popup = document.getElementById('stat-cal-popup');
@@ -5452,11 +6294,17 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             btn.classList.toggle('active', !isOpen);
         }
 
+        /**
+         * 关闭日历浮层
+         */
         function closeStatCalPopup() {
             document.getElementById('stat-cal-popup').classList.remove('show');
             document.getElementById('stat-date-btn').classList.remove('active');
         }
 
+        /**
+         * 处理日历格子点击：第一次点选开始日期，第二次点选结束日期
+         */
         function statCalDayClick(key) {
             if (statRangePhase === 0) {
                 statRangeStart = key;
@@ -5483,6 +6331,9 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             updateStatCalRangeClasses();
         }
 
+        /**
+         * 更新日历浮层顶部的操作提示文字
+         */
         function updateStatCalHint() {
             const el = document.getElementById('stat-cal-hint');
             if (!el) return;
@@ -5495,6 +6346,9 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             }
         }
 
+        /**
+         * 更新统计弹窗顶部的时间范围显示文字
+         */
         function updateStatDateRangeDisplay() {
             const el = document.getElementById('stat-date-range-display');
             const rangeText = document.getElementById('stat-range-text');
@@ -5511,6 +6365,9 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             }
         }
 
+        /**
+         * 重置日期范围选择，恢复为全部记录
+         */
         function resetStatDateRange() {
             statRangeStart = null;
             statRangeEnd = null;
@@ -5523,20 +6380,29 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             closeStatCalPopup();
         }
 
+        /**
+         * 日历切换到上一个月
+         */
         function statCalPrevMonth() {
             statCalMonth--;
             if (statCalMonth < 0) { statCalMonth = 11; statCalYear--; }
             renderStatCalendar();
         }
 
+        /**
+         * 日历切换到下一个月
+         */
         function statCalNextMonth() {
             statCalMonth++;
             if (statCalMonth > 11) { statCalMonth = 0; statCalYear++; }
             renderStatCalendar();
         }
 
+        /**
+         * 渲染统计弹窗的汇总卡片和表格内容
+         * @param {string} tab - 'count' 或 'log'
+         */
         function renderStatModal(tab) {
-            const cnt = getCallCount();
             const allNames = getAllStudentNames(); // 当前座位表学生
             const totalStudents = allNames.length;
             // 使用过滤后的日志
@@ -5550,13 +6416,7 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             const maxCalls = vals.length ? Math.max(...vals) : 0;
             const minCalls = vals.length ? Math.min(...vals) : 0;
 
-            // 记录开始时间（基于过滤后）
-            let startTimeStr = '暂无记录';
-            if (filteredLogs.length) {
-                const earliest = filteredLogs.reduce((a, b) => a.time < b.time ? a : b);
-                const d = new Date(earliest.time);
-                startTimeStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`;
-            }
+            const neverCalled = vals.filter(v => v === 0).length;
 
             // 标题固定，时间范围信息由按钮显示
             document.querySelector('.stat-modal-title').textContent = '📊 点名数据统计';
@@ -5566,23 +6426,19 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                 <div class="stat-card"><div class="stat-card-val">${totalCalls}</div><div class="stat-card-lbl">总点名次数</div></div>
                 <div class="stat-card"><div class="stat-card-val">${avg}</div><div class="stat-card-lbl">人均被点次数</div></div>
                 <div class="stat-card"><div class="stat-card-val">${maxCalls}</div><div class="stat-card-lbl">最大被点次数</div></div>
-                <div class="stat-card"><div class="stat-card-val">${minCalls}</div><div class="stat-card-lbl">最小被点次数</div></div>`;
+                <div class="stat-card"><div class="stat-card-val">${minCalls}</div><div class="stat-card-lbl">最小被点次数</div></div>
+                <div class="stat-card" style="${neverCalled > 0 ? 'color:#fbbf24' : ''}"><div class="stat-card-val" style="${neverCalled > 0 ? 'color:#fbbf24' : ''}">${neverCalled}</div><div class="stat-card-lbl">未被点过</div></div>`;
             renderStatBody(tab);
         }
 
+        /**
+         * 渲染统计弹窗的表格主体（点名统计或点名记录）
+         * @param {string} tab - 'count' 或 'log'
+         */
         function renderStatBody(tab) {
             const body = document.getElementById('stat-body');
             const allNames = getAllStudentNames();
             const filteredLogs = getStatFilteredLogs();
-            // SVG 双箭头排序图标
-            function sortArrows(field) {
-                const state = field === 'count' ? statSortCount : statSortTime;
-                const cls = state === 'desc' ? 'sort-desc' : 'sort-asc';
-                return `<span class="stat-th-sort ${cls}" onclick="toggleStatSort('${field}')">` +
-                    `<svg width="8" height="5" viewBox="0 0 8 5"><polygon class="arr-up" points="4,0 8,5 0,5"/></svg>` +
-                    `<svg width="8" height="5" viewBox="0 0 8 5"><polygon class="arr-dn" points="0,0 8,0 4,5"/></svg>` +
-                    `</span>`;
-            }
             if (tab === 'count') {
                 // 基于过滤后的日志计算次数
                 const filteredCnt = {};
@@ -5631,6 +6487,10 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             }
         }
 
+        /**
+         * 切换统计表格的排序方向
+         * @param {string} field - 'count' 或 'time'
+         */
         function toggleStatSort(field) {
             if (field === 'count') {
                 statSortCount = statSortCount === 'desc' ? 'asc' : 'desc';
@@ -5649,6 +6509,9 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             }
         });
 
+        /**
+         * 关闭介绍/备注弹窗
+         */
         function closeIntroModal() {
             document.getElementById('intro-modal').style.display = 'none';
         }
@@ -5718,6 +6581,9 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             }
         });
 
+        /**
+         * 切换介绍/备注弹窗为编辑模式
+         */
         function toggleIntroEdit() {
             const ta = document.getElementById('intro-modal-text');
             ta.readOnly = false;
@@ -5727,6 +6593,9 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             document.getElementById('intro-save-btn').style.display = '';
         }
 
+        /**
+         * 保存介绍/备注弹窗中编辑的内容到 CLASS_CONFIG 并持久化
+         */
         function saveIntroEdit() {
             const modal = document.getElementById('intro-modal');
             const name = modal._currentName;
@@ -5785,15 +6654,19 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                 td.addEventListener('mouseenter', () => {
                     const displayName = td.id;
                     if (td.classList.contains('highlight')) {
-                        td.title = `鼠标双击 ${displayName} 可取消本次点名`;
+                        td.title = `鼠标双击 ${displayName} 可取消本次点名；鼠标右键可修改备注/介绍`;
                     } else {
-                        td.title = `鼠标双击 ${displayName} 可对其手动点名`;
+                        td.title = `鼠标双击 ${displayName} 可对其手动点名；鼠标右键可修改备注/介绍`;
                     }
                 });
             });
         }
 
         // ===================== 初始化 =====================
+
+        /**
+         * 页面初始化入口：渲染座位表、绑定所有事件、恢复 UI 状态
+         */
         function init() {
             // 先渲染座位表
             renderSeats();
@@ -5805,22 +6678,35 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             // 初始化按钮事件
             startBtn.addEventListener('click', () => startRoll(true));
             manualBtn.addEventListener('click', () => startRoll(false));
+            document.getElementById('more-pick-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleMorePickMenu();
+            });
+            // 点击外部关闭更多菜单
+            document.addEventListener('click', () => closeMorePickMenu());
+            // 点击外部关闭指定名单弹窗
+            document.getElementById('custom-list-overlay').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('custom-list-overlay')) closeCustomListPick();
+            });
+            // 点击外部关闭小组选择弹窗
+            document.getElementById('group-pick-overlay').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('group-pick-overlay')) closeGroupPickMenu();
+            });
             settingsBtn.addEventListener('click', () => settingsPanel.classList.toggle('show'));
             document.getElementById('edit-config').addEventListener('click', openBuilder);
             document.getElementById('open-display-prefs').addEventListener('click', openDisplayPrefs);
             clearRecordBtn.addEventListener('click', resetRecord);
-            exportLogBtn.addEventListener('click', function () { settingsPanel.classList.remove('show'); exportCallLog(); });
-            importLogBtn.addEventListener('click', function () { settingsPanel.classList.remove('show'); document.getElementById('import-log-input').click(); });
-            toggleRecordVisibilityBtn; // 已移入显示偏好配置弹窗，无需绑定
+            exportLogBtn.addEventListener('click', function () { closeSettingsPanel(); exportCallLog(); });
+            importLogBtn.addEventListener('click', function () { closeSettingsPanel(); document.getElementById('import-log-input').click(); });
             document.getElementById('show-stat').addEventListener('click', openStatModal);
             viewInstructionBtn.addEventListener('click', openInstruction);
             document.getElementById('reset-config').addEventListener('click', function () {
-                settingsPanel.classList.remove('show');
+                closeSettingsPanel();
                 showConfirm('确定要恢复默认配置吗？\n这将清除本地保存的座位数据、备注及介绍数据、点名记录及偏好设置，清除后页面将自动刷新。\n\n1、如需备份座位及备注数据请点击编辑座位数据菜单进入编辑页面导出excel或者html\n2、如需备份点名记录数据请在本页面选择导出点名记录Excel', {
                     danger: true, confirmText: '确定清除'
                 }).then(ok => {
                     if (ok) {
-                        ['index_config', 'callLog', 'viewMode', 'darkMode', 'showCount', 'showCommittee', 'showGroup', 'showIntro', 'builder_apply'].forEach(function (k) {
+                        ['index_config', 'callLog', 'viewMode', 'darkMode', 'showCount', 'showCommittee', 'showGroup', 'showIntro', 'builder_apply', 'builder_draft'].forEach(function (k) {
                             localStorage.removeItem(k);
                         });
                         location.reload();
@@ -5842,7 +6728,7 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             updateRecordVisibilityUI();
             updateDarkModeUI();
             updateClassCommitteeUI();
-            updateGroupBgUI(true); // 初始化只更新按钮文字，不重复渲染
+            updateGroupBgUI(true); // 初始化时跳过重新渲染，只同步弹窗状态
             refreshUI();
             updateIntroUI();
 
