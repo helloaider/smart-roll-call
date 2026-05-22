@@ -4122,8 +4122,7 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             const remain = document.getElementById('round-remain');
             if (!label || !remain) return;
             const allNames = getAllStudentNames();
-            // 全员随机模式下不显示轮次，避免误导
-            if (!allNames.length || !lastRollBalanced) { label.textContent = ''; remain.textContent = ''; return; }
+            if (!allNames.length) { label.textContent = ''; remain.textContent = ''; return; }
             const { minCount, candidates } = getBalancedStatus();
             label.textContent = `第 ${minCount + 1} 轮`;
             remain.textContent = `还剩 ${candidates.length} 人`;
