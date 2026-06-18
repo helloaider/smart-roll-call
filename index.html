@@ -21,8 +21,6 @@
             --committee-thickness: 2px;
             --monitor-color: #ff3333;
             --leader-color: #00dd44;
-            --dark-monitor-color: #ff6666;
-            --dark-leader-color: #44ee66;
         }
 
         .class-committee-monitor,
@@ -42,18 +40,6 @@
             text-decoration-thickness: var(--committee-thickness) !important;
         }
 
-        body.dark-mode.show-committee .class-committee-monitor {
-            text-decoration: underline var(--dark-monitor-color) !important;
-            text-underline-offset: var(--committee-offset);
-            text-decoration-thickness: var(--committee-thickness) !important;
-        }
-
-        body.dark-mode.show-committee .class-committee-leader {
-            text-decoration: underline var(--dark-leader-color) !important;
-            text-underline-offset: var(--committee-offset);
-            text-decoration-thickness: var(--committee-thickness) !important;
-        }
-
         /* ===================== 班委标记样式功能结束 =====================*/
 
         body {
@@ -65,6 +51,7 @@
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
+            overflow-y: scroll;
             position: relative;
             transition: all 0.3s ease;
         }
@@ -193,17 +180,8 @@
             background: rgba(0, 255, 252, 0.1);
         }
 
-        body.dark-mode #intro-display .intro-expand-btn {
-            color: rgba(56, 189, 248, 0.5);
-        }
 
-        body.dark-mode #intro-display .intro-expand-btn:hover {
-            color: #38bdf8;
-            background: rgba(56, 189, 248, 0.1);
-        }
-
-        /* 关闭按钮 */
-        #intro-display .intro-close-btn {
+        /* 关闭按钮 */        #intro-display .intro-close-btn {
             width: 22px;
             height: 22px;
             display: flex;
@@ -223,14 +201,6 @@
             background: rgba(0, 255, 252, 0.1);
         }
 
-        body.dark-mode #intro-display .intro-close-btn {
-            color: rgba(56, 189, 248, 0.4);
-        }
-
-        body.dark-mode #intro-display .intro-close-btn:hover {
-            color: #38bdf8;
-            background: rgba(56, 189, 248, 0.1);
-        }
 
         /* 放大模式 */
         #intro-display.expanded {
@@ -357,32 +327,12 @@
             padding: 10px 14px;
         }
 
-        body.dark-mode #intro-display .intro-name {
-            color: #38bdf8;
-        }
-
-        body.dark-mode #intro-display .intro-header {
-            border-bottom-color: rgba(56, 189, 248, 0.2);
-        }
-
-        body.dark-mode #intro-display .intro-text {
-            color: #c8e6fa;
-        }
-
-        body.dark-mode #intro-display .intro-photo img {
-            border-color: rgba(56, 189, 248, 0.3);
-        }
 
         #intro-display.visible {
             opacity: 1;
             pointer-events: auto;
         }
 
-        body.dark-mode #intro-display {
-            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            color: #e0f2fe;
-        }
 
         /* ===================== 按钮基础样式 ===================== */
         .controls {
@@ -425,8 +375,8 @@
             opacity: 0.7;
         }
 
-        #start-btn,
-        #manual-btn {
+        #balanced-btn,
+        #random-btn {
             padding: 12px 20px;
             font-size: 1.15em;
         }
@@ -673,40 +623,24 @@
             color: #000 !important;
             font-weight: bold !important;
             border: 1px solid rgba(231, 16, 16, 0.1) !important;
-            animation: pulse 1s ease-out !important;
+            animation: pulse 0.9s ease-out forwards !important;
             z-index: 5;
         }
 
         @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.03);
-            }
-
-            100% {
-                transform: scale(1);
-            }
+            0%   { filter: brightness(2.2); }
+            30%  { filter: brightness(1.5); }
+            100% { filter: brightness(1); }
         }
 
         #seat-table.student-mode td.highlight {
-            animation: pulse-flipped 1s ease-out !important;
+            animation: pulse-flipped 0.9s ease-out forwards !important;
         }
 
         @keyframes pulse-flipped {
-            0% {
-                transform: rotate(180deg) scale(1);
-            }
-
-            50% {
-                transform: rotate(180deg) scale(1.03);
-            }
-
-            100% {
-                transform: rotate(180deg) scale(1);
-            }
+            0%   { filter: brightness(2.2); transform: rotate(180deg); }
+            30%  { filter: brightness(1.5); transform: rotate(180deg); }
+            100% { filter: brightness(1); transform: rotate(180deg); }
         }
 
         /* ===================== 日历范围选择器样式（浮层模式）===================== */
@@ -894,32 +828,6 @@
 
         .stat-cal-day.today .stat-cal-day-num { color: #ffd700; font-weight: bold; }
         .stat-cal-day.other-month { opacity: .28; }
-
-        /* 暗黑模式 */
-        body.dark-mode .stat-cal-popup {
-            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-color: rgba(56,189,248,.3);
-        }
-
-        body.dark-mode .stat-date-btn {
-            border-color: rgba(56,189,248,.3);
-        }
-
-        body.dark-mode .stat-date-btn:hover,
-        body.dark-mode .stat-date-btn.active {
-            background: rgba(56,189,248,.15);
-            color: #38bdf8;
-            border-color: #38bdf8;
-        }
-
-        body.dark-mode .stat-cal-day.has-data .stat-cal-day-count { color: #38bdf8; }
-
-        body.dark-mode .stat-cal-day.in-range { background: rgba(56,189,248,.1); }
-
-        body.dark-mode .stat-cal-day.range-start,
-        body.dark-mode .stat-cal-day.range-end { background: rgba(56,189,248,.32) !important; }
 
         /* ===================== 点名统计弹窗样式 ===================== */
         .stat-modal {
@@ -1258,46 +1166,6 @@
             text-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
         }
 
-        /* 暗黑模式 */
-        body.dark-mode .stat-modal {
-            background: rgba(0, 0, 0, 0.85);
-        }
-
-        body.dark-mode .stat-modal-box {
-            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
-            border-color: rgba(56, 189, 248, 0.3);
-        }
-
-        body.dark-mode .stat-modal-header {
-            border-bottom-color: rgba(56, 189, 248, .2);
-        }
-
-        body.dark-mode .stat-modal-title {
-            color: #38bdf8;
-        }
-
-        body.dark-mode .stat-card {
-            background: rgba(255, 255, 255, .07);
-        }
-
-        body.dark-mode .stat-card-val {
-            color: #38bdf8;
-        }
-
-        body.dark-mode .stat-tab.active {
-            color: #38bdf8;
-            border-bottom-color: #38bdf8;
-        }
-
-        body.dark-mode .stat-table th {
-            background: linear-gradient(135deg, rgba(10, 18, 38, 0.9) 0%, rgba(20, 32, 60, 0.9) 100%);
-            border-bottom-color: rgba(56, 189, 248, .12);
-        }
-
-        body.dark-mode .stat-th-sort.sort-asc .arr-up,
-        body.dark-mode .stat-th-sort.sort-desc .arr-dn {
-            fill: #38bdf8;
-        }
 
         /* ===================== 右键菜单 & 介绍弹窗样式 ===================== */
         .ctx-menu {
@@ -1407,9 +1275,6 @@
             display: block;
         }
 
-        body.dark-mode .intro-modal-header-photo img {
-            border-color: rgba(56, 189, 248, 0.3);
-        }
 
         .intro-modal-title {
             display: flex;
@@ -1549,72 +1414,6 @@
             background: rgba(255, 255, 255, .18);
         }
 
-        /* 暗黑模式 */
-        body.dark-mode .ctx-menu {
-            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
-            border-color: rgba(56, 189, 248, 0.3);
-        }
-
-        body.dark-mode .ctx-menu-item:hover {
-            background: rgba(56, 189, 248, .15);
-        }
-
-        body.dark-mode .intro-modal {
-            background: rgba(0, 0, 0, 0.85);
-        }
-
-        body.dark-mode .intro-modal-box {
-            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
-            border-color: rgba(56, 189, 248, 0.3);
-        }
-
-        body.dark-mode .intro-modal-header {
-            border-bottom-color: rgba(56, 189, 248, .2);
-        }
-
-        body.dark-mode .intro-modal-title {
-            color: #38bdf8;
-        }
-
-        body.dark-mode .intro-modal-textarea {
-            color: rgba(224, 242, 254, .8);
-            cursor: default;
-        }
-
-        body.dark-mode .intro-modal-textarea::placeholder {
-            color: rgba(224, 242, 254, .2);
-        }
-
-        body.dark-mode .intro-modal-textarea:not([readonly]) {
-            background: rgba(0, 0, 0, .35);
-            border: 1px solid rgba(56, 189, 248, .2);
-            border-radius: 8px;
-            color: #e0f2fe;
-            cursor: text;
-        }
-
-        body.dark-mode .intro-modal-textarea:not([readonly]):focus {
-            border-color: rgba(56, 189, 248, .5);
-        }
-
-        body.dark-mode .intro-btn-edit {
-            background: rgba(56, 189, 248, .12);
-            border-color: rgba(56, 189, 248, .4);
-        }
-
-        body.dark-mode .intro-btn-edit:hover {
-            background: rgba(56, 189, 248, .25);
-        }
-
-        body.dark-mode .intro-btn-save {
-            background: rgba(56, 189, 248, .25);
-            border-color: #38bdf8;
-        }
-
-        body.dark-mode .intro-btn-save:hover {
-            background: rgba(56, 189, 248, .4);
-        }
-
         /* ===================== 使用说明弹窗样式 ===================== */
         .instruction-modal {
             position: fixed;
@@ -1724,7 +1523,7 @@
 
         .ins-row {
             display: flex;
-            align-items: baseline;
+            align-items: flex-start;
             gap: 9px;
             margin: 8px 0;
             font-size: .86em;
@@ -1732,14 +1531,21 @@
         }
 
         .ins-row .ins-key {
+            display: inline-block;
+            padding: 2px 9px;
+            border-radius: 12px;
+            font-size: .8em;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, .75);
             flex-shrink: 0;
-            color: rgba(255, 255, 255, .6);
-            font-size: .88em;
-            min-width: 0;
+            line-height: 1.7;
+            white-space: nowrap;
         }
 
         .ins-row .ins-val {
             color: rgba(255, 255, 255, .88);
+            padding-top: 3px;
         }
 
         .ins-row .ins-tag {
@@ -1789,73 +1595,8 @@
             color: #fff;
         }
 
-        /* 暗黑模式 */
-        body.dark-mode .instruction-modal {
-            background: rgba(0, 0, 0, 0.85);
-        }
 
-        body.dark-mode .instruction-content {
-            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
-            border-color: rgba(56, 189, 248, 0.3);
-        }
-
-        body.dark-mode .instruction-header {
-            border-bottom-color: rgba(56, 189, 248, .12);
-        }
-
-        body.dark-mode .instruction-header h2 {
-            color: #38bdf8;
-        }
-
-        body.dark-mode .ins-card {
-            border-color: rgba(56, 189, 248, 0.14);
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        body.dark-mode .ins-card-title {
-            color: #38bdf8;
-            border-bottom-color: rgba(56, 189, 248, 0.1);
-        }
-
-        body.dark-mode .ins-row .ins-tag {
-            background: rgba(56, 189, 248, 0.1);
-            border-color: rgba(56, 189, 248, 0.25);
-            color: rgba(56, 189, 248, 0.9);
-        }
-
-        body.dark-mode .instruction-footer {
-            border-top-color: rgba(56, 189, 248, .1);
-        }
-
-        body.dark-mode .instruction-footer .close-btn {
-            background: rgba(56, 189, 248, 0.12);
-            border-color: rgba(56, 189, 248, 0.35);
-        }
-
-        body.dark-mode .instruction-footer .close-btn:hover {
-            background: rgba(56, 189, 248, 0.25);
-        }
-
-        /* ===================== 暗黑模式样式 ===================== */
-        body.dark-mode,
-        html.dark-mode-pre body {
-            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
-        }
-
-        body.dark-mode h1 {
-            text-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
-            letter-spacing: 2px;
-            background: linear-gradient(90deg, #38bdf8, #818cf8, #38bdf8);
-            background-size: 200% 100%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: gradientFlow 3s ease infinite;
-            border-bottom: 2px solid rgba(56, 189, 248, 0.2);
-        }
-
-        @keyframes gradientFlow {
-            0% {
+        @keyframes gradientFlow {            0% {
                 background-position: 0% 50%;
             }
 
@@ -1868,13 +1609,6 @@
             }
         }
 
-        body.dark-mode #name-display {
-            text-shadow: 0 0 25px rgba(56, 189, 248, 0.8), 0 0 50px rgba(56, 189, 248, 0.5);
-        }
-
-        body.dark-mode #current-name {
-            animation: namePulse 0.8s ease-in-out infinite alternate;
-        }
 
         @keyframes namePulse {
             from {
@@ -1886,73 +1620,6 @@
             }
         }
 
-        body.dark-mode button {
-            background: linear-gradient(135deg, rgba(56, 189, 248, 0.1) 0%, rgba(30, 64, 175, 0.1) 100%);
-            border: 1px solid rgba(56, 189, 248, 0.4);
-            color: #e0f2fe;
-        }
-
-        body.dark-mode #particles-js {
-            opacity: 0.6;
-        }
-
-        body.dark-mode .settings-btn {
-            background: rgba(15, 23, 42, 0.4);
-            border: 1px solid rgba(56, 189, 248, 0.4);
-            color: #e0f2fe;
-        }
-
-        body.dark-mode .settings-btn:hover {
-            background: rgba(15, 23, 42, 0.4);
-        }
-
-        body.dark-mode .settings-panel {
-            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-        }
-
-        body.dark-mode .settings-item {
-            background: transparent;
-            color: rgba(224, 242, 254, 0.8);
-        }
-
-        body.dark-mode .settings-group-title {
-            color: rgba(56, 189, 248, 0.5);
-        }
-
-        body.dark-mode .settings-item:hover {
-            background: rgba(255, 255, 255, 0.08);
-            color: #e0f2fe;
-        }
-
-        body.dark-mode .seating-chart {
-            background: rgba(15, 23, 42, 0.3);
-            border-color: rgba(56, 189, 248, 0.12);
-        }
-
-        body.dark-mode .seating-chart td:not(.aisle):not(.stage):not(.highlight):not([data-group]) {
-            background: rgba(15, 23, 42, 0.4) !important;
-            color: #e0f2fe !important;
-            border: 1px solid rgba(56, 189, 248, 0.2) !important;
-        }
-        body.dark-mode .seating-chart td[data-group] {
-            color: #e0f2fe !important;
-            border: 1px solid rgba(56, 189, 248, 0.2) !important;
-        }
-        /* 隐藏小组背景时（inline style 为空），data-group 格子也用暗黑背景 */
-        body.dark-mode .seating-chart td[data-group]:not([style*="background"]) {
-            background: rgba(15, 23, 42, 0.4) !important;
-            border: 1px solid rgba(56, 189, 248, 0.2) !important;
-        }
-        /* 深色模式下小组背景色由 JS 动态注入，无需硬编码 */
-
-        body.dark-mode .seating-chart td.highlight {
-            background: #ffeb3b !important;
-            color: #000 !important;
-            font-weight: bold !important;
-            border: 1px solid rgba(255, 215, 0, 0.5) !important;
-            animation: pulse 1s ease-out !important;
-        }
 
         /* ===================== 自定义 Alert / Confirm 弹框样式 ===================== */
         .custom-dialog-overlay {
@@ -2086,124 +1753,6 @@
             background: rgba(255, 80, 60, 0.1);
         }
 
-        body.dark-mode .custom-dialog-btn.primary {
-            color: #38bdf8;
-        }
-
-        body.dark-mode .custom-dialog-btn.primary:hover {
-            background: rgba(56, 189, 248, 0.08);
-        }
-
-        body.dark-mode .custom-dialog-box {
-            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
-            border-color: rgba(56, 189, 248, 0.3);
-        }
-
-        body.dark-mode .custom-dialog-header-title {
-            color: #38bdf8;
-        }
-
-        body.dark-mode .custom-dialog-msg {
-            color: rgba(224, 242, 254, 0.75);
-        }
-
-        body.dark-mode .custom-dialog-footer {
-            border-top-color: rgba(56, 189, 248, 0.12);
-        }
-
-        body.dark-mode .custom-dialog-footer:not(.single) .custom-dialog-btn:first-child {
-            border-right-color: rgba(56, 189, 248, 0.12);
-        }
-
-        /* 暗黑模式 — 更多抽取菜单 */
-        body.dark-mode #more-pick-menu {
-            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
-            border-color: rgba(56, 189, 248, 0.3);
-        }
-
-        body.dark-mode .more-pick-item:hover:not(.disabled) {
-            background: rgba(56, 189, 248, 0.12);
-        }
-
-        /* 暗黑模式 — 指定名单弹窗 */
-        body.dark-mode #custom-list-overlay {
-            background: rgba(0, 0, 0, 0.85);
-        }
-
-        body.dark-mode #custom-list-box {
-            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
-            border-color: rgba(56, 189, 248, 0.3);
-        }
-
-        body.dark-mode #custom-list-box .cl-header {
-            color: #38bdf8;
-        }
-
-        body.dark-mode #custom-list-box textarea {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(56, 189, 248, 0.2);
-            color: #e0f2fe;
-        }
-
-        body.dark-mode #custom-list-box textarea:focus {
-            border-color: rgba(56, 189, 248, 0.5);
-        }
-
-        body.dark-mode #custom-list-box textarea::placeholder {
-            color: rgba(224, 242, 254, 0.25);
-        }
-
-        body.dark-mode #custom-list-box .cl-footer {
-            border-top-color: rgba(56, 189, 248, 0.15);
-        }
-
-        body.dark-mode #custom-list-box .cl-btn.primary {
-            color: #38bdf8;
-            border-left-color: rgba(56, 189, 248, 0.15);
-        }
-
-        body.dark-mode #custom-list-box .cl-btn.primary:hover {
-            background: rgba(56, 189, 248, 0.08);
-        }
-
-        /* 暗黑模式 — 小组选择弹窗 */
-        body.dark-mode #group-pick-overlay {
-            background: rgba(0, 0, 0, 0.85);
-        }
-
-        body.dark-mode #group-pick-box {
-            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
-            border-color: rgba(56, 189, 248, 0.3);
-        }
-
-        body.dark-mode #group-pick-box .gp-header {
-            color: #38bdf8;
-            border-bottom-color: rgba(56, 189, 248, 0.15);
-        }
-
-        body.dark-mode .gp-item:hover {
-            background: rgba(56, 189, 248, 0.1);
-        }
-
-        body.dark-mode .gp-done-tag {
-            color: rgba(56, 189, 248, 0.7);
-            background: rgba(56, 189, 248, 0.1);
-            border: 1px solid rgba(56, 189, 248, 0.25);
-        }
-
-        body.dark-mode #group-pick-box .gp-footer {
-            border-top-color: rgba(56, 189, 248, 0.15);
-        }
-
-        body.dark-mode #group-pick-box .gp-cancel {
-            border-color: rgba(56, 189, 248, 0.25);
-            color: rgba(224, 242, 254, 0.5);
-        }
-
-        body.dark-mode #group-pick-box .gp-cancel:hover {
-            border-color: rgba(56, 189, 248, 0.5);
-            color: #e0f2fe;
-        }
 
         /* ===================== 显示偏好配置弹窗行样式 ===================== */
         .dp-row {
@@ -2242,9 +1791,6 @@
             flex-shrink: 0;
         }
 
-        body.dark-mode .dp-radio input[type=radio] {
-            accent-color: #38bdf8;
-        }
 
         #displayPrefsOverlay .custom-dialog-box {
             font-size: 1.1em;
@@ -2256,54 +1802,6 @@
             font-size: 1em;
             white-space: normal;
             max-height: none;
-        }
-
-        /* 暗黑模式下弹窗配色 */
-        #displayPrefsOverlay .custom-dialog-box.dp-dark {
-            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-        }
-
-        #displayPrefsOverlay .custom-dialog-box.dp-dark .custom-dialog-header-title {
-            color: #38bdf8;
-        }
-
-        #displayPrefsOverlay .custom-dialog-box.dp-dark .dp-label {
-            color: rgba(224, 242, 254, .85);
-        }
-
-        #displayPrefsOverlay .custom-dialog-box.dp-dark .dp-radio {
-            color: rgba(224, 242, 254, .6);
-        }
-
-        #displayPrefsOverlay .custom-dialog-box.dp-dark .dp-radio input[type=radio] {
-            accent-color: #38bdf8;
-        }
-
-        #displayPrefsOverlay .custom-dialog-box.dp-dark .dp-row {
-            border-bottom-color: rgba(56, 189, 248, .08);
-        }
-
-        #displayPrefsOverlay .custom-dialog-footer .custom-dialog-btn {
-            padding: 10px 0;
-        }
-
-        #displayPrefsOverlay .custom-dialog-box.dp-dark .custom-dialog-footer {
-            border-top: 1px solid rgba(56, 189, 248, .3);
-            background: linear-gradient(135deg, rgba(10, 18, 38, 0.98) 0%, rgba(20, 32, 60, 0.98) 100%);
-            border-radius: 0 0 16px 16px;
-        }
-
-        #displayPrefsOverlay .custom-dialog-box.dp-dark .custom-dialog-footer:not(.single) .custom-dialog-btn:first-child {
-            border-right: 1px solid rgba(56, 189, 248, .3);
-        }
-
-        #displayPrefsOverlay .custom-dialog-box.dp-dark .custom-dialog-btn.primary {
-            color: #38bdf8;
-        }
-
-        #displayPrefsOverlay .custom-dialog-box.dp-dark .custom-dialog-btn.primary:hover {
-            background: rgba(56, 189, 248, 0.08);
         }
 
         /* ===================== 更多抽取菜单样式 ===================== */
@@ -2646,12 +2144,7 @@
             color: #fff;
         }
     </style>
-    <script>
-        // 在页面渲染前立即应用暗黑模式，避免闪烁
-        if (localStorage.getItem('darkMode') === 'true') {
-            document.documentElement.classList.add('dark-mode-pre');
-        }
-    </script>
+
 </head>
 
 <body>
@@ -2806,12 +2299,6 @@
                     <label class="dp-radio"><input type="radio" name="dp-view" value="teacher"> 教师</label>
                     <label class="dp-radio"><input type="radio" name="dp-view" value="student"> 学生</label>
                 </div>
-                <!-- 应用界面主题色 -->
-                <div class="dp-row">
-                    <span class="dp-label">☀️ 应用界面主题色</span>
-                    <label class="dp-radio"><input type="radio" name="dp-theme" value="0"> 深蓝</label>
-                    <label class="dp-radio"><input type="radio" name="dp-theme" value="1"> 暗黑</label>
-                </div>
             </div>
             <div class="custom-dialog-footer">
                 <button class="custom-dialog-btn" onclick="cancelDisplayPrefs()">取消</button>
@@ -2948,10 +2435,6 @@
                             <span class="ins-key">🔄 座位视角</span>
                             <span class="ins-val">教师视角 / 学生视角切换；学生视角下座位表整体左右翻转，适合投影给学生看时使用</span>
                         </div>
-                        <div class="ins-row">
-                            <span class="ins-key">☀️ 主题</span>
-                            <span class="ins-val">深蓝 / 暗黑两种主题，切换后自动记住偏好</span>
-                        </div>
                     </div>
                     <div class="ins-card">
                         <div class="ins-card-title">⚙️ 点名管理</div>
@@ -2974,7 +2457,7 @@
                         </div>
                         <div class="ins-row">
                             <span class="ins-key">🕐 点名记录</span>
-                            <span class="ins-val">按时间顺序查看每次点名详情，支持按时间排序，可按时间范围筛选</span>
+                            <span class="ins-val">按时间顺序查看每次点名详情，含抽取范围列，可悬停查看本次参与随机的完整名单；支持按时间排序，可按时间范围筛选</span>
                         </div>
                         <div class="ins-row">
                             <span class="ins-key">📤 导出统计</span>
@@ -3059,14 +2542,14 @@
             <div class="controls">
                 <!-- 左侧占位，与右侧更多按钮等宽，保持主按钮视觉居中 -->
                 <div class="more-pick-placeholder"></div>
-                <button id="start-btn" title="优先抽取被点次数少的同学，保证机会均等，被点次数最少的同学被点完后自动进入下一轮">均衡抽取</button>
+                <button id="balanced-btn" title="优先抽取被点次数少的同学，保证机会均等，被点次数最少的同学被点完后自动进入下一轮">均衡抽取</button>
                 <div id="round-status" style="text-align:center;line-height:1.6;pointer-events:none;">
                     <div id="round-label"
                         style="font-size:0.95em;color:#00fffc;font-weight:bold;letter-spacing:1px;text-shadow:0 0 8px rgba(0,255,252,0.5)">
                     </div>
                     <div id="round-remain" style="font-size:0.72em;color:rgba(255,255,255,0.45);margin-top:1px"></div>
                 </div>
-                <button id="manual-btn" title="忽略被点次数，从全班随机抽取">全员随机</button>
+                <button id="random-btn" title="忽略被点次数，从全班随机抽取">全员随机</button>
                 <!-- 更多抽取入口（弱化，紧跟全员随机右侧） -->
                 <div id="more-pick-wrapper">
                     <button id="more-pick-btn" title="更多抽取方式">⋯</button>
@@ -3120,7 +2603,7 @@
         </div>
         <div
             style="margin-top:56px;margin-bottom:48px;font-size:.72em;color:rgba(255,255,255,.25);text-align:center;letter-spacing:1px">
-            智能课堂点名器 v1.5 &nbsp;·&nbsp; © 2026 helloaider &nbsp;·&nbsp;
+            智能课堂点名器 v1.6 &nbsp;·&nbsp; © 2026 helloaider &nbsp;·&nbsp;
             <a href="https://github.com/helloaider/smart-roll-call" target="_blank"
                 style="color:rgba(255,255,255,.3);text-decoration:none"
                 onmouseover="this.style.color='rgba(255,255,255,.6)'"
@@ -3160,61 +2643,51 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                     "id": 1,
                     "name": "第1组",
                     "lightColor": "rgba(140,221,250,0.20)",
-                    "darkColor": "rgba(140,221,250,0.30)"
                 },
                 {
                     "id": 2,
                     "name": "第2组",
                     "lightColor": "rgba(216,180,254,0.20)",
-                    "darkColor": "rgba(216,180,254,0.30)"
                 },
                 {
                     "id": 3,
                     "name": "第3组",
                     "lightColor": "rgba(134,239,172,0.18)",
-                    "darkColor": "rgba(134,239,172,0.28)"
                 },
                 {
                     "id": 4,
                     "name": "第4组",
                     "lightColor": "rgba(253,186,116,0.20)",
-                    "darkColor": "rgba(253,186,116,0.30)"
                 },
                 {
                     "id": 5,
                     "name": "第5组",
                     "lightColor": "rgba(249,168,212,0.20)",
-                    "darkColor": "rgba(249,168,212,0.30)"
                 },
                 {
                     "id": 6,
                     "name": "第6组",
                     "lightColor": "rgba(251,191,36,0.20)",
-                    "darkColor": "rgba(251,191,36,0.30)"
                 },
                 {
                     "id": 7,
                     "name": "第7组",
                     "lightColor": "rgba(254,240,138,0.20)",
-                    "darkColor": "rgba(254,240,138,0.30)"
                 },
                 {
                     "id": 8,
                     "name": "第8组",
                     "lightColor": "rgba(45,212,191,0.20)",
-                    "darkColor": "rgba(45,212,191,0.30)"
                 },
                 {
                     "id": 9,
                     "name": "第9组",
                     "lightColor": "rgba(252,165,165,0.20)",
-                    "darkColor": "rgba(252,165,165,0.30)"
                 },
                 {
                     "id": 10,
                     "name": "第10组",
                     "lightColor": "rgba(99,102,241,0.20)",
-                    "darkColor": "rgba(99,102,241,0.30)"
                 }
             ],
             "seats": [
@@ -3785,24 +3258,21 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                                 const groups = CLASS_CONFIG.groups || [];
                                 const gDef = groups.find(g => g.id === cell.group);
                                 if (gDef) {
-                                    const isDark = document.body.classList.contains('dark-mode');
                                     // 内置颜色表（兜底，兼容只有 color key 的旧配置）
                                     const COLOR_TABLE = {
-                                        blue:   { light: 'rgba(140,221,250,0.20)', dark: 'rgba(140,221,250,0.30)' },
-                                        orange: { light: 'rgba(253,186,116,0.20)', dark: 'rgba(253,186,116,0.30)' },
-                                        green:  { light: 'rgba(134,239,172,0.18)', dark: 'rgba(134,239,172,0.28)' },
-                                        pink:   { light: 'rgba(249,168,212,0.20)', dark: 'rgba(249,168,212,0.30)' },
-                                        purple: { light: 'rgba(216,180,254,0.20)', dark: 'rgba(216,180,254,0.30)' },
-                                        yellow: { light: 'rgba(254,240,138,0.20)', dark: 'rgba(254,240,138,0.30)' },
-                                        mint:   { light: 'rgba(45,212,191,0.20)',  dark: 'rgba(45,212,191,0.30)'  },
-                                        red:    { light: 'rgba(252,165,165,0.20)', dark: 'rgba(252,165,165,0.30)' },
-                                        indigo: { light: 'rgba(99,102,241,0.20)',  dark: 'rgba(99,102,241,0.30)'  },
-                                        lime:   { light: 'rgba(190,242,100,0.20)', dark: 'rgba(190,242,100,0.30)' },
+                                        blue:   'rgba(140,221,250,0.20)',
+                                        orange: 'rgba(253,186,116,0.20)',
+                                        green:  'rgba(134,239,172,0.18)',
+                                        pink:   'rgba(249,168,212,0.20)',
+                                        purple: 'rgba(216,180,254,0.20)',
+                                        yellow: 'rgba(254,240,138,0.20)',
+                                        mint:   'rgba(45,212,191,0.20)',
+                                        red:    'rgba(252,165,165,0.20)',
+                                        indigo: 'rgba(99,102,241,0.20)',
+                                        lime:   'rgba(190,242,100,0.20)',
                                     };
                                     const fallback = COLOR_TABLE[gDef.color] || COLOR_TABLE.blue;
-                                    const lightColor = gDef.lightColor || fallback.light;
-                                    const darkColor  = gDef.darkColor  || fallback.dark;
-                                    td.style.background = isDark ? darkColor : lightColor;
+                                    td.style.background = gDef.lightColor || fallback;
                                 }
                             } else {
                                 // 隐藏小组背景时清空 inline style，让 CSS 规则统一接管
@@ -3875,7 +3345,6 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
         let last = '';
         let lastRollBalanced = true; // 记录最后一次点名是否为均衡模式，用于轮次状态显示
         let isTeacher = localStorage.getItem('viewMode') === 'student' ? false : true;
-        let isDarkMode = localStorage.getItem('darkMode') === 'true';
         let isShowCount = localStorage.getItem('showCount') !== null ? localStorage.getItem('showCount') === 'true' : false;
         let isShowCommittee = localStorage.getItem('showCommittee') === 'true';
         let isShowGroup = localStorage.getItem('showGroup') !== null ? localStorage.getItem('showGroup') === 'true' : false;
@@ -3886,8 +3355,8 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             Array.from(document.querySelectorAll('#seat-table td[id]')).map(td => td.id);
 
         // DOM元素
-        const startBtn = document.getElementById('start-btn');
-        const manualBtn = document.getElementById('manual-btn');
+        const balancedBtn = document.getElementById('balanced-btn');
+        const randomBtn = document.getElementById('random-btn');
         const nameDisplay = document.getElementById('current-name');
         const teacherView = document.getElementById('seat-table');
         const settingsBtn = document.querySelector('.settings-btn');
@@ -3966,7 +3435,6 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             try {
                 localStorage.setItem('callLog', JSON.stringify(callLog));
                 localStorage.setItem('viewMode', isTeacher ? 'teacher' : 'student');
-                localStorage.setItem('darkMode', isDarkMode);
                 localStorage.setItem('showCount', isShowCount);
                 localStorage.setItem('showCommittee', isShowCommittee);
                 localStorage.setItem('showGroup', isShowGroup);
@@ -3982,9 +3450,6 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
         function refreshUI() {
             // 更新记录显示状态
             updateRecordVisibilityUI();
-
-            // 更新暗黑模式样式
-            updateDarkModeUI();
 
             // 更新所有座位的悬浮提示
             updateAllSeatTooltip();
@@ -4019,15 +3484,6 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                 el.style.display = isShowCount ? '' : 'none';
             });
         }
-
-        /**
-         * 更新暗黑模式UI
-         */
-        function updateDarkModeUI() {
-            document.body.classList.toggle('dark-mode', isDarkMode);
-            document.documentElement.classList.toggle('dark-mode-pre', isDarkMode);
-        }
-
         /**
          * 更新班委标记显示UI
          */
@@ -4051,10 +3507,12 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                 el.dataset.savedBg = el.style.background || '';
                 el.dataset.savedColor = el.style.color || '';
                 el.dataset.savedTextShadow = el.style.textShadow || '';
-                // 用 setProperty + important 确保覆盖 CSS !important 规则
                 el.style.setProperty('background', '#ffeb3b', 'important');
                 el.style.setProperty('color', '#1a1a1a', 'important');
                 el.style.setProperty('text-shadow', 'none', 'important');
+                // 强制重新触发动画（即使元素已有 highlight 类）
+                el.classList.remove('highlight');
+                void el.offsetWidth; // 触发回流，重置动画
                 el.classList.add('highlight');
                 el.title = `鼠标双击 ${name} 可取消本次点名；鼠标右键可修改备注/介绍`;
             }
@@ -4086,6 +3544,30 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
          * @param {boolean} balanced - 是否均衡抽取（从被点次数最少的人中抽）
          * @returns {string|null} 姓名 / null（无学生时）
          */
+        /**
+         * 格式化候选人名单摘要，用于统计页「抽取范围」列显示
+         * @param {string[]|undefined|null} pool - 候选人姓名数组
+         * @returns {string} 摘要文本，如 '5人：张三、李四…' 或 '—'
+         */
+        function formatPoolSummary(pool) {
+            if (!pool || !pool.length) return '—';
+            const n = pool.length;
+            if (n <= 8) {
+                return n + '人：' + pool.join('、');
+            }
+            return n + '人（悬停查看完整名单）';
+        }
+
+        /**
+         * 格式化候选人名单完整字符串，用于 title 属性（tooltip）
+         * @param {string[]|undefined|null} pool - 候选人姓名数组
+         * @returns {string} 完整名单字符串，如 '张三、李四、王五' 或 ''
+         */
+        function formatPoolTooltip(pool) {
+            if (!pool || !pool.length) return '';
+            return pool.join('、');
+        }
+
         function randomName(balanced = true) {
             const allNames = getAllStudentNames();
             if (!allNames.length) return null;
@@ -4142,8 +3624,8 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             if (!allNames.length) { showAlert('当前座位表没有学生，请先配置座位信息。'); return; }
 
             isRunning = true;
-            startBtn.disabled = true;
-            manualBtn.disabled = true;
+            balancedBtn.disabled = true;
+            randomBtn.disabled = true;
             document.getElementById('more-pick-btn').disabled = true;
 
             // 均衡抽取前记录本次抽取前的最小次数，用于判断是否完成一轮
@@ -4158,11 +3640,15 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
 
                 if (counter >= maxCounter) {
                     clearInterval(interval);
+                    // 均衡抽取：在抽取前先计算候选池（此时 callLog 尚未写入本次记录）
+                    const pool = balanced
+                        ? getBalancedStatus().candidates.slice()
+                        : getAllStudentNames().slice();
                     const selected = randomName(balanced);
                     if (selected) {
                         nameDisplay.innerText = selected;
                         high(selected);
-                        callLog.push({ name: selected, time: new Date().toISOString() });
+                        callLog.push({ name: selected, time: new Date().toISOString(), pool: pool });
                         showCountToast(selected);
                         showIntro(selected);
                         save();
@@ -4181,8 +3667,8 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                     }
 
                     isRunning = false;
-                    startBtn.disabled = false;
-                    manualBtn.disabled = false;
+                    balancedBtn.disabled = false;
+                    randomBtn.disabled = false;
                     document.getElementById('more-pick-btn').disabled = false;
                     refreshUI();
                 }
@@ -4292,8 +3778,8 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             clearAllToasts();
 
             isRunning = true;
-            startBtn.disabled = true;
-            manualBtn.disabled = true;
+            balancedBtn.disabled = true;
+            randomBtn.disabled = true;
             document.getElementById('more-pick-btn').disabled = true;
 
             const groupNames = groups.map(g => g.name || `第${g.id}组`);
@@ -4313,8 +3799,8 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                     const members = getGroupMembers(picked.id);
                     showGroupResultToast(pickedName, members);
                     isRunning = false;
-                    startBtn.disabled = false;
-                    manualBtn.disabled = false;
+                    balancedBtn.disabled = false;
+                    randomBtn.disabled = false;
                     document.getElementById('more-pick-btn').disabled = false;
                     refreshUI();
                 }
@@ -4328,22 +3814,18 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
          */
         function showGroupResultToast(groupName, members) {
             const el = document.createElement('div');
-            const dark = document.body.classList.contains('dark-mode');
             el.style.cssText = `
                 position: fixed; top: 30%; left: 50%;
                 transform: translate(-50%, -50%);
-                background: ${dark
-                    ? 'linear-gradient(135deg, rgba(10,18,38,0.97), rgba(20,32,60,0.97))'
-                    : 'linear-gradient(135deg, rgba(30,60,114,0.95), rgba(42,82,152,0.95))'};
-                border: 1px solid ${dark ? 'rgba(56,189,248,0.3)' : 'rgba(0,255,252,0.3)'};
-                border-radius: 12px; padding: 18px 28px;
+                background: linear-gradient(135deg, rgba(30,60,114,0.95), rgba(42,82,152,0.95));
+                border: 1px solid rgba(0,255,252,0.3);                border-radius: 12px; padding: 18px 28px;
                 color: #fff; font-size: 1em; text-align: center;
                 z-index: 9999; pointer-events: none;
                 box-shadow: 0 8px 32px rgba(0,0,0,0.5);
                 animation: roundDoneFade 5s ease forwards;
                 max-width: 320px;
             `;
-            const accentColor = dark ? '#38bdf8' : '#00fffc';
+            const accentColor = '#00fffc';
             el.innerHTML = `<div style="font-size:1.4em;margin-bottom:6px">🎲</div>
                 <div style="color:${accentColor};font-weight:bold;margin-bottom:6px">抽到：${groupName}</div>
                 <div style="color:rgba(255,255,255,.6);font-size:.82em;line-height:1.8">${members.join('　')}</div>`;
@@ -4417,8 +3899,8 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             clearAllToasts();
 
             isRunning = true;
-            startBtn.disabled = true;
-            manualBtn.disabled = true;
+            balancedBtn.disabled = true;
+            randomBtn.disabled = true;
             document.getElementById('more-pick-btn').disabled = true;
 
             let counter = 0;
@@ -4431,13 +3913,13 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                     const selected = members[Math.floor(Math.random() * members.length)];
                     nameDisplay.innerText = selected;
                     high(selected);
-                    callLog.push({ name: selected, time: new Date().toISOString() });
+                    callLog.push({ name: selected, time: new Date().toISOString(), pool: [...members] });
                     showCountToast(selected);
                     showIntro(selected);
                     save();
                     isRunning = false;
-                    startBtn.disabled = false;
-                    manualBtn.disabled = false;
+                    balancedBtn.disabled = false;
+                    randomBtn.disabled = false;
                     document.getElementById('more-pick-btn').disabled = false;
                     refreshUI();
                 }
@@ -4471,8 +3953,8 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             clearAllToasts();
 
             isRunning = true;
-            startBtn.disabled = true;
-            manualBtn.disabled = true;
+            balancedBtn.disabled = true;
+            randomBtn.disabled = true;
             document.getElementById('more-pick-btn').disabled = true;
 
             let counter = 0;
@@ -4493,12 +3975,12 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                         clearHigh();
                         clearIntro();
                     }
-                    callLog.push({ name: selected, time: new Date().toISOString() });
+                    callLog.push({ name: selected, time: new Date().toISOString(), pool: [...names] });
                     showCountToast(selected);
                     save();
                     isRunning = false;
-                    startBtn.disabled = false;
-                    manualBtn.disabled = false;
+                    balancedBtn.disabled = false;
+                    randomBtn.disabled = false;
                     document.getElementById('more-pick-btn').disabled = false;
                     refreshUI();
                 }
@@ -4896,7 +4378,6 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                             id: g.id,
                             name: g.name,
                             lightColor: rgbaToKey(g.lightColor),
-                            darkColor:  rgbaToKey(g.darkColor || g.lightColor),
                             members: []  // members 从 cells 的 group 字段重建，builder 会调用 syncCellsToGroups
                         })),
                         groupIdCounter: Math.max(0, ...(CLASS_CONFIG.groups || []).map(g => g.id || 0))
@@ -4932,7 +4413,6 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             setRadio('dp-group',     isShowGroup     ? '1' : '0');
             setRadio('dp-intro',     isShowIntro     ? '1' : '0');
             setRadio('dp-view',      isTeacher ? 'teacher' : 'student');
-            setRadio('dp-theme',     isDarkMode ? '1' : '0');
         }
 
         /**
@@ -4943,13 +4423,10 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             // 记录快照
             _dpSnapshot = {
                 isShowCount, isShowCommittee, isShowGroup,
-                isShowIntro, isTeacher, isDarkMode
+                isShowIntro, isTeacher
             };
             syncDisplayPrefsUI();
             const overlay = document.getElementById('displayPrefsOverlay');
-            // 跟随当前主题
-            const box = overlay.querySelector('.custom-dialog-box');
-            if (box) box.classList.toggle('dp-dark', isDarkMode);
             overlay.classList.add('show');
 
             // 单选变化立即生效（预览），但不持久化
@@ -4971,9 +4448,6 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                     } else if (name === 'dp-view') {
                         const wantTeacher = val === 'teacher';
                         if (wantTeacher !== isTeacher) toggleView();
-                    } else if (name === 'dp-theme') {
-                        const wantDark = val === '1';
-                        if (wantDark !== isDarkMode) { isDarkMode = wantDark; updateDarkModeUI(); refreshUI(); }
                     }
                 };
             });
@@ -5004,7 +4478,6 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             if (isShowGroup     !== s.isShowGroup)     { isShowGroup     = s.isShowGroup;     updateGroupBgUI(); }
             if (isShowIntro     !== s.isShowIntro)     { isShowIntro     = s.isShowIntro;     updateIntroUI(); }
             if (isTeacher       !== s.isTeacher)       toggleView();
-            if (isDarkMode      !== s.isDarkMode)      { isDarkMode      = s.isDarkMode;      updateDarkModeUI(); refreshUI(); }
             _dpSnapshot = null;
             document.getElementById('displayPrefsOverlay').classList.remove('show');
         }
@@ -5020,7 +4493,7 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
         function openInstruction() {
             closeSettingsPanel();
             instructionModal.classList.add('show');
-            document.body.style.overflow = 'hidden';
+            document.body.style.overflowY = 'hidden';
         }
 
         /**
@@ -5028,7 +4501,7 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
          */
         function closeInstruction() {
             instructionModal.classList.remove('show');
-            document.body.style.overflow = 'auto';
+            document.body.style.overflowY = 'scroll';
         }
 
         // ===================== 点名统计 =====================
@@ -5141,7 +4614,6 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
          */
         function openStatModal() {
             closeSettingsPanel();
-            statSortCount = 'desc'; statSortTime = 'desc'; statCurrentTab = 'count';
             statRangeStart = null; statRangeEnd = null; statRangeHover = null; statRangePhase = 0;
             // 初始化日历到当前月，若有记录则跳到最早记录所在月
             const now = new Date();
@@ -5157,7 +4629,10 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             }
             updateStatDateRangeDisplay();
             renderStatCalendar();
-            renderStatModal('count');
+            // 同步 tab 高亮并渲染内容
+            document.getElementById('stat-tab-count').classList.toggle('active', statCurrentTab === 'count');
+            document.getElementById('stat-tab-log').classList.toggle('active', statCurrentTab === 'log');
+            renderStatModal(statCurrentTab);
             document.getElementById('stat-modal').style.display = 'flex';
         }
 
@@ -5214,14 +4689,14 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                     [`${title}·点名记录`],
                     [`统计范围：${rangeDisplay}`],
                     [`导出时间：${exportTime}`],
-                    ['序号', '姓名', '点名时间']
+                    ['序号', '姓名', '点名时间', '抽取范围']
                 ];
                 [...filteredLogs]
                     .sort((a, b) => a.time < b.time ? 1 : -1)
                     .forEach((r, i) => {
                         const d = new Date(r.time);
                         const fmt = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`;
-                        logRows.push([i + 1, r.name, fmt]);
+                        logRows.push([i + 1, r.name, fmt, formatPoolTooltip(r.pool)]);
                     });
 
                 const ws1 = XLSX.utils.aoa_to_sheet(countRows);
@@ -5234,11 +4709,11 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                 ];
 
                 const ws2 = XLSX.utils.aoa_to_sheet(logRows);
-                ws2['!cols'] = [{ wch: 6 }, { wch: 14 }, { wch: 22 }];
+                ws2['!cols'] = [{ wch: 6 }, { wch: 14 }, { wch: 22 }, { wch: 40 }];
                 ws2['!merges'] = [
-                    { s: { r: 0, c: 0 }, e: { r: 0, c: 2 } },
-                    { s: { r: 1, c: 0 }, e: { r: 1, c: 2 } },
-                    { s: { r: 2, c: 0 }, e: { r: 2, c: 2 } },
+                    { s: { r: 0, c: 0 }, e: { r: 0, c: 3 } },
+                    { s: { r: 1, c: 0 }, e: { r: 1, c: 3 } },
+                    { s: { r: 2, c: 0 }, e: { r: 2, c: 3 } },
                 ];
 
                 const wb = XLSX.utils.book_new();
@@ -5498,7 +4973,7 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                 var logRows = [
                     [title + '·点名记录'],
                     ['导出时间：' + exportTime],
-                    ['序号', '姓名', '点名时间']
+                    ['序号', '姓名', '点名时间', '抽取范围']
                 ];
                 logs.forEach(function(r, i) {
                     var d = new Date(r.time);
@@ -5508,13 +4983,13 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                         String(d.getHours()).padStart(2,'0') + ':' +
                         String(d.getMinutes()).padStart(2,'0') + ':' +
                         String(d.getSeconds()).padStart(2,'0');
-                    logRows.push([i+1, r.name, fmt]);
+                    logRows.push([i+1, r.name, fmt, formatPoolTooltip(r.pool)]);
                 });
                 var ws1 = XLSX.utils.aoa_to_sheet(logRows);
-                ws1['!cols'] = [{ wch: 6 }, { wch: 14 }, { wch: 22 }];
+                ws1['!cols'] = [{ wch: 6 }, { wch: 14 }, { wch: 22 }, { wch: 40 }];
                 ws1['!merges'] = [
-                    { s:{r:0,c:0}, e:{r:0,c:2} },
-                    { s:{r:1,c:0}, e:{r:1,c:2} }
+                    { s:{r:0,c:0}, e:{r:0,c:3} },
+                    { s:{r:1,c:0}, e:{r:1,c:3} }
                 ];
 
                 // ── Sheet2: 网页配置 ──
@@ -6033,7 +5508,18 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                             if (!name || !timeStr) continue;
                             var t = new Date(timeStr);
                             if (isNaN(t.getTime())) continue;
-                            imported.push({ name: name, time: t.toISOString() });
+                            // 读取第 4 列「抽取范围」（可选，旧格式无此列）
+                            var poolStr = data[i][3] !== undefined ? String(data[i][3]).trim() : '';
+                            var pool;
+                            if (poolStr) {
+                                pool = poolStr.split(/[,，、]/).map(function(s){ return s.trim(); }).filter(Boolean);
+                                if (!pool.length) pool = undefined;
+                            } else {
+                                pool = undefined;
+                            }
+                            var rec = { name: name, time: t.toISOString() };
+                            if (pool !== undefined) rec.pool = pool;
+                            imported.push(rec);
                         }
                         if (!imported.length) { showAlert('未读取到有效记录，请确认文件格式正确。'); return; }
 
@@ -6476,11 +5962,18 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                     `<svg width="8" height="5" viewBox="0 0 8 5"><polygon class="arr-up" points="4,0 8,5 0,5"/></svg>` +
                     `<svg width="8" height="5" viewBox="0 0 8 5"><polygon class="arr-dn" points="0,0 8,0 4,5"/></svg>` +
                     `</span></th>
+                        <th class="th-left">抽取范围</th>
                     </tr></thead>
                     <tbody>${logs.map((r, i) => {
                         const d = new Date(r.time);
                         const fmt = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`;
-                        return `<tr><td>${i + 1}</td><td class="td-left">${r.name}</td><td>${fmt}</td></tr>`;
+                        const summary = formatPoolSummary(r.pool);
+                        const tooltip = formatPoolTooltip(r.pool);
+                        const hasPool = r.pool && r.pool.length > 0;
+                        const poolCell = hasPool
+                            ? `<td class="td-left stat-note" title="完整名单：${tooltip}" style="cursor:help">${summary}</td>`
+                            : `<td class="td-left stat-note">${summary}</td>`;
+                        return `<tr><td>${i + 1}</td><td class="td-left">${r.name}</td><td>${fmt}</td>${poolCell}</tr>`;
                     }).join('')}</tbody>
                 </table>`;
             }
@@ -6675,8 +6168,8 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
             restoreNoteDots();
 
             // 初始化按钮事件
-            startBtn.addEventListener('click', () => startRoll(true));
-            manualBtn.addEventListener('click', () => startRoll(false));
+            balancedBtn.addEventListener('click', () => startRoll(true));
+            randomBtn.addEventListener('click', () => startRoll(false));
             document.getElementById('more-pick-btn').addEventListener('click', (e) => {
                 e.stopPropagation();
                 toggleMorePickMenu();
@@ -6705,7 +6198,7 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
                     danger: true, confirmText: '确定清除'
                 }).then(ok => {
                     if (ok) {
-                        ['index_config', 'callLog', 'viewMode', 'darkMode', 'showCount', 'showCommittee', 'showGroup', 'showIntro', 'builder_apply', 'builder_draft'].forEach(function (k) {
+                        ['index_config', 'callLog', 'viewMode', 'showCount', 'showCommittee', 'showGroup', 'showIntro', 'builder_apply', 'builder_draft'].forEach(function (k) {
                             localStorage.removeItem(k);
                         });
                         location.reload();
@@ -6725,7 +6218,6 @@ function hexToRgb(e){var a=/^#?([a-f\d])([a-f\d])([a-f\d])$/i;e=e.replace(a,func
 
             // 初始化UI状态
             updateRecordVisibilityUI();
-            updateDarkModeUI();
             updateClassCommitteeUI();
             updateGroupBgUI(true); // 初始化时跳过重新渲染，只同步弹窗状态
             refreshUI();
